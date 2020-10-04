@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by ncw22 on 1/16/20.
  */
 @Disabled
-@TeleOp(name ="Grabber Test",group="Competition")
+@TeleOp(name ="Claw Test",group="Competition")
 
 public class ClawTest extends OpMode {
 
