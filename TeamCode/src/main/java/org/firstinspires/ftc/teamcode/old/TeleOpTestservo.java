@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by George on 10/11/2018.
  */
 
-@TeleOp(name ="Grabber Test",group="Competition")
+@TeleOp(name ="TeleOpTestServo",group="Competition")
 @Disabled
 
 public class TeleOpTestservo extends OpMode {
