@@ -29,7 +29,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Created by Nathaniel on 10/9/19.
  */
 @Disabled
-@Autonomous (name="autograbstone",group="REMOVE BEFORE FLIGHT")
+@Autonomous (name="Stone Grab Test",group="REMOVE BEFORE FLIGHT")
 
 public class AutoGrabStone extends LinearOpMode {
 
