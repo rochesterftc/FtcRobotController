@@ -74,11 +74,7 @@ public class CompetitionTeleOp extends OpMode {
             while (intakemotor.isBusy()){}
             intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-
-            arm.setTargetPosition(21);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (arm.isBusy()) {}
-            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        
 
         float x = gamepad1.left_stick_x;
         float z = gamepad1.right_stick_x;
