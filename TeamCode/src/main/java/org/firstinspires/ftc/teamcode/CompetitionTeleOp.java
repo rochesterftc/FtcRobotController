@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * Created by Rochesterftc10303 on 10/4/2018.
  */
 @TeleOp(name="Competition",group="Master")
-@Disabled
-public class
-CompetitionTeleOp extends OpMode {
+
+public class CompetitionTeleOp extends OpMode {
 
     DcMotor fl;
     DcMotor fr;
@@ -31,7 +27,7 @@ CompetitionTeleOp extends OpMode {
     boolean armButtonPushed;
 
     // Declare OpMode members.
-    private boolean helloThereFound;      // Sound file present flag
+   // private boolean helloThereFound;      // Sound file present flag
 
     public void init() {
         // Test Branch
@@ -51,24 +47,38 @@ CompetitionTeleOp extends OpMode {
     }
 
     public void loop() {
-        //84counts per rotation
+        //3:1 84 counts per rotation
+        //5:1 140 counts per rotation
 
-        if (gamepad2.b) ;
-        {
+        if (gamepad2.b); {
             arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             arm.setTargetPosition(-21);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (arm.isBusy()) {
-            }
+            while (arm.isBusy()) {}
         }
-        if (gamepad2.a) ;
-        {
+        if (gamepad2.a) ;{
             arm.setTargetPosition(0);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (arm.isBusy()) {
-            }
-            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            while (arm.isBusy()) {}
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
+        if (gamepad2.dpad_up); {
+            intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            intakemotor.setTargetPosition(-6);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            while (intakemotor.isBusy()){}
+        }
+        if (gamepad2.dpad_down); {
+            intakemotor.setTargetPosition(0);
+            intakemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            while (intakemotor.isBusy()){}
+            intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+            arm.setTargetPosition(21);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            while (arm.isBusy()) {}
+            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         float x = gamepad1.left_stick_x;
         float z = gamepad1.right_stick_x;
