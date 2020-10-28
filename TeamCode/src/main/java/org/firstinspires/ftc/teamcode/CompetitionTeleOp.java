@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 /**
@@ -24,7 +25,8 @@ public class CompetitionTeleOp extends OpMode {
     Servo claw;
     boolean clawButtonPushed;
     boolean clawOn;
-    boolean armButtonPushed;
+    boolean IsButtonPushed;
+    boolean IsOn;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -62,6 +64,7 @@ public class CompetitionTeleOp extends OpMode {
             while (arm.isBusy()) {}
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
+
         if (gamepad2.dpad_up); {
             intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intakemotor.setTargetPosition(-6);
@@ -74,7 +77,6 @@ public class CompetitionTeleOp extends OpMode {
             while (intakemotor.isBusy()){}
             intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-        
 
         float x = gamepad1.left_stick_x;
         float z = gamepad1.right_stick_x;
@@ -88,12 +90,19 @@ public class CompetitionTeleOp extends OpMode {
         lift.setPower(gamepad2.left_trigger);
         launch.setPower(gamepad2.right_trigger);
 
-        if (gamepad2.y && !armButtonPushed) {
+        if (gamepad2.y && !clawButtonPushed) {
             claw.setPosition((clawOn ? 0.7 : 1));
             claw.setPosition((clawOn ? 0.3 : 0));
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
+
+        if (gamepad2.y && !IsButtonPushed) {
+            intakeservo.setPower((IsOn ? 1:1));
+            intakeservo.setPower((IsOn ? 0:0));
+            IsOn = !IsOn;
+            IsButtonPushed = true;
+        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
 
     }
 }
