@@ -1,17 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.hardwaremap.HardwareCompetitionChassis;
+import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import java.util.List;
 
 public class tfodTest extends LinearOpMode {
 
-    HardwareHolonomicChassis robot   = new HardwareHolonomicChassis();
+    HardwareCompetitionChassis robot   = new HardwareCompetitionChassis();
 
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -60,7 +59,7 @@ public class tfodTest extends LinearOpMode {
 
             // The TensorFlow software will scale the input images from the camera to a lower resolution.
             // This can result in lower detection accuracy at longer distances (> 55cm or 22").
-            // If your target is at distance greater than 50 cm (20") you can adjust the magnification value
+            // If ywour target is at distance greater than 50 cm (20") you can adjust the magnification value
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 1.78 or 16/9).
@@ -76,12 +75,13 @@ public class tfodTest extends LinearOpMode {
 
             if (tfod != null) {
 
-                ElapsedTime timeOut = new ElapsedTime();
-                timeOut.reset();
+                ElapsedTime scanTime = new ElapsedTime();
+                scanTime.reset();
 
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                while ((tfod.getUpdatedRecognitions() != null) && (timeOut.seconds() < 5)) {
+                int ringCondition = 0; //1 = zero rings, 2 = one ring, 3 = four rings
+                while (scanTime.seconds() < 5) {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -95,23 +95,44 @@ public class tfodTest extends LinearOpMode {
                             telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                     recognition.getRight(), recognition.getBottom());
                             if(recognition.getLabel() == "Single") {
-                                moveTime(0, 1, 0, 3);
-                                telemetry.addLine("MOVING TO TARGET B");
+                                ringCondition = 2;
                             } else if (recognition.getLabel() == "Quad") {
-                                moveTime(0, 3, 0, 3000);
-                                moveTime(-1, 1, 0, 1410);
-                                telemetry.addLine("MOVING TO TARGET C");
-
-                            } else {
-                                moveTime(0, 1, 0, 2000);
-                                moveTime(-1, 1, 0, 1410);
-                                telemetry.addLine("MOVING TO TARGET A");
+                                ringCondition = 3;
                             }
                             telemetry.update();
                         }
                         telemetry.update();
                     }
                 }
+
+                boolean atLine = false;
+                while(atLine = false) {
+                    if (robot.sensorColor.blue()>robot.sensorColor.red() && robot.sensorColor.blue()>robot.sensorColor.green()) {
+                        robot.fl.setPower(0.5);
+                        robot.fr.setPower(-0.5);
+                        robot.bl.setPower(0.5);
+                        robot.br.setPower(-0.5);
+                        telemetry.addData("STATUS","Scanning for shot line");
+                    } else atLine = true;
+                    telemetry.addData("STATUS","Shot line found!");
+                    telemetry.update();
+                }
+
+                sleep(1000);
+                if (ringCondition == 0) {
+                    telemetry.addLine("MOVING TO TARGET A");
+                    telemetry.update();
+                    moveTime(-0.5, 0, 0, 2000);
+                } else if (ringCondition == 2) {
+                    telemetry.addLine("MOVING TO TARGET B");
+                    telemetry.update();
+                    moveTime(0, 0.5, 0, 2000);
+                } else if (ringCondition == 3) {
+                    telemetry.addLine("MOVING TO TARGET C");
+                    telemetry.update();
+                    moveTime(-0.25, 1, 0, 3000);
+                }
+                telemetry.update();
 
                 tfod.getUpdatedRecognitions();
 
