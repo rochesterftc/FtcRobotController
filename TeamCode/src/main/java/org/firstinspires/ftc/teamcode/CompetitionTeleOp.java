@@ -90,18 +90,16 @@ public class CompetitionTeleOp extends OpMode {
 
 
         if (gamepad2.y && !clawButtonPushed) {
-            claw.setPosition((clawOn ? 0.7 : 1));
-            claw.setPosition((clawOn ? 0.3 : 0));
+            claw.setPosition((clawOn ? 0.7 : 0.3));
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
 
         if (gamepad2.x && !IsButtonPushed) {
-            intakeservo.setPower((IsOn ? 1:1));
-            intakeservo.setPower((IsOn ? 0:0));
+            intakeservo.setPower((IsOn ? 1:0));
             IsOn = !IsOn;
             IsButtonPushed = true;
-        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
+        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
         lift.setPower(gamepad2.left_trigger);
         launch.setPower(gamepad2.right_trigger);
