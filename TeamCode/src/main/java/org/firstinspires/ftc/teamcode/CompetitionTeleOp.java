@@ -87,8 +87,7 @@ public class CompetitionTeleOp extends OpMode {
         fr.setPower(-y - x - z);
         bl.setPower(y + x - z);
         br.setPower(-y + x - z);
-        lift.setPower(gamepad2.left_trigger);
-        launch.setPower(gamepad2.right_trigger);
+
 
         if (gamepad2.y && !clawButtonPushed) {
             claw.setPosition((clawOn ? 0.7 : 1));
@@ -97,13 +96,22 @@ public class CompetitionTeleOp extends OpMode {
             clawButtonPushed = true;
         } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
 
-        if (gamepad2.y && !IsButtonPushed) {
+        if (gamepad2.x && !IsButtonPushed) {
             intakeservo.setPower((IsOn ? 1:1));
             intakeservo.setPower((IsOn ? 0:0));
             IsOn = !IsOn;
             IsButtonPushed = true;
         } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
 
+        lift.setPower(gamepad2.left_trigger);
+        launch.setPower(gamepad2.right_trigger);
+
+        if (gamepad2.left_bumper) {
+            launch.setPower(.9);
+        }
+        if (gamepad2.right_bumper){
+            launch.setPower(.1);
+        }
     }
 }
 
