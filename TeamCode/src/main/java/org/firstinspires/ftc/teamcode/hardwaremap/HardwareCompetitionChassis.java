@@ -27,11 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardwaremap;
 
+import android.app.Activity;
+import android.view.View;
+
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -47,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Motor channel:  Back Left drive motor:   "bl"
  * Motor channel:  Back Right drive motor:  "br"
  */
-public class HardwareHolonomicChassis
+public class HardwareCompetitionChassis
 {
     /* Public OpMode members. */
     public DcMotor  fl  = null;
@@ -55,12 +59,15 @@ public class HardwareHolonomicChassis
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
 
+    public ColorSensor sensorColor;
+    public DistanceSensor sensorDistance;
+
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwareHolonomicChassis(){
+    public HardwareCompetitionChassis(){
 
     }
 
@@ -87,6 +94,15 @@ public class HardwareHolonomicChassis
         fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // get a reference to the color sensor.
+        sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
+
+        // get a reference to the distance sensor that shares the same name.
+        sensorDistance = hwMap.get(DistanceSensor.class, "sensor_color_distance");
+
     }
+
+
  }
 

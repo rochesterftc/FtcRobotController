@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by George on 9/27/2019.
  */
 @Disabled
-@TeleOp(name = "Encoder Calibration", group = "Testing")
+@TeleOp(name = "OLDEncoder Calibration", group = "Testing")
 
 public class EncoderCalibration extends OpMode {
 
