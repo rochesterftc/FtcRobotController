@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -55,6 +56,20 @@ public class HardwareHolonomicChassis
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
 
+    public ColorSensor sensorColor = null;
+
+    /* ENCODER MATH
+    Wheel diameter - 3.875 inches
+    Circumference - ~12.174 inches
+    Drive reduction - 26:15 (1.7333...)
+    Core Hex Motor has 288 counts per revolution
+    Encoder counts per wheel revolution - ~166.154
+    */
+    float pi = (float)Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
+    float ratio = 15/26;
+    float YcountsPerInch = (288*ratio)/(pi*3.875f);
+    float XcountsPerInch = 86f;
+
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -75,6 +90,8 @@ public class HardwareHolonomicChassis
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
 
+        sensorColor = hwMap.get(ColorSensor.class, "color sensor");
+
         // Set all motors to zero power
         fl.setPower(0);
         fr.setPower(0);
@@ -83,10 +100,116 @@ public class HardwareHolonomicChassis
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //When given a power of 0, motors will brake instead of coast.
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void driveXY(float inches, double speed, String direction) {
+
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        if (direction == "forward") {
+            fr.setTargetPosition(Math.round(inches * YcountsPerInch));
+            br.setTargetPosition(Math.round(inches * YcountsPerInch));
+            fl.setTargetPosition(-Math.round(inches * YcountsPerInch));
+            bl.setTargetPosition(-Math.round(inches * YcountsPerInch));
+        }
+        if (direction == "backward") {
+            fr.setTargetPosition(-Math.round(inches * YcountsPerInch));
+            br.setTargetPosition(-Math.round(inches * YcountsPerInch));
+            fl.setTargetPosition(Math.round(inches * YcountsPerInch));
+            bl.setTargetPosition(Math.round(inches * YcountsPerInch));
+        }
+        if (direction == "left") {
+            fr.setTargetPosition(Math.round(inches * XcountsPerInch));
+            br.setTargetPosition(-Math.round(inches * XcountsPerInch));
+            fl.setTargetPosition(Math.round(inches * XcountsPerInch));
+            bl.setTargetPosition(-Math.round(inches * XcountsPerInch));
+        }
+        if (direction == "right") {
+            fr.setTargetPosition(-Math.round(inches * XcountsPerInch));
+            br.setTargetPosition(Math.round(inches * XcountsPerInch));
+            fl.setTargetPosition(-Math.round(inches * XcountsPerInch));
+            bl.setTargetPosition(Math.round(inches * XcountsPerInch));
+        }
+
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fr.setPower(speed);
+        br.setPower(speed);
+        fl.setPower(speed);
+        bl.setPower(speed);
+
+        while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) { }
+
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void turn(int degrees, double speed, String direction) {
+
+        //1120 counts per rotation
+        //60 degrees per rotation
+        //18.6 countsPerDegree counts per degree
+
+        float countsPerDegree = 18.666f;
+
+        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+
+        if(direction == "left") {
+            fr.setTargetPosition(Math.round(degrees * countsPerDegree));
+            br.setTargetPosition(Math.round(degrees * countsPerDegree));
+            fl.setTargetPosition(Math.round(degrees * countsPerDegree));
+            bl.setTargetPosition(Math.round(degrees * countsPerDegree));
+        }
+        if(direction == "right") {
+            fr.setTargetPosition(-Math.round(degrees * countsPerDegree));
+            br.setTargetPosition(-Math.round(degrees * countsPerDegree));
+            fl.setTargetPosition(-Math.round(degrees * countsPerDegree));
+            bl.setTargetPosition(-Math.round(degrees * countsPerDegree));
+        }
+
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fr.setPower(speed);
+        br.setPower(speed);
+        fl.setPower(speed);
+        bl.setPower(speed);
+
+        while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) {
+
+        }
+        fr.setPower(0);
+        br.setPower(0);
+        fl.setPower(0);
+        bl.setPower(0);
+
+        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
     }
  }
 
