@@ -55,6 +55,8 @@ public class HardwareHolonomicChassis
     public DcMotor  fr  = null;
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
+    public DcMotor shooter = null;
+    public DcMotor conveyer = null;
 
     public ColorSensor sensorColor = null;
 
@@ -63,12 +65,12 @@ public class HardwareHolonomicChassis
     Circumference - ~12.174 inches
     Drive reduction - 26:15 (1.7333...)
     Core Hex Motor has 288 counts per revolution
-    Encoder counts per wheel revolution - ~166.154
-    */
+    Encoder counts per wheel revolution - ~166.154    */
     float pi = (float)Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
     float ratio = 15/26;
     float YcountsPerInch = (288*ratio)/(pi*3.875f);
-    float XcountsPerInch = 86f;
+    float XcountsPerInch = (288*ratio);
+    float countsPerDegree = (288*ratio)/(360);
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -164,16 +166,10 @@ public class HardwareHolonomicChassis
 
     public void turn(int degrees, double speed, String direction) {
 
-        //1120 counts per rotation
-        //60 degrees per rotation
-        //18.6 countsPerDegree counts per degree
-
-        float countsPerDegree = 18.666f;
-
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         if(direction == "left") {
             fr.setTargetPosition(Math.round(degrees * countsPerDegree));
@@ -206,10 +202,26 @@ public class HardwareHolonomicChassis
         fl.setPower(0);
         bl.setPower(0);
 
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    
+    public void driveColor(String color, double speed, String direction) {
+        if (color == "white")
+        do {
+            fr.setPower(-.5);
+            fl.setPower(.5);
+            br.setPower(-.5);
+            bl.setPower(.5);
+        }
+        while (sensorColor.red() < 200 || sensorColor.green() < 200 || sensorColor.blue() < 200);
+
+        fr.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        bl.setPower(0);
     }
  }
 

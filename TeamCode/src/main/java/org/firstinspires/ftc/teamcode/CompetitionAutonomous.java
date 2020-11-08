@@ -1,18 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
+
 /**
- * Created by George on 11/4/2020.
+ * Created by George on 11/9/2020.
  */
+@Autonomous(name = "Compeition Autonomous", group = "Competition")
 
-@Autonomous(name = "Strafe Test", group = "Testing")
-
-public class StrafeTest extends LinearOpMode {
+public class CompetitionAutonomous extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
 
@@ -23,6 +23,11 @@ public class StrafeTest extends LinearOpMode {
 
         waitForStart();
 
-        robot.driveXY(1, 1, "right");
+        //Computervision code
+
+/*        if (var = 1) {
+
+        }
+*/
     }
 }

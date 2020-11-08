@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -36,6 +35,12 @@ public class HolonomicTeleop extends OpMode {
         robot.fr.setPower(-x+y-z);
         robot.bl.setPower(x-y-z);
         robot.br.setPower(x+y-z);
+
+        robot.shooter.setPower(gamepad1.right_trigger);
+
+        if (gamepad1.b) {
+            robot.conveyer.setPower(1);
+        }
 
         }
     }
