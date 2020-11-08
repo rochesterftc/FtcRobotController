@@ -14,8 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  */
 @TeleOp(name="Old Competition",group="Master")
 @Disabled
-public class
-CompetitionTeleOp extends OpMode {
+public class CompetitionTeleOp extends OpMode {
 
     DcMotor fl;
     DcMotor fr;
@@ -49,13 +48,13 @@ CompetitionTeleOp extends OpMode {
     public void init() {
         // Test Branch
         // Determine Resource IDs for sounds built into the RC application.
-        int helloThereID = hardwareMap.appContext.getResources().getIdentifier("hellothere", "raw", hardwareMap.appContext.getPackageName());
+     //   int helloThereID = hardwareMap.appContext.getResources().getIdentifier("hellothere", "raw", hardwareMap.appContext.getPackageName());
 
         // Determine if sound resources are found.
         // Note: Preloading is NOT required, but it's a good way to verify all your sounds are available before you run.
-        if (helloThereID != 0) {
-            helloThereFound = SoundPlayer.getInstance().preload(hardwareMap.appContext, helloThereID);
-        }
+      //  if (helloThereID != 0) {
+     //       helloThereFound = SoundPlayer.getInstance().preload(hardwareMap.appContext, helloThereID);
+     //   }
 
         fl = hardwareMap.dcMotor.get("front left");
         fr = hardwareMap.dcMotor.get("front right");
@@ -81,11 +80,11 @@ CompetitionTeleOp extends OpMode {
         arm.setPower(0.7); //set to the max speed you want the arm to move at*/
 
         // Display sound status
-        telemetry.addData("hellothere resource",   helloThereFound ?   "Found" : "NOT found\n Add hellothere.wav to /src/main/res/raw" );
+       telemetry.addData("hellothere resource",   helloThereFound ?   "Found" : "NOT found\n Add hellothere.wav to /src/main/res/raw" );
         telemetry.addData("Status", "Init complete! Press Start to Continue");
         telemetry.update();
 
-        SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, helloThereID);
+    //    SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, helloThereID);
 
     }
 

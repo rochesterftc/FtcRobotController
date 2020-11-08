@@ -34,13 +34,13 @@ testBot extends OpMode {
     public void init() {
         // Test Branch
         // Determine Resource IDs for sounds built into the RC application.
-        int helloThereID = hardwareMap.appContext.getResources().getIdentifier("hellothere", "raw", hardwareMap.appContext.getPackageName());
+   /*     int helloThereID = hardwareMap.appContext.getResources().getIdentifier("hellothere", "raw", hardwareMap.appContext.getPackageName());
 
         // Determine if sound resources are found.
         // Note: Preloading is NOT required, but it's a good way to verify all your sounds are available before you run.
         if (helloThereID != 0) {
             helloThereFound = SoundPlayer.getInstance().preload(hardwareMap.appContext, helloThereID);
-        }
+        */
 
         fl = hardwareMap.dcMotor.get("front left");
         fr = hardwareMap.dcMotor.get("front right");
@@ -63,7 +63,7 @@ testBot extends OpMode {
         telemetry.addData("Status", "Init complete! Press Start to Continue");
         telemetry.update();
 
-        SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, helloThereID);
+       // SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, helloThereID);
 
     }
 
