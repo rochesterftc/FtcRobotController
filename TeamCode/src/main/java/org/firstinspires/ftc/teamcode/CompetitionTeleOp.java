@@ -27,6 +27,10 @@ public class CompetitionTeleOp extends OpMode {
     boolean clawOn;
     boolean IsButtonPushed;
     boolean IsOn;
+    boolean armButtonPushed;
+    boolean ArmOn;
+    boolean intakeButtonPushed;
+    boolean IntakeOn;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -52,31 +56,18 @@ public class CompetitionTeleOp extends OpMode {
         //3:1 84 counts per rotation
         //5:1 140 counts per rotation
 
-        if (gamepad2.b); {
-            arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            arm.setTargetPosition(-21);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (arm.isBusy()) {}
-        }
-        if (gamepad2.a) ;{
-            arm.setTargetPosition(0);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (arm.isBusy()) {}
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
+        if (gamepad2.b && !armButtonPushed) {
+            arm.setPower((ArmOn ? 1 : 0));
+            ArmOn = !ArmOn;
+            armButtonPushed = true;
+        } else if (!gamepad2.y && armButtonPushed) armButtonPushed = false;
 
-        if (gamepad2.dpad_up); {
-            intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            intakemotor.setTargetPosition(-6);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (intakemotor.isBusy()){}
-        }
-        if (gamepad2.dpad_down); {
-            intakemotor.setTargetPosition(0);
-            intakemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            while (intakemotor.isBusy()){}
-            intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
+        if (gamepad2.b && !intakeButtonPushed) {
+            arm.setPower((IntakeOn ? 1 : 0));
+            IntakeOn = !IntakeOn;
+            armButtonPushed = true;
+        } else if (!gamepad2.y && intakeButtonPushed) intakeButtonPushed = false;
+
 
         float x = gamepad1.left_stick_x;
         float z = gamepad1.right_stick_x;
