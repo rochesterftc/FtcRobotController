@@ -41,7 +41,7 @@ public class tfodTest extends LinearOpMode {
 
     public void runOpMode() {
 
-        robot.init(hardwareMap);
+        robot.initWithVuforia(hardwareMap);
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
