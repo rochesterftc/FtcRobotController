@@ -70,8 +70,8 @@ public class CompetitionTeleOp extends OpMode {
 
 
         float x = gamepad1.left_stick_x;
-        float z = gamepad1.right_stick_x;
-        float y = gamepad1.left_stick_y;
+        float z = -gamepad1.right_stick_x;
+        float y = -gamepad1.left_stick_y;
 
 
         fl.setPower(y - x - z);

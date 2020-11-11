@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.hardwaremap;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -55,8 +56,10 @@ public class HardwareHolonomicChassis
     public DcMotor  fr  = null;
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
-    public DcMotor shooter = null;
-    public DcMotor conveyer = null;
+    public DcMotor  intakemotor = null;
+    public DcMotor  arm = null;
+    public CRServo  intakeservo = null;
+    public Servo    claw  = null;
 
     public ColorSensor sensorColor = null;
 
@@ -65,12 +68,12 @@ public class HardwareHolonomicChassis
     Circumference - ~12.174 inches
     Drive reduction - 26:15 (1.7333...)
     Core Hex Motor has 288 counts per revolution
-    Encoder counts per wheel revolution - ~166.154    */
+    Encoder counts per wheel revolution - ~166.154
+    */
     float pi = (float)Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
     float ratio = 15/26;
     float YcountsPerInch = (288*ratio)/(pi*3.875f);
-    float XcountsPerInch = (288*ratio);
-    float countsPerDegree = (288*ratio)/(360);
+    float XcountsPerInch = 86f;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -91,6 +94,10 @@ public class HardwareHolonomicChassis
         fr = hwMap.get(DcMotor.class, "fr");
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
+        intakemotor = hwMap.get(DcMotor.class, "IM");
+        intakeservo = hwMap.get(CRServo.class, "IS");
+        arm = hwMap.get(DcMotor.class, "arm");
+        claw = hwMap.get(Servo.class, "claw");
 
         sensorColor = hwMap.get(ColorSensor.class, "color sensor");
 
@@ -116,10 +123,10 @@ public class HardwareHolonomicChassis
 
     public void driveXY(float inches, double speed, String direction) {
 
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         if (direction == "forward") {
             fr.setTargetPosition(Math.round(inches * YcountsPerInch));
@@ -158,13 +165,19 @@ public class HardwareHolonomicChassis
 
         while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) { }
 
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void turn(int degrees, double speed, String direction) {
+
+        //1120 counts per rotation
+        //60 degrees per rotation
+        //18.6 countsPerDegree counts per degree
+
+        float countsPerDegree = 18.666f;
 
         fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
         br.setMode(DcMotor.RunMode.RESET_ENCODERS);
