@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -55,6 +56,10 @@ public class HardwareHolonomicChassis
     public DcMotor  fr  = null;
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
+    public DcMotor  intakemotor = null;
+    public DcMotor  arm = null;
+    public CRServo  intakeservo = null;
+    public Servo    claw  = null;
 
     public ColorSensor sensorColor = null;
 
@@ -89,6 +94,10 @@ public class HardwareHolonomicChassis
         fr = hwMap.get(DcMotor.class, "fr");
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
+        intakemotor = hwMap.get(DcMotor.class, "IM");
+        intakeservo = hwMap.get(CRServo.class, "IS");
+        arm = hwMap.get(DcMotor.class, "arm");
+        claw = hwMap.get(Servo.class, "claw");
 
         sensorColor = hwMap.get(ColorSensor.class, "color sensor");
 

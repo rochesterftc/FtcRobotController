@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by George on 9/27/2019.
  */
 @Autonomous(name = "Blue Foundation Park", group = "Competition")
-@Disabled
+//@Disabled
 public class BlueFoundPark extends LinearOpMode {
 
     MecanumReference ref = new MecanumReference();
