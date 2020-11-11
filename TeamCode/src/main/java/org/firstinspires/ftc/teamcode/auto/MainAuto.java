@@ -4,6 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareCompetitionChassis;
 
@@ -28,6 +32,7 @@ public class MainAuto extends LinearOpMode {
         robot.initWithVuforia(hardwareMap);
 
         waitForStart();
+        int ringCondition = 0; //1 = zero rings, 2 = one ring, 3 = four rings
 
         if (robot.tfod != null) {
 
@@ -36,7 +41,6 @@ public class MainAuto extends LinearOpMode {
 
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
-            int ringCondition = 0; //1 = zero rings, 2 = one ring, 3 = four rings
             while (scanTime.seconds() < 5) {
                 List<Recognition> updatedRecognitions = robot.tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
@@ -78,19 +82,24 @@ public class MainAuto extends LinearOpMode {
             if (ringCondition == 0) {
                 telemetry.addLine("MOVING TO TARGET A");
                 telemetry.update();
+
                 moveTime(-0.5, 0, 0, 2000);
             } else if (ringCondition == 2) {
                 telemetry.addLine("MOVING TO TARGET B");
                 telemetry.update();
+
                 moveTime(0, 0.5, 0, 2000);
             } else if (ringCondition == 3) {
                 telemetry.addLine("MOVING TO TARGET C");
                 telemetry.update();
+
                 moveTime(-0.25, 1, 0, 3000);
             }
             telemetry.update();
 
             robot.tfod.getUpdatedRecognitions();
+
+            robot.goToTarget(ringCondition);
 
         }else {telemetry.addLine("WARNING! TFOD INIT FAILURE"); telemetry.update();}
 

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 public class AutonomousColorSensor extends LinearOpMode {
 
-    HardwareHolonomicChassis robot   = new HardwareHolonomicChassis();
+     HardwareHolonomicChassis robot   = new HardwareHolonomicChassis();
 
     @Override
     public void runOpMode() {

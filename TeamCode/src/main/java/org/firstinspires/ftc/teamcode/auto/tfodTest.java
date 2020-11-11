@@ -9,8 +9,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.HardwareHolonomicChassis;
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareCompetitionChassis;
-import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class tfodTest extends LinearOpMode {
 
-    HardwareCompetitionChassis robot   = new HardwareCompetitionChassis();
+    HardwareHolonomicChassis robot   = new HardwareHolonomicChassis();
 
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -168,7 +168,7 @@ public class tfodTest extends LinearOpMode {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
             parameters.vuforiaLicenseKey = VUFORIA_KEY;
-            parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+            parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
             //  Instantiate the Vuforia engine
             vuforia = ClassFactory.getInstance().createVuforia(parameters);
