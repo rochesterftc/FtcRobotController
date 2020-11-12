@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
+
 /**
  * Created by George on 10/28/2020.
  */

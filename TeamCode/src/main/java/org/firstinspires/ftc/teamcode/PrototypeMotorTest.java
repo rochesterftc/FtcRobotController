@@ -14,18 +14,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class PrototypeMotorTest extends OpMode {
 
-    DcMotor elevator;
+    DcMotor conveyor;
     DcMotor shooter;
 
     public void init() {
-        elevator = hardwareMap.dcMotor.get("elevator");
+        conveyor = hardwareMap.dcMotor.get("elevator");
         shooter = hardwareMap.dcMotor.get("shooter");
 
     }
 
     public void loop() {
 
-        elevator.setPower(-gamepad1.left_trigger);
+        conveyor.setPower(-gamepad1.left_trigger);
         shooter.setPower(-gamepad1.right_trigger);
 
     }

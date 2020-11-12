@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+
+import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 @Autonomous(name = "Autonomous Color Sensor", group = "Testing")
 
