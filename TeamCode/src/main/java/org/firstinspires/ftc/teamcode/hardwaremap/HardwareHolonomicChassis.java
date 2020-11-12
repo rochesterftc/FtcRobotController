@@ -56,6 +56,8 @@ public class HardwareHolonomicChassis
     public DcMotor  fr  = null;
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
+    public DcMotor  Conveyor  = null;
+    public DcMotor  shooter  = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
     public DcMotor  shooter;
