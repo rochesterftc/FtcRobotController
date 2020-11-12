@@ -105,7 +105,7 @@ public class tfodTest extends LinearOpMode {
                 }
 
                 boolean atLine = false;
-                while(atLine = false) {
+                while(!atLine) {
                     if (robot.sensorColor.alpha() < 3000) {
                         robot.fl.setPower(-0.5);
                         robot.fr.setPower(0.5);

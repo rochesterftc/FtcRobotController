@@ -52,8 +52,8 @@ public class CompetitionTeleOp extends OpMode {
 
         if (gamepad2.b && !armButtonPushed) {
             // ((ArmOn ? 21 : -21));
-             if (ArmOn) {double armDirection = 55;}
-             else {double armDirection = -55;}
+             if (ArmOn) {armDirection = 55;}
+             else {armDirection = -55;}
             ArmOn = !ArmOn;
             armButtonPushed = true;
         } else if (!gamepad2.y && armButtonPushed) armButtonPushed = false;
@@ -66,8 +66,8 @@ public class CompetitionTeleOp extends OpMode {
 
         if (gamepad2.b && !intakeButtonPushed) {
           //  robot.intakemotor.setPower((IntakeOn ? 1 : -1));
-            if (ArmOn) {double intakeMotorDirection = -30;}
-            else {double intakeMotorDirection = 30;}
+            if (ArmOn) {intakeMotorDirection = -30;}
+            else {intakeMotorDirection = 30;}
             IntakeOn = !IntakeOn;
             armButtonPushed = true;
         } else if (!gamepad2.y && intakeButtonPushed) intakeButtonPushed = false;
@@ -105,9 +105,9 @@ public class CompetitionTeleOp extends OpMode {
 
         if (gamepad2.left_bumper) {
             robot.shooter.setPower(.9);
-        }
-        if (gamepad2.right_bumper){
+        } else if (gamepad2.right_bumper) {
             robot.shooter.setPower(.1);
+        } else {robot.shooter.setPower(0);
         }
     }
 }
