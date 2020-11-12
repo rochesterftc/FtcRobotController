@@ -7,24 +7,27 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 /**
- * Created by George on 10/11/2020.
+ * Created by Nathaniel on 11/11/2020.
  */
 
-@TeleOp(name="Tele-Op Base",group="Testing")
-@Disabled
+@TeleOp(name="Color Sensor Test",group="Testing")
+//@Disabled
 
-public class TeleOpBase extends OpMode {
+public class colorSensorTest extends OpMode {
 
     HardwareHolonomicChassis robot   = new HardwareHolonomicChassis();
 
 
     public void init() {
-    robot.init(hardwareMap);
+        robot.init(hardwareMap);
     }
 
     public void loop() {
 
-
+        telemetry.addData("alpha", robot.sensorColor.alpha());
+        telemetry.addData("red", robot.sensorColor.red());
+        telemetry.addData("green", robot.sensorColor.green());
+        telemetry.addData("blue", robot.sensorColor.blue());
 
         }
     }

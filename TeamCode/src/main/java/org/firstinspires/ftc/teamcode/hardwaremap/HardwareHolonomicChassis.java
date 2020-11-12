@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.hardwaremap;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -58,6 +58,8 @@ public class HardwareHolonomicChassis
     public DcMotor  br  = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
+    public DcMotor  shooter;
+    public DcMotor  conveyer;
     public CRServo  intakeservo = null;
     public Servo    claw  = null;
 

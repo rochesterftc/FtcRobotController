@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.HardwareHolonomicChassis;
-import org.firstinspires.ftc.teamcode.hardwaremap.HardwareCompetitionChassis;
+import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class tfodTest extends LinearOpMode {
 
     public void runOpMode() {
 
-        robot.initWithVuforia(hardwareMap);
+        robot.init(hardwareMap);
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -106,11 +106,11 @@ public class tfodTest extends LinearOpMode {
 
                 boolean atLine = false;
                 while(atLine = false) {
-                    if (robot.sensorColor.blue()>robot.sensorColor.red() && robot.sensorColor.blue()>robot.sensorColor.green()) {
-                        robot.fl.setPower(0.5);
-                        robot.fr.setPower(-0.5);
-                        robot.bl.setPower(0.5);
-                        robot.br.setPower(-0.5);
+                    if (robot.sensorColor.alpha() < 3000) {
+                        robot.fl.setPower(-0.5);
+                        robot.fr.setPower(0.5);
+                        robot.bl.setPower(-0.5);
+                        robot.br.setPower(0.5);
                         telemetry.addData("STATUS","Scanning for shot line");
                     } else atLine = true;
                     telemetry.addData("STATUS","Shot line found!");
@@ -143,10 +143,10 @@ public class tfodTest extends LinearOpMode {
     //Move method: define value for each axis and time
         public void moveTime ( double x, double y, double z, int time){
 
-            robot.fl.setPower(-x - y + z);
-            robot.fr.setPower(-x + y + z);
-            robot.bl.setPower(x - y + z);
-            robot.br.setPower(x + y + z);
+            robot.fl.setPower(x + y - z);
+            robot.fr.setPower(x - y - z);
+            robot.bl.setPower(-x + y - z);
+            robot.br.setPower(-x - y - z);
 
             sleep(time);
 
