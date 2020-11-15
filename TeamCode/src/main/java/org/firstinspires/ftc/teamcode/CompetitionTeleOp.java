@@ -47,13 +47,14 @@ public class CompetitionTeleOp extends OpMode {
     }
 
     public void loop() {
-        //3:1 84 counts per rotation
+        //1:1 28  counts per rotation
+        //3:1 84  counts per rotation
         //5:1 140 counts per rotation
 
         if (gamepad2.b && !armButtonPushed) {
             // ((ArmOn ? 21 : -21));
-             if (ArmOn) {armDirection = 55;}
-             else {armDirection = -55;}
+             if (ArmOn) {armDirection = 30;}
+             else {armDirection = -30;}
             ArmOn = !ArmOn;
             armButtonPushed = true;
         } else if (!gamepad2.y && armButtonPushed) armButtonPushed = false;
@@ -64,17 +65,17 @@ public class CompetitionTeleOp extends OpMode {
             robot.arm.setTargetPosition((int)armDirection);
         }
 
-        if (gamepad2.b && !intakeButtonPushed) {
+        if (gamepad2.a && !intakeButtonPushed) {
           //  robot.intakemotor.setPower((IntakeOn ? 1 : -1));
-            if (ArmOn) {intakeMotorDirection = -30;}
-            else {intakeMotorDirection = 30;}
+            if (ArmOn) {intakeMotorDirection = -55;}
+            else {intakeMotorDirection = 55;}
             IntakeOn = !IntakeOn;
             armButtonPushed = true;
         } else if (!gamepad2.y && intakeButtonPushed) intakeButtonPushed = false;
-        if (gamepad2.b) {
-            robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.arm.setTargetPosition((int)intakeMotorDirection);
+        if (gamepad2.a) {
+            robot.intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.intakemotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
         }
 
         float x = gamepad1.left_stick_x;
