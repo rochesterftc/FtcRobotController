@@ -57,7 +57,7 @@ public class CompetitionTeleOp extends OpMode {
              else {armDirection = -30;}
             ArmOn = !ArmOn;
             armButtonPushed = true;
-        } else if (!gamepad2.y && armButtonPushed) armButtonPushed = false;
+        } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
 
         if (gamepad2.b) {
             robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -71,7 +71,7 @@ public class CompetitionTeleOp extends OpMode {
             else {intakeMotorDirection = 55;}
             IntakeOn = !IntakeOn;
             armButtonPushed = true;
-        } else if (!gamepad2.y && intakeButtonPushed) intakeButtonPushed = false;
+        } else if (!gamepad2.a && intakeButtonPushed) intakeButtonPushed = false;
         if (gamepad2.a) {
             robot.intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.intakemotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
