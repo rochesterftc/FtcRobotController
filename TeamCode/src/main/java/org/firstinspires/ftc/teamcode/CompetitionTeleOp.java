@@ -47,14 +47,15 @@ public class CompetitionTeleOp extends OpMode {
     }
 
     public void loop() {
-        //1:1 28  counts per rotation
-        //3:1 84  counts per rotation
-        //5:1 140 counts per rotation
+        //1:1  28     counts per rotation
+        //3:1  84     counts per rotation
+        //5:1  140    counts per rotation
+        //100:1 2,800 counts per rotation
 
         if (gamepad2.b && !armButtonPushed) {
             // ((ArmOn ? 21 : -21));
-             if (ArmOn) {armDirection = 30;}
-             else {armDirection = -30;}
+             if (ArmOn) {armDirection = 700;}
+             else {armDirection = -700;}
             ArmOn = !ArmOn;
             armButtonPushed = true;
         } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
