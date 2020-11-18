@@ -50,34 +50,17 @@ public class CompetitionTeleOp extends OpMode {
         //1:1 28  counts per rotation
         //3:1 84  counts per rotation
         //5:1 140 counts per rotation
-/*
+
         if (gamepad2.b && !armButtonPushed) {
-            // ((ArmOn ? 21 : -21));
-             if (ArmOn) {armDirection = 30;}
-             else {armDirection = -30;}
-            ArmOn = !ArmOn;
-            armButtonPushed = true;
-        } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
-
-        if (gamepad2.b) {
-            robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.arm.setTargetPosition((int)armDirection);
-        }
-
+            robot.intakemotor.setPower(.2); }
         if (gamepad2.a && !intakeButtonPushed) {
-          //  robot.intakemotor.setPower((IntakeOn ? 1 : -1));
-            if (ArmOn) {intakeMotorDirection = -55;}
-            else {intakeMotorDirection = 55;}
-            IntakeOn = !IntakeOn;
-            armButtonPushed = true;
-        } else if (!gamepad2.a && intakeButtonPushed) intakeButtonPushed = false;
-        if (gamepad2.a) {
-            robot.intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.intakemotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
-        }
-*/
+            robot.intakemotor.setPower(-.2); }
+
+        if (gamepad1.b && !armButtonPushed) {
+            robot.intakemotor.setPower(.5); }
+        if (gamepad1.a && !intakeButtonPushed) {
+            robot.intakemotor.setPower(-.5); }
+
         float z = gamepad1.left_stick_x;
         float x = -gamepad1.right_stick_x;
         float y = gamepad1.left_stick_y;
@@ -89,7 +72,7 @@ public class CompetitionTeleOp extends OpMode {
         robot.br.setPower(-y + x + z);
 
 
-        if (gamepad2.y && !clawButtonPushed) {
+        if (gamepad1.y && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 0.7 : 0.3));
             clawOn = !clawOn;
             clawButtonPushed = true;
