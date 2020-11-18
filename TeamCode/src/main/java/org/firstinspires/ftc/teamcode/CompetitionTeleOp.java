@@ -42,7 +42,10 @@ public class CompetitionTeleOp extends OpMode {
         robot.init(hardwareMap);
         // Test Branch
         // Determine Resource IDs for sounds built into the RC application.
-
+robot.fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+robot.fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+robot.bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
@@ -78,15 +81,15 @@ public class CompetitionTeleOp extends OpMode {
             robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
         }
 */
-        float z = gamepad1.left_stick_x;
-        float x = -gamepad1.right_stick_x;
+        float z = gamepad1.right_stick_x;
+        float x = gamepad1.left_stick_x;
         float y = gamepad1.left_stick_y;
 
 
         robot.fl.setPower(y - x + z);
-        robot.fr.setPower(-y - x - z);
+        robot.fr.setPower(-y + x + z);
         robot.bl.setPower(y + x - z);
-        robot.br.setPower(-y + x + z);
+        robot.br.setPower(-y - x - z);
 
 
         if (gamepad2.y && !clawButtonPushed) {
@@ -96,10 +99,13 @@ public class CompetitionTeleOp extends OpMode {
         } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
 
         if (gamepad2.x && !IsButtonPushed) {
-            robot.intakeservo.setPower((IsOn ? 1:0));
+            if (IsOn)robot.intakeservo.setPower(1);
+            else robot.intakeservo.setPower(0);
             IsOn = !IsOn;
             IsButtonPushed = true;
         } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
+
+        robot.arm.setPower(gamepad2.right_stick_y);
 
         robot.Conveyor.setPower(gamepad2.left_trigger);
         robot.shooter.setPower(-gamepad2.right_trigger);

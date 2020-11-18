@@ -85,14 +85,14 @@ public class CompetitionAutonomous extends LinearOpMode {
             robot.br.setPower(0);
             robot.bl.setPower(0);
 
-            robot.driveXY(4, .5, "left");
+            //robot.driveXY(4, .5, "left");
         }
 
         //move behind white line
-        robot.driveXY(6, .75, "backward");
+        //robot.driveXY(6, .75, "backward");
 
         //move to 1st power shot position
-        robot.driveXY(45, 1, "right");
+        //robot.driveXY(45, 1, "right");
 
         //shoot and keep motor running
         robot.shooter.setPower(1);
@@ -102,7 +102,7 @@ public class CompetitionAutonomous extends LinearOpMode {
         robot.conveyer.setPower(0);
 
         //move to 2nd power shot position
-        robot.driveXY(7, .75, "right");
+        //robot.driveXY(7, .75, "right");
 
         //shoot and keep motor running
         robot.shooter.setPower(1);
@@ -112,7 +112,7 @@ public class CompetitionAutonomous extends LinearOpMode {
         robot.conveyer.setPower(0);
 
         //move to 3rd power shot position
-        robot.driveXY(7, .75, "right");
+        //robot.driveXY(7, .75, "right");
 
         //shoot and stop motor
         robot.shooter.setPower(1);
@@ -123,7 +123,7 @@ public class CompetitionAutonomous extends LinearOpMode {
         robot.shooter.setPower(0);
 
         //move onto white line
-        robot.driveXY(6, .75, "forward");
+        //robot.driveXY(6, .75, "forward");
 
     }
 }

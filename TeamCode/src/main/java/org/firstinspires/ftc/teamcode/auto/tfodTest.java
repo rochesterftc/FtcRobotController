@@ -80,7 +80,7 @@ public class tfodTest extends LinearOpMode {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 int ringCondition = 0; //1 = zero rings, 2 = one ring, 3 = four rings
-                while (scanTime.seconds() < 5) {
+                while (scanTime.seconds() < 2 &&opModeIsActive()) {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -104,13 +104,16 @@ public class tfodTest extends LinearOpMode {
                     }
                 }
 
+
+                moveTime(0,1,0,1500);
+
                 boolean atLine = false;
-                while(!atLine) {
+                while(!atLine&&opModeIsActive()) {
                     if (robot.sensorColor.alpha() < 3000) {
-                        robot.fl.setPower(-0.5);
-                        robot.fr.setPower(0.5);
-                        robot.bl.setPower(-0.5);
-                        robot.br.setPower(0.5);
+                        robot.fl.setPower(0.025);
+                        robot.fr.setPower(-0.025);
+                        robot.bl.setPower(0.025);
+                        robot.br.setPower(-0.025);
                         telemetry.addData("STATUS","Scanning for shot line");
                     } else atLine = true;
                     telemetry.addData("STATUS","Shot line found!");

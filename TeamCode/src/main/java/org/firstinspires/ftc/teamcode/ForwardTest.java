@@ -22,6 +22,6 @@ public class ForwardTest extends LinearOpMode {
 
         waitForStart();
 
-        robot.driveXY(20, 1, "forward");
+        //robot.driveXY(20, 1, "forward");
     }
 }

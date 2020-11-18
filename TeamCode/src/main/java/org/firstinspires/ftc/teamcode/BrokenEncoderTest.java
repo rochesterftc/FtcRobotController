@@ -25,7 +25,7 @@ public class BrokenEncoderTest extends OpMode {
 
     public void loop() {
         if (gamepad1.a) {
-            robot.driveXY(5, .75, "forward");
+            //robot.driveXY(5, .75, "forward");
         }
         if (gamepad1.b) {
             robot.fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

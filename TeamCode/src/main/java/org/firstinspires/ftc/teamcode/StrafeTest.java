@@ -22,6 +22,6 @@ public class StrafeTest extends LinearOpMode {
 
         waitForStart();
 
-        robot.driveXY(1, 1, "right");
+        //robot.driveXY(1, 1, "right");
     }
 }
