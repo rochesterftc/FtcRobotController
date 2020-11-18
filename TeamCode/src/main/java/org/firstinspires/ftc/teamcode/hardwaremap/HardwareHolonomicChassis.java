@@ -101,7 +101,7 @@ public class HardwareHolonomicChassis
         intakeservo = hwMap.get(CRServo.class, "IS");
         arm = hwMap.get(DcMotor.class, "arm");
         claw = hwMap.get(Servo.class, "claw");
-        conveyer = hwMap.get(DcMotor.class, "conveyor");
+        Conveyor = hwMap.get(DcMotor.class, "conveyor");
         shooter = hwMap.get(DcMotor.class, "shooter");
 
         sensorColor = hwMap.get(ColorSensor.class, "color sensor");

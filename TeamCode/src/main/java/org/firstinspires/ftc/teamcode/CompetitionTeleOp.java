@@ -47,15 +47,14 @@ public class CompetitionTeleOp extends OpMode {
     }
 
     public void loop() {
-        //1:1  28     counts per rotation
-        //3:1  84     counts per rotation
-        //5:1  140    counts per rotation
-        //100:1 2,800 counts per rotation
-
+        //1:1 28  counts per rotation
+        //3:1 84  counts per rotation
+        //5:1 140 counts per rotation
+/*
         if (gamepad2.b && !armButtonPushed) {
             // ((ArmOn ? 21 : -21));
-             if (ArmOn) {armDirection = 700;}
-             else {armDirection = -700;}
+             if (ArmOn) {armDirection = 30;}
+             else {armDirection = -30;}
             ArmOn = !ArmOn;
             armButtonPushed = true;
         } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
@@ -78,16 +77,16 @@ public class CompetitionTeleOp extends OpMode {
             robot.intakemotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
         }
+*/
+        float z = gamepad1.left_stick_x;
+        float x = -gamepad1.right_stick_x;
+        float y = gamepad1.left_stick_y;
 
-        float x = gamepad1.left_stick_x;
-        float z = -gamepad1.right_stick_x;
-        float y = -gamepad1.left_stick_y;
 
-
-        robot.fl.setPower(y - x - z);
+        robot.fl.setPower(y - x + z);
         robot.fr.setPower(-y - x - z);
         robot.bl.setPower(y + x - z);
-        robot.br.setPower(-y + x - z);
+        robot.br.setPower(-y + x + z);
 
 
         if (gamepad2.y && !clawButtonPushed) {
@@ -103,14 +102,14 @@ public class CompetitionTeleOp extends OpMode {
         } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
         robot.Conveyor.setPower(gamepad2.left_trigger);
-        robot.shooter.setPower(gamepad2.right_trigger);
+        robot.shooter.setPower(-gamepad2.right_trigger);
 
-        if (gamepad2.left_bumper) {
+     /*   if (gamepad2.left_bumper) {
             robot.shooter.setPower(.9);
         } else if (gamepad2.right_bumper) {
             robot.shooter.setPower(.1);
         } else {robot.shooter.setPower(0);
-        }
+        } */
     }
 }
 
