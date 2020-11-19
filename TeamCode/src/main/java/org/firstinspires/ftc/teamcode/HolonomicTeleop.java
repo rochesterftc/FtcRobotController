@@ -36,10 +36,10 @@ public class HolonomicTeleop extends OpMode {
         robot.bl.setPower(x-y-z);
         robot.br.setPower(x+y-z);
 
-        robot.shooter.setPower(gamepad1.right_trigger);
+//        robot.shooter.setPower(gamepad1.right_trigger);
 
         if (gamepad1.b) {
-            robot.conveyer.setPower(1);
+//            robot.conveyer.setPower(1);
         }
 
         }
