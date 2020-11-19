@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "EncoderCodeTest", group = "Testing")
 
-public class EncoderCodeTest extends LinearOpMode {
+public class  EncoderCodeTest extends LinearOpMode {
 
     public DcMotor fl;
     public DcMotor fr;

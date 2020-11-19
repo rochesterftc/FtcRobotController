@@ -56,8 +56,11 @@ public class HardwareHolonomicChassis
     public DcMotor  fr  = null;
     public DcMotor  bl  = null;
     public DcMotor  br  = null;
+    public DcMotor  Conveyor  = null;
+    public DcMotor  shooter  = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
+    public DcMotor  conveyer;
     public CRServo  intakeservo = null;
     public Servo    claw  = null;
 
@@ -98,6 +101,8 @@ public class HardwareHolonomicChassis
         intakeservo = hwMap.get(CRServo.class, "IS");
         arm = hwMap.get(DcMotor.class, "arm");
         claw = hwMap.get(Servo.class, "claw");
+        Conveyor = hwMap.get(DcMotor.class, "conveyor");
+        shooter = hwMap.get(DcMotor.class, "shooter");
 
         sensorColor = hwMap.get(ColorSensor.class, "color sensor");
 

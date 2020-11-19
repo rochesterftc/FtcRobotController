@@ -37,10 +37,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -79,6 +81,9 @@ public class HardwareCompetitionChassis {
 
     public ColorSensor sensorColor;
     public DistanceSensor sensorDistance;
+
+    public VuforiaTrackables targetsUltimateGoal;
+
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -223,7 +228,7 @@ public class HardwareCompetitionChassis {
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
+        targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
         VuforiaTrackable blueTowerGoalTarget = targetsUltimateGoal.get(0);
         blueTowerGoalTarget.setName("Blue Tower Goal Target");
         VuforiaTrackable redTowerGoalTarget = targetsUltimateGoal.get(1);
@@ -305,8 +310,8 @@ public class HardwareCompetitionChassis {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_FORWARD_DISPLACEMENT  = 8.0f * mmPerInch;   // eg: Camera is 8 Inches in front of robot-center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches above ground
         final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
@@ -318,7 +323,56 @@ public class HardwareCompetitionChassis {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
+        targetsUltimateGoal.activate();
+
     }
+
+    public void goToTarget (int ringCondition) {
+        double ftToMm = 304.8;
+        int mmTargetHeight = 8;
+
+        OpenGLMatrix Amatrix = OpenGLMatrix.translation((int)(-2.5*ftToMm), 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+        OpenGLMatrix Bmatrix = OpenGLMatrix.translation((int)(-1.5*ftToMm), (int)(1.5*ftToMm), mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+
+                 // check all the trackable targets to see which one (if any) is visible.
+                 boolean targetVisible = false;
+                 OpenGLMatrix lastLocation;
+        for (VuforiaTrackable trackable : targetsUltimateGoal) {
+            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                //telemetry.addData("Visible Target", trackable.getName());
+                targetVisible = true;
+
+                // getUpdatedRobotLocation() will return null if no new information is available since
+                // the last time that call was made, or if the trackable is not currently visible.
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                if (robotLocationTransform != null) {
+                    lastLocation = robotLocationTransform;
+                }
+                break;
+            }
+        }
+
+        // Provide feedback as to where the robot is located (if we know).
+        if (targetVisible) {
+            // express position (translation) of robot in inches.
+            //VectorF translation = lastLocation.getTranslation();
+            //telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+            //        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+            // express the rotation of the robot in degrees.
+            //Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+        }
+        else {
+           // telemetry.addData("Visible Target", "none");
+        }
+       // telemetry.update();
+
+
+    }
+
     public void initWithoutVuforia(HardwareMap ComphwMap) {
         // Save reference to Hardware map
         hwMap = ComphwMap;
