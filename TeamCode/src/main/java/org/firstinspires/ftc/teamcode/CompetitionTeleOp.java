@@ -18,7 +18,7 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Rochesterftc10303 on 10/4/2018.
  */
-@TeleOp(name="Competition",group="Master")
+@TeleOp(name="Competition2020-2021",group="Master")
 
 public class CompetitionTeleOp extends OpMode {
 
@@ -62,11 +62,12 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             armButtonPushed = true;
         } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
 
-        if (gamepad2.b) {
-            robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.arm.setTargetPosition((int)armDirection);
-        }
+        if (gamepad2.b) robot.intakemotor.setPower(.2);
+        else if (gamepad2.a) robot.intakemotor.setPower(-.2);
+        else robot.intakemotor.setPower(0);
+        if (gamepad1.b) robot.arm.setPower(.5);
+        else if (gamepad1.a) robot.arm.setPower(-.5);
+        else robot.arm.setPower(0);
 
         if (gamepad2.a && !intakeButtonPushed) {
           //  robot.intakemotor.setPower((IntakeOn ? 1 : -1));
@@ -81,8 +82,8 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
         }
 */
-        float z = gamepad1.right_stick_x;
-        float x = (float) (gamepad1.left_stick_x * 1.5);
+        float z = gamepad1.left_stick_x;
+        float x = -gamepad1.right_stick_x;
         float y = gamepad1.left_stick_y;
 
 
@@ -92,29 +93,27 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.br.setPower(-y - x - z);
 
 
-        if (gamepad2.y && !clawButtonPushed) {
+        if (gamepad1.y && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 0.7 : 0.3));
             clawOn = !clawOn;
             clawButtonPushed = true;
-        } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
+        } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
         if (gamepad2.x && !IsButtonPushed) {
-            if (IsOn)robot.intakeservo.setPower(1);
-            else robot.intakeservo.setPower(0);
+            robot.intakeservo.setPower((IsOn ? 1:0));
             IsOn = !IsOn;
             IsButtonPushed = true;
         } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
-        robot.arm.setPower(gamepad2.right_stick_y);
-
         robot.Conveyor.setPower(gamepad2.left_trigger);
+        robot.shooter.setPower(-gamepad2.right_trigger);
 
-        if (gamepad2.left_bumper) {
+     /*   if (gamepad2.left_bumper) {
             robot.shooter.setPower(.9);
         } else if (gamepad2.right_bumper) {
             robot.shooter.setPower(.1);
         } else {robot.shooter.setPower(0);
-        }
+        } */
     }
 }
 
