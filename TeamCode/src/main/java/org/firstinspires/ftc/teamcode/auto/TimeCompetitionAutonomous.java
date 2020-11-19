@@ -97,7 +97,7 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
             robot.br.setPower(0);
             robot.bl.setPower(0);
 
-            robot.driveXY(4, .5, "left");
+            timeDriveXY(4, .5, "left");
         }
 
         //move behind white line
@@ -107,14 +107,14 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         timeDriveXY(45, 1, "right");
 
         //shoot and keep motor running
-/*        robot.shooter.setPower(1);
+        robot.shooter.setPower(1);
         sleep(2000);
         robot.conveyer.setPower(1);
         sleep(500);
         robot.conveyer.setPower(0);
 
         //move to 2nd power shot position
-        robot.driveXY(7, .75, "right");
+        timeDriveXY(7, .75, "right");
 
         //shoot and keep motor running
         robot.shooter.setPower(1);
@@ -124,7 +124,7 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         robot.conveyer.setPower(0);
 
         //move to 3rd power shot position
-        robot.driveXY(7, .75, "right");
+        timeDriveXY(7, .75, "right");
 
         //shoot and stop motor
         robot.shooter.setPower(1);
@@ -135,8 +135,8 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         robot.shooter.setPower(0);
 
         //move onto white line
-        robot.driveXY(6, .75, "forward");
-*/
+        timeDriveXY(6, .75, "forward");
+
     }
 
     public void timeDriveXY(long inches, double speed, String direction) {
