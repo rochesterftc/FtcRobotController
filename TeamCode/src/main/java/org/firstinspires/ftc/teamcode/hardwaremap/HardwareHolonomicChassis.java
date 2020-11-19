@@ -104,7 +104,7 @@ public class HardwareHolonomicChassis
         Conveyor = hwMap.get(DcMotor.class, "conveyor");
         shooter = hwMap.get(DcMotor.class, "shooter");
 
-        sensorColor = hwMap.get(ColorSensor.class, "color sensor");
+        sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
 
         // Set all motors to zero power
         fl.setPower(0);

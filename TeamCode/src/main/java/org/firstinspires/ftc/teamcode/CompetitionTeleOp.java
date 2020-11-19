@@ -53,22 +53,22 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //1:1 28  counts per rotation
         //3:1 84  counts per rotation
         //5:1 140 counts per rotation
-/*
-        if (gamepad2.b && !armButtonPushed) {
-            // ((ArmOn ? 21 : -21));
-             if (ArmOn) {armDirection = 30;}
-             else {armDirection = -30;}
-            ArmOn = !ArmOn;
-            armButtonPushed = true;
-        } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
 
-        if (gamepad2.b) robot.intakemotor.setPower(.2);
-        else if (gamepad2.a) robot.intakemotor.setPower(-.2);
+//        if (gamepad2.b && !armButtonPushed) {
+//            // ((ArmOn ? 21 : -21));
+//             if (ArmOn) {armDirection = 30;}
+//             else {armDirection = -30;}
+//            ArmOn = !ArmOn;
+//            armButtonPushed = true;
+//        } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
+
+        if (gamepad2.b) robot.intakemotor.setPower(4);
+        else if (gamepad2.a) robot.intakemotor.setPower(-.8);
         else robot.intakemotor.setPower(0);
         if (gamepad1.b) robot.arm.setPower(.5);
         else if (gamepad1.a) robot.arm.setPower(-.5);
         else robot.arm.setPower(0);
-
+/*
         if (gamepad2.a && !intakeButtonPushed) {
           //  robot.intakemotor.setPower((IntakeOn ? 1 : -1));
             if (ArmOn) {intakeMotorDirection = -55;}
@@ -82,14 +82,14 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
         }
 */
-        float z = gamepad1.left_stick_x;
-        float x = -gamepad1.right_stick_x;
+        float z = gamepad1.right_stick_x;
+        float x = (float) (gamepad1.left_stick_x *1.5);
         float y = gamepad1.left_stick_y;
 
 
-        robot.fl.setPower(y - x + z);
-        robot.fr.setPower(-y + x + z);
-        robot.bl.setPower(y +  x - z);
+        robot.fl.setPower(y - x - z);
+        robot.fr.setPower(-y + x - z);
+        robot.bl.setPower(y + x - z);
         robot.br.setPower(-y - x - z);
 
 
@@ -100,7 +100,7 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
         if (gamepad2.x && !IsButtonPushed) {
-            robot.intakeservo.setPower((IsOn ? 1:0));
+            robot.intakeservo.setPower((IsOn ? -1:0));
             IsOn = !IsOn;
             IsButtonPushed = true;
         } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
