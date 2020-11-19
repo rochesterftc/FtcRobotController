@@ -28,7 +28,8 @@ public class CompetitionTeleOp extends OpMode {
     boolean clawOn;
     boolean IsButtonPushed;
     boolean IsOn;
-
+    boolean LSButtonPushed;
+    boolean LSOn;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -76,7 +77,13 @@ public class CompetitionTeleOp extends OpMode {
             IsButtonPushed = true;
         } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
-        robot.Conveyor.setPower(gamepad2.left_trigger);
+        if (gamepad2.x && !LSButtonPushed) {
+            robot.liftServo.setPower((LSOn ? 1:0));
+            LSOn = !LSOn;
+            LSButtonPushed = true;
+        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
+
+        robot.conveyor.setPower(gamepad2.left_trigger);
         robot.shooter.setPower(-gamepad2.right_trigger);
 
      /*   if (gamepad2.left_bumper) {
