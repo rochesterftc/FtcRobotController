@@ -82,13 +82,13 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 */
         float z = gamepad1.right_stick_x;
-        float x = gamepad1.left_stick_x;
+        float x = (float) (gamepad1.left_stick_x * 1.5);
         float y = gamepad1.left_stick_y;
 
 
         robot.fl.setPower(y - x + z);
         robot.fr.setPower(-y + x + z);
-        robot.bl.setPower(y + x - z);
+        robot.bl.setPower(y +  x - z);
         robot.br.setPower(-y - x - z);
 
 
@@ -108,14 +108,13 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.arm.setPower(gamepad2.right_stick_y);
 
         robot.Conveyor.setPower(gamepad2.left_trigger);
-        robot.shooter.setPower(-gamepad2.right_trigger);
 
-     /*   if (gamepad2.left_bumper) {
+        if (gamepad2.left_bumper) {
             robot.shooter.setPower(.9);
         } else if (gamepad2.right_bumper) {
             robot.shooter.setPower(.1);
         } else {robot.shooter.setPower(0);
-        } */
+        }
     }
 }
 
