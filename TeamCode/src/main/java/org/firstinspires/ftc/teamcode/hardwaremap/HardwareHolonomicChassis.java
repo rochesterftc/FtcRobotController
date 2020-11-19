@@ -106,7 +106,7 @@ public class HardwareHolonomicChassis
         shooter = hwMap.get(DcMotor.class, "shooter");
         liftServo = hwMap.get(CRServo.class, "LS");
 
-        sensorColor = hwMap.get(ColorSensor.class, "color sensor");
+        sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
 
         // Set all motors to zero power
         fl.setPower(0);
