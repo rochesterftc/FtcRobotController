@@ -18,7 +18,7 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Rochesterftc10303 on 10/4/2018.
  */
-@TeleOp(name="Competition",group="Master")
+@TeleOp(name="Competition2020-2021",group="Master")
 
 public class CompetitionTeleOp extends OpMode {
 
@@ -28,12 +28,7 @@ public class CompetitionTeleOp extends OpMode {
     boolean clawOn;
     boolean IsButtonPushed;
     boolean IsOn;
-    boolean armButtonPushed;
-    boolean ArmOn;
-    boolean intakeButtonPushed;
-    boolean IntakeOn;
-    double  armDirection;
-    double  intakeMotorDirection;
+
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -51,15 +46,12 @@ public class CompetitionTeleOp extends OpMode {
         //3:1 84  counts per rotation
         //5:1 140 counts per rotation
 
-        if (gamepad2.b && !armButtonPushed) {
-            robot.intakemotor.setPower(.2); }
-        if (gamepad2.a && !intakeButtonPushed) {
-            robot.intakemotor.setPower(-.2); }
-
-        if (gamepad1.b && !armButtonPushed) {
-            robot.intakemotor.setPower(.5); }
-        if (gamepad1.a && !intakeButtonPushed) {
-            robot.intakemotor.setPower(-.5); }
+        if (gamepad2.b) robot.intakemotor.setPower(.2);
+        else if (gamepad2.a) robot.intakemotor.setPower(-.2);
+        else robot.intakemotor.setPower(0);
+        if (gamepad1.b) robot.arm.setPower(.5);
+        else if (gamepad1.a) robot.arm.setPower(-.5);
+        else robot.arm.setPower(0);
 
         float z = gamepad1.left_stick_x;
         float x = -gamepad1.right_stick_x;
@@ -76,7 +68,7 @@ public class CompetitionTeleOp extends OpMode {
             robot.claw.setPosition((clawOn ? 0.7 : 0.3));
             clawOn = !clawOn;
             clawButtonPushed = true;
-        } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
+        } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
         if (gamepad2.x && !IsButtonPushed) {
             robot.intakeservo.setPower((IsOn ? 1:0));
