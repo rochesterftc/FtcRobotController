@@ -23,6 +23,14 @@ public class TurnTest extends LinearOpMode {
 
         waitForStart();
 
-        robot.turn(360, 1, "right");
+        robot.fr.setPower(1);
+        robot.br.setPower(1);
+        robot.fl.setPower(1);
+        robot.bl.setPower(1);
+        sleep(1000);
+        robot.fr.setPower(0);
+        robot.br.setPower(0);
+        robot.fl.setPower(0);
+        robot.bl.setPower(0);
     }
 }

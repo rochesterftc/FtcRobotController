@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
@@ -10,18 +10,29 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 /**
  * Created by George on 11/9/2020.
  */
-@Autonomous(name = "Compeition Autonomous", group = "Competition")
+@Autonomous(name = "Time Autonomous", group = "Competition")
 
-public class CompetitionAutonomous extends LinearOpMode {
+public class TimeCompetitionAutonomous extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
 
     int var;
 
+    //38.5in forward in 1 second @ 12.2v
+    long YMSPerInch = 260;
+    long XMSPerInch;
+    //140* left in 1 second @ 12.17v
+    long secondsPerDegree = 71;
+
     @Override
     public void runOpMode() {
 
         robot.init(hardwareMap);
+
+        robot.fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
@@ -90,13 +101,13 @@ public class CompetitionAutonomous extends LinearOpMode {
         }
 
         //move behind white line
-        robot.driveXY(6, .75, "backward");
+        timeDriveXY(6, .75, "backward");
 
         //move to 1st power shot position
-        robot.driveXY(45, 1, "right");
+        timeDriveXY(45, 1, "right");
 
         //shoot and keep motor running
-        robot.shooter.setPower(1);
+/*        robot.shooter.setPower(1);
         sleep(2000);
         robot.conveyer.setPower(1);
         sleep(500);
@@ -125,6 +136,65 @@ public class CompetitionAutonomous extends LinearOpMode {
 
         //move onto white line
         robot.driveXY(6, .75, "forward");
+*/
+    }
 
+    public void timeDriveXY(long inches, double speed, String direction) {
+
+        if (direction == "forward") {
+            robot.fr.setPower(speed);
+            robot.br.setPower(speed);
+            robot.fl.setPower(-speed);
+            robot.bl.setPower(-speed);
+            sleep(inches*YMSPerInch);
+        }
+        if (direction == "backward") {
+            robot.fr.setPower(-speed);
+            robot.br.setPower(-speed);
+            robot.fl.setPower(speed);
+            robot.bl.setPower(speed);
+            sleep(inches*YMSPerInch);
+        }
+        if (direction == "left") {
+            robot.fr.setPower(speed);
+            robot.br.setPower(-speed);
+            robot.fl.setPower(speed);
+            robot.bl.setPower(-speed);
+            sleep(inches*XMSPerInch);
+        }
+        if (direction == "right") {
+            robot.fr.setPower(-speed);
+            robot.br.setPower(speed);
+            robot.fl.setPower(-speed);
+            robot.bl.setPower(speed);
+            sleep(inches*XMSPerInch);
+        }
+
+        robot.fr.setPower(0);
+        robot.br.setPower(0);
+        robot.fl.setPower(0);
+        robot.bl.setPower(0);
+    }
+
+    public void timeTurn(int degrees, double speed, String direction) {
+        if (direction == "left") {
+            robot.fr.setPower(speed);
+            robot.br.setPower(speed);
+            robot.fl.setPower(speed);
+            robot.bl.setPower(speed);
+        }
+        if (direction == "right") {
+            robot.fr.setPower(-speed);
+            robot.br.setPower(-speed);
+            robot.fl.setPower(-speed);
+            robot.bl.setPower(-speed);
+        }
+
+        sleep(degrees*secondsPerDegree);
+
+        robot.fr.setPower(0);
+        robot.br.setPower(0);
+        robot.fl.setPower(0);
+        robot.bl.setPower(0);
     }
 }

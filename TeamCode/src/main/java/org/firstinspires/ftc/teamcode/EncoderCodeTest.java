@@ -34,8 +34,17 @@ public class EncoderCodeTest extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
 
+        telemetry.addData("Finished init", "yes");
+        telemetry.update();
+
         waitForStart();
+        telemetry.addData("Started Autonomous", "yes");
+        telemetry.update();
+
         driveXY(10, 1, "right");
+
+        telemetry.addData("Finished Autonomous", "yes");
+        telemetry.update();
 
     }
 
@@ -44,11 +53,6 @@ public class EncoderCodeTest extends LinearOpMode {
 
         float YCountsPerInch = YcountsPerInch;
         float XCountsPerInch = XcountsPerInch;
-        
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
         if (direction == "forward") {
             fr.setTargetPosition(Math.round(inches * YcountsPerInch));
@@ -87,10 +91,5 @@ public class EncoderCodeTest extends LinearOpMode {
 
         while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) {
         }
-
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
     }
 }
