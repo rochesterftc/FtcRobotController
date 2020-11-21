@@ -55,12 +55,12 @@ public class CompetitionTeleOp extends OpMode {
         else robot.arm.setPower(0);
 
         float z = gamepad1.left_stick_x;
-        float x = -gamepad1.right_stick_x;
-        float y = gamepad1.left_stick_y;
+        float x = gamepad1.right_stick_x;
+        float y = -gamepad1.left_stick_y;
 
 
-        robot.fl.setPower(y - x + z);
-        robot.fr.setPower(-y - x - z);
+        robot.fl.setPower(y + x + z);
+        robot.fr.setPower(-y + x - z);
         robot.bl.setPower(y + x - z);
         robot.br.setPower(-y + x + z);
 
@@ -74,12 +74,12 @@ public class CompetitionTeleOp extends OpMode {
             robot.intakeservo.setPower(0);
             robot.liftServo.setPower(0); }
 
-//        if (gamepad1.y && !clawButtonPushed) {
-//            robot.claw.setPosition((clawOn ? 0.7 : 0.3));
-//            clawOn = !clawOn;
-//            clawButtonPushed = true;
-//        } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
-//
+        if (gamepad1.y && !clawButtonPushed) {
+            robot.claw.setPosition((clawOn ? 0.7 : 0.3));
+            clawOn = !clawOn;
+            clawButtonPushed = true;
+        } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
+
 //        if (gamepad2.x && !IsButtonPushed) {
 //            robot.intakeservo.setPower((IsOn ? -1:0));
 //            IsOn = !IsOn;
@@ -98,21 +98,22 @@ public class CompetitionTeleOp extends OpMode {
 //            IsButtonPushed = true;
 //        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
 //
-//        if (gamepad2.y && !LSButtonPushed) {
-//            robot.liftServo.setPower((LSOn ? 1:0));
-//            LSOn = !LSOn;
-//            LSButtonPushed = true;
-//        } else if (!gamepad2.y&& LSButtonPushed) LSButtonPushed = false;
+        if (gamepad2.right_bumper && !LSButtonPushed) {
+            robot.shooter.setPower((LSOn ? 1:0));
+            LSOn = !LSOn;
+            LSButtonPushed = true;
+        } else if (!gamepad2.right_bumper && LSButtonPushed) LSButtonPushed = false;
 
-        robot.conveyor.setPower(gamepad2.left_trigger);
-        robot.shooter.setPower(gamepad2.right_trigger);
+        robot.conveyor.setPower(-gamepad2.left_trigger/2);
+        robot.conveyor.setPower(gamepad2.right_trigger/2);
+//      robot.shooter.setPower(gamepad2.right_trigger);
 
-     /*   if (gamepad2.left_bumper) {
-            robot.shooter.setPower(.9);
-        } else if (gamepad2.right_bumper) {
-            robot.shooter.setPower(.1);
-        } else {robot.shooter.setPower(0);
-        } */
+//        if (gamepad2.right_bumper) {
+//            robot.shooter.setPower(1);
+//        } else if (gamepad2.left_bumper) {
+//            robot.shooter.setPower(.5);
+//        } else {robot.shooter.setPower(0);
+//        }
     }
 }
 
