@@ -124,13 +124,18 @@ public class tfodTest extends LinearOpMode {
 //                    telemetry.update();
 //                }
 
-                moveTime(0,0.5,0,3);
+                moveTime(0,0.5,0,2000);
                 robot.shooter.setPower(0.9);
+                moveTime(0,0,-0.5,1000);
                 sleep(1500);
-                robot.conveyer.setPower(1);
+                robot.conveyor.setPower(-1);
                 sleep(3000);
                 robot.shooter.setPower(0);
+                robot.conveyor.setPower(0);
+                moveTime(0,0,0.5,1000);
                 sleep(1000);
+                moveTime(0,0.5,0,2000);
+
 
                 if (ringCondition == 0) {
                     telemetry.addLine("MOVING TO TARGET A");
@@ -146,13 +151,13 @@ public class tfodTest extends LinearOpMode {
                     moveTime(-0.25, 1, 0, 3000);
                 }
                 telemetry.update();
-                robot.arm.setPower(.5);
-                sleep(250);
+                robot.arm.setPower(-1);
+                sleep(500);
                 robot.arm.setPower(0);
-                sleep(250);
+                sleep(100);
                 robot.claw.setPosition(0.7);
-                moveTime(0,0.25,0,500);
-                robot.arm.setPower(-0.5);
+                moveTime(0,0.5,0,500);
+                robot.arm.setPower(1);
                 sleep(250);
                 robot.arm.setPower(0);
 
@@ -174,10 +179,10 @@ public class tfodTest extends LinearOpMode {
     //Move method: define value for each axis and time
         public void moveTime ( double x, double y, double z, int time){
 
-            robot.fl.setPower(x + y - z);
-            robot.fr.setPower(x - y - z);
-            robot.bl.setPower(-x + y - z);
-            robot.br.setPower(-x - y - z);
+            robot.fl.setPower(y + x + z);
+            robot.fr.setPower(-y + x - z);
+            robot.bl.setPower(y + x - z);
+            robot.br.setPower(-y + x + z);
 
             sleep(time);
 

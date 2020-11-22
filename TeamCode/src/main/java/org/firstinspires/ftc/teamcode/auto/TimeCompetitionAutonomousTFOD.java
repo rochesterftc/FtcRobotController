@@ -116,6 +116,28 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
                     }
                 }
 
+                moveTime(0,0.5,0,4000);
+                robot.shooter.setPower(0.8);
+                sleep(2000);
+                robot.conveyor.setPower(0.5);
+                sleep(3000);
+                robot.shooter.setPower(0);
+                sleep(1000);
+
+                if (var == 0) {
+                    telemetry.addLine("MOVING TO TARGET A");
+                    telemetry.update();
+                    moveTime(-0.5, 0, 0, 2000);
+                } else if (var == 2) {
+                    telemetry.addLine("MOVING TO TARGET B");
+                    telemetry.update();
+                    moveTime(0, 0.5, 0, 2000);
+                } else if (var == 3) {
+                    telemetry.addLine("MOVING TO TARGET C");
+                    telemetry.update();
+                    moveTime(-0.25, 1, 0, 3000);
+                }
+
                 //move to the white shooter line, then the corner of the white line and 1st blue box
                 if (var == 1 || var == 3) {
                     do {
@@ -187,9 +209,9 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
                 //shoot and keep motor running
                 robot.shooter.setPower(1);
                 sleep(2000);
-                robot.conveyer.setPower(1);
+                robot.conveyor.setPower(1);
                 sleep(500);
-                robot.conveyer.setPower(0);
+                robot.conveyor.setPower(0);
 
                 //move to 2nd power shot position
                 timeDriveXY(7, .75, "right");
@@ -197,9 +219,9 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
                 //shoot and keep motor running
                 robot.shooter.setPower(1);
                 sleep(2000);
-                robot.conveyer.setPower(1);
+                robot.conveyor.setPower(1);
                 sleep(500);
-                robot.conveyer.setPower(0);
+                robot.conveyor.setPower(0);
 
                 //move to 3rd power shot position
                 timeDriveXY(7, .75, "right");
@@ -207,9 +229,9 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
                 //shoot and stop motor
                 robot.shooter.setPower(1);
                 sleep(2000);
-                robot.conveyer.setPower(1);
+                robot.conveyor.setPower(1);
                 sleep(500);
-                robot.conveyer.setPower(0);
+                robot.conveyor.setPower(0);
                 robot.shooter.setPower(0);
 
                 //move onto white line
@@ -306,5 +328,21 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
         robot.br.setPower(0);
         robot.fl.setPower(0);
         robot.bl.setPower(0);
+    }
+    //Move method: define value for each axis and time
+    public void moveTime ( double x, double y, double z, int time){
+
+        robot.fl.setPower(x + y - z);
+        robot.fr.setPower(x - y - z);
+        robot.bl.setPower(-x + y - z);
+        robot.br.setPower(-x - y - z);
+
+        sleep(time);
+
+        robot.fl.setPower(0);
+        robot.fr.setPower(0);
+        robot.bl.setPower(0);
+        robot.br.setPower(0);
+
     }
 }

@@ -109,9 +109,9 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         //shoot and keep motor running
         robot.shooter.setPower(1);
         sleep(2000);
-        robot.conveyer.setPower(1);
+        robot.conveyor.setPower(1);
         sleep(500);
-        robot.conveyer.setPower(0);
+        robot.conveyor.setPower(0);
 
         //move to 2nd power shot position
         timeDriveXY(7, .75, "right");
@@ -119,9 +119,9 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         //shoot and keep motor running
         robot.shooter.setPower(1);
         sleep(2000);
-        robot.conveyer.setPower(1);
+        robot.conveyor.setPower(1);
         sleep(500);
-        robot.conveyer.setPower(0);
+        robot.conveyor.setPower(0);
 
         //move to 3rd power shot position
         timeDriveXY(7, .75, "right");
@@ -129,9 +129,9 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         //shoot and stop motor
         robot.shooter.setPower(1);
         sleep(2000);
-        robot.conveyer.setPower(1);
+        robot.conveyor.setPower(1);
         sleep(500);
-        robot.conveyer.setPower(0);
+        robot.conveyor.setPower(0);
         robot.shooter.setPower(0);
 
         //move onto white line
