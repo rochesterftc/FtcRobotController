@@ -125,14 +125,14 @@ public class tfodTest extends LinearOpMode {
 //                }
 
                 moveTime(0,0.5,0,2000);
-                robot.shooter.setPower(0.9);
-                moveTime(0,0,-0.5,1000);
-                sleep(1500);
+                robot.shooter.setPower(1);
+                moveTime(0,0,-1,1000);
+                sleep(3000);
                 robot.conveyor.setPower(-1);
                 sleep(3000);
                 robot.shooter.setPower(0);
                 robot.conveyor.setPower(0);
-                moveTime(0,0,0.5,1000);
+                moveTime(0,0,1,1000);
                 sleep(1000);
                 moveTime(0,0.5,0,2000);
 
@@ -155,7 +155,7 @@ public class tfodTest extends LinearOpMode {
                 sleep(500);
                 robot.arm.setPower(0);
                 sleep(100);
-                robot.claw.setPosition(0.7);
+                robot.claw.setPosition(0.9);
                 moveTime(0,0.5,0,500);
                 robot.arm.setPower(1);
                 sleep(250);
@@ -179,8 +179,8 @@ public class tfodTest extends LinearOpMode {
     //Move method: define value for each axis and time
         public void moveTime ( double x, double y, double z, int time){
 
-            robot.fl.setPower(y + x + z);
-            robot.fr.setPower(-y + x - z);
+            robot.fl.setPower(y - x + z);
+            robot.fr.setPower(-y - x - z);
             robot.bl.setPower(y + x - z);
             robot.br.setPower(-y + x + z);
 

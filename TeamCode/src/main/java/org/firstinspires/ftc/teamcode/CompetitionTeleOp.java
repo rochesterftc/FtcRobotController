@@ -75,7 +75,7 @@ public class CompetitionTeleOp extends OpMode {
             robot.liftServo.setPower(0); }
 
         if (gamepad1.y && !clawButtonPushed) {
-            robot.claw.setPosition((clawOn ? 0.7 : 0.3));
+            robot.claw.setPosition((clawOn ? 0.9 : 0.3));
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
@@ -104,8 +104,8 @@ public class CompetitionTeleOp extends OpMode {
             LSButtonPushed = true;
         } else if (!gamepad2.right_bumper && LSButtonPushed) LSButtonPushed = false;
 
-        robot.conveyor.setPower(-gamepad2.left_trigger/2);
-        robot.conveyor.setPower(gamepad2.right_trigger/2);
+        robot.conveyor.setPower(-gamepad2.left_trigger);
+        robot.conveyor.setPower(gamepad2.right_trigger);
 //      robot.shooter.setPower(gamepad2.right_trigger);
 
 //        if (gamepad2.right_bumper) {
