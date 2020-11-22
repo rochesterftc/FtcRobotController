@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 /**
  * Created by George on 11/9/2020.
  */
-//@Disabled
+
 @Autonomous(name = "Compeition Autonomous", group = "Competition")
 
 public class CompetitionAutonomous extends LinearOpMode {

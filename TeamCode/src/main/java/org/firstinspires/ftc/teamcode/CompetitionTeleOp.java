@@ -28,12 +28,8 @@ public class CompetitionTeleOp extends OpMode {
     boolean clawOn;
     boolean IsButtonPushed;
     boolean IsOn;
-    boolean armButtonPushed;
-    boolean ArmOn;
-    boolean intakeButtonPushed;
-    boolean IntakeOn;
-    double  armDirection;
-    double  intakeMotorDirection;
+    boolean LSButtonPushed;
+    boolean LSOn;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -42,10 +38,7 @@ public class CompetitionTeleOp extends OpMode {
         robot.init(hardwareMap);
         // Test Branch
         // Determine Resource IDs for sounds built into the RC application.
-robot.fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-robot.fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-robot.bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
     }
 
@@ -54,44 +47,32 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //3:1 84  counts per rotation
         //5:1 140 counts per rotation
 
-//        if (gamepad2.b && !armButtonPushed) {
-//            // ((ArmOn ? 21 : -21));
-//             if (ArmOn) {armDirection = 30;}
-//             else {armDirection = -30;}
-//            ArmOn = !ArmOn;
-//            armButtonPushed = true;
-//        } else if (!gamepad2.b && armButtonPushed) armButtonPushed = false;
-
-        if (gamepad2.b) robot.intakemotor.setPower(4);
-        else if (gamepad2.a) robot.intakemotor.setPower(-.8);
+        if (gamepad2.b) robot.intakemotor.setPower(1);
+        else if (gamepad2.a) robot.intakemotor.setPower(-1);
         else robot.intakemotor.setPower(0);
-        if (gamepad1.b) robot.arm.setPower(.5);
-        else if (gamepad1.a) robot.arm.setPower(-.5);
+        if (gamepad1.b) robot.arm.setPower(.3);
+        else if (gamepad1.a) robot.arm.setPower(-.3);
         else robot.arm.setPower(0);
-/*
-        if (gamepad2.a && !intakeButtonPushed) {
-          //  robot.intakemotor.setPower((IntakeOn ? 1 : -1));
-            if (ArmOn) {intakeMotorDirection = -55;}
-            else {intakeMotorDirection = 55;}
-            IntakeOn = !IntakeOn;
-            armButtonPushed = true;
-        } else if (!gamepad2.a && intakeButtonPushed) intakeButtonPushed = false;
-        if (gamepad2.a) {
-            robot.intakemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.intakemotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.intakemotor.setTargetPosition((int)intakeMotorDirection);
-        }
-*/
-        float z = gamepad1.right_stick_x;
-        float x = (float) (gamepad1.left_stick_x *1.5);
-        float y = gamepad1.left_stick_y;
+
+        float z = gamepad1.left_stick_x;
+        float x = gamepad1.right_stick_x;
+        float y = -gamepad1.left_stick_y;
 
 
-        robot.fl.setPower(y - x - z);
+        robot.fl.setPower(y + x + z);
         robot.fr.setPower(-y + x - z);
         robot.bl.setPower(y + x - z);
-        robot.br.setPower(-y - x - z);
+        robot.br.setPower(-y + x + z);
 
+        if (gamepad2.y) {
+            robot.intakeservo.setPower(1);
+        robot.liftServo.setPower(1); }
+        else if (gamepad2.x) {
+            robot.liftServo.setPower(-1);
+        robot.intakeservo.setPower(-1); }
+        else {
+            robot.intakeservo.setPower(0);
+            robot.liftServo.setPower(0); }
 
         if (gamepad1.y && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 0.7 : 0.3));
@@ -99,21 +80,40 @@ robot.br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             clawButtonPushed = true;
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
-        if (gamepad2.x && !IsButtonPushed) {
-            robot.intakeservo.setPower((IsOn ? -1:0));
-            IsOn = !IsOn;
-            IsButtonPushed = true;
-        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
+//        if (gamepad2.x && !IsButtonPushed) {
+//            robot.intakeservo.setPower((IsOn ? -1:0));
+//            IsOn = !IsOn;
+//            IsButtonPushed = true;
+//        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
+//
+//        if (gamepad2.x && !LSButtonPushed) {
+//            robot.liftServo.setPower((LSOn ? -1:0));
+//            LSOn = !LSOn;
+//            LSButtonPushed = true;
+//        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
+//
+//        if (gamepad2.y && !IsButtonPushed) {
+//            robot.intakeservo.setPower((IsOn ? 1:0));
+//            IsOn = !IsOn;
+//            IsButtonPushed = true;
+//        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
+//
+        if (gamepad2.right_bumper && !LSButtonPushed) {
+            robot.shooter.setPower((LSOn ? 1:0));
+            LSOn = !LSOn;
+            LSButtonPushed = true;
+        } else if (!gamepad2.right_bumper && LSButtonPushed) LSButtonPushed = false;
 
-        robot.Conveyor.setPower(gamepad2.left_trigger);
-        robot.shooter.setPower(-gamepad2.right_trigger);
+        robot.conveyor.setPower(-gamepad2.left_trigger/2);
+        robot.conveyor.setPower(gamepad2.right_trigger/2);
+//      robot.shooter.setPower(gamepad2.right_trigger);
 
-     /*   if (gamepad2.left_bumper) {
-            robot.shooter.setPower(.9);
-        } else if (gamepad2.right_bumper) {
-            robot.shooter.setPower(.1);
-        } else {robot.shooter.setPower(0);
-        } */
+//        if (gamepad2.right_bumper) {
+//            robot.shooter.setPower(1);
+//        } else if (gamepad2.left_bumper) {
+//            robot.shooter.setPower(.5);
+//        } else {robot.shooter.setPower(0);
+//        }
     }
 }
 

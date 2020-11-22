@@ -59,15 +59,15 @@ public class CompetitionTeleOpPlzWork extends OpMode {
             IsButtonPushed = true;
         } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
-        robot.Conveyor.setPower(gamepad2.left_trigger);
+        robot.conveyor.setPower(gamepad2.left_trigger);
         robot.shooter.setPower(gamepad2.right_trigger);
 
-        if (gamepad2.left_bumper) {
-            robot.shooter.setPower(.9);
-        } else if (gamepad2.right_bumper) {
-            robot.shooter.setPower(.1);
-        } else {robot.shooter.setPower(0);
-        }
+//        if (gamepad2.left_bumper) {
+//            robot.shooter.setPower(.9);
+//        } else if (gamepad2.right_bumper) {
+//            robot.shooter.setPower(.1);
+//        } else {robot.shooter.setPower(0);
+//        }
     }
 }
 
