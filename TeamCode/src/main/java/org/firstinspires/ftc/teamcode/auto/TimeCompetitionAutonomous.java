@@ -16,7 +16,7 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
 
-    int var;
+    int var = 1;
 
     //38.5in forward in 1 second @ 12.2v
     long YMSPerInch = 260;
@@ -142,31 +142,31 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
     public void timeDriveXY(long inches, double speed, String direction) {
 
         if (direction == "forward") {
-            robot.fr.setPower(speed);
-            robot.br.setPower(speed);
-            robot.fl.setPower(-speed);
-            robot.bl.setPower(-speed);
+            robot.fr.setPower(-speed);
+            robot.br.setPower(-speed);
+            robot.fl.setPower(speed);
+            robot.bl.setPower(speed);
             sleep(inches*YMSPerInch);
         }
         if (direction == "backward") {
-            robot.fr.setPower(-speed);
-            robot.br.setPower(-speed);
-            robot.fl.setPower(speed);
-            robot.bl.setPower(speed);
+            robot.fr.setPower(speed);
+            robot.br.setPower(speed);
+            robot.fl.setPower(-speed);
+            robot.bl.setPower(-speed);
             sleep(inches*YMSPerInch);
         }
         if (direction == "left") {
-            robot.fr.setPower(speed);
-            robot.br.setPower(-speed);
-            robot.fl.setPower(speed);
-            robot.bl.setPower(-speed);
-            sleep(inches*XMSPerInch);
-        }
-        if (direction == "right") {
             robot.fr.setPower(-speed);
             robot.br.setPower(speed);
             robot.fl.setPower(-speed);
             robot.bl.setPower(speed);
+            sleep(inches*XMSPerInch);
+        }
+        if (direction == "right") {
+            robot.fr.setPower(speed);
+            robot.br.setPower(-speed);
+            robot.fl.setPower(speed);
+            robot.bl.setPower(-speed);
             sleep(inches*XMSPerInch);
         }
 
@@ -178,16 +178,16 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
 
     public void timeTurn(int degrees, double speed, String direction) {
         if (direction == "left") {
-            robot.fr.setPower(speed);
-            robot.br.setPower(speed);
-            robot.fl.setPower(speed);
-            robot.bl.setPower(speed);
-        }
-        if (direction == "right") {
             robot.fr.setPower(-speed);
             robot.br.setPower(-speed);
             robot.fl.setPower(-speed);
             robot.bl.setPower(-speed);
+        }
+        if (direction == "right") {
+            robot.fr.setPower(speed);
+            robot.br.setPower(speed);
+            robot.fl.setPower(speed);
+            robot.bl.setPower(speed);
         }
 
         sleep(degrees*secondsPerDegree);
