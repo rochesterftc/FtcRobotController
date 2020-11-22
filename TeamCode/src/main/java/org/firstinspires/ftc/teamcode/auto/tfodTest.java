@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.auto;
+ package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -43,6 +44,9 @@ public class tfodTest extends LinearOpMode {
     public void runOpMode() {
 
         robot.init(hardwareMap);
+        robot.shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
@@ -105,22 +109,29 @@ public class tfodTest extends LinearOpMode {
                 }
 
 
-                moveTime(0,1,0,1500);
+                //moveTime(0,1,0,1500);
 
-                boolean atLine = false;
-                while(!atLine&&opModeIsActive()) {
-                    if (robot.sensorColor.alpha() < 3000) {
-                        robot.fl.setPower(0.025);
-                        robot.fr.setPower(-0.025);
-                        robot.bl.setPower(0.025);
-                        robot.br.setPower(-0.025);
-                        telemetry.addData("STATUS","Scanning for shot line");
-                    } else atLine = true;
-                    telemetry.addData("STATUS","Shot line found!");
-                    telemetry.update();
-                }
+//                boolean atLine = false;
+//                while(!atLine&&opModeIsActive()) {
+//                    if (robot.sensorColor.alpha() < 3000) {
+//                        robot.fl.setPower(0.025);
+//                        robot.fr.setPower(-0.025);
+//                        robot.bl.setPower(0.025);
+//                        robot.br.setPower(-0.025);
+//                        telemetry.addData("STATUS","Scanning for shot line");
+//                    } else atLine = true;
+//                    telemetry.addData("STATUS","Shot line found!");
+//                    telemetry.update();
+//                }
 
+                moveTime(0,0.5,0,3);
+                robot.shooter.setPower(0.9);
+                sleep(1500);
+                robot.conveyer.setPower(1);
+                sleep(3000);
+                robot.shooter.setPower(0);
                 sleep(1000);
+
                 if (ringCondition == 0) {
                     telemetry.addLine("MOVING TO TARGET A");
                     telemetry.update();
@@ -135,6 +146,23 @@ public class tfodTest extends LinearOpMode {
                     moveTime(-0.25, 1, 0, 3000);
                 }
                 telemetry.update();
+                robot.arm.setPower(.5);
+                sleep(250);
+                robot.arm.setPower(0);
+                sleep(250);
+                robot.claw.setPosition(0.7);
+                moveTime(0,0.25,0,500);
+                robot.arm.setPower(-0.5);
+                sleep(250);
+                robot.arm.setPower(0);
+
+                if(ringCondition == 0){
+                    moveTime(0,-0.25,0,500);
+                } else if (ringCondition == 2){
+                    moveTime(0,0.5,0,2000);
+                } else if (ringCondition == 3) {
+                    moveTime(0.25,1,0,3000);
+                }
 
                 tfod.getUpdatedRecognitions();
 
