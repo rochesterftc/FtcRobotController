@@ -28,8 +28,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 /**
  * Created by George on 10/11/2020.
  */
-@Disabled
-@Autonomous(name = "AutonomousBase", group = "Testing")
+//@Disabled
+@Autonomous(name = "Auto Localization", group = "Testing")
 
 public class AutoLocalization extends LinearOpMode {
 
@@ -265,10 +265,10 @@ public class AutoLocalization extends LinearOpMode {
     }
 
     public void setMotorPower (float x, float y, float rX) {
-        robot.fl.setPower(y + x + rX);
-        robot.fr.setPower(-y + x - rX);
-        robot.bl.setPower(y + x - rX);
-        robot.br.setPower(-y + x + rX);
+//        robot.fl.setPower(y + x + rX);
+//        robot.fr.setPower(-y + x - rX);
+//        robot.bl.setPower(y + x - rX);
+//        robot.br.setPower(-y + x + rX);
         telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, rX);
     }
 
