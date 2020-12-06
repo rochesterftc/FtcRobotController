@@ -30,6 +30,10 @@ public class CompetitionTeleOp extends OpMode {
     boolean IsOn;
     boolean LSButtonPushed;
     boolean LSOn;
+    boolean SSButtonPushed;
+    boolean SSOn;
+    boolean SSnegativeButtonPushed;
+    boolean SSnegativeOn;
     double shooterSpeed;
 
     // Declare OpMode members.
@@ -83,22 +87,26 @@ public class CompetitionTeleOp extends OpMode {
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
+        //test comment
 
-//        if (gamepad2.x && !IsButtonPushed) {
-//            robot.intakeservo.setPower((IsOn ? -1:0));
-//            IsOn = !IsOn;
-//            IsButtonPushed = true;
-//        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
-//
-//        if (gamepad2.x && !LSButtonPushed) {
-//            robot.liftServo.setPower((LSOn ? -1:0));
-//            LSOn = !LSOn;
-//            LSButtonPushed = true;
-//        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
-//
+        if (gamepad2.left_bumper && !SSButtonPushed) {
+            shooterSpeed=shooterSpeed+.1;
+            telemetry.addData("Shooter Speed:", shooterSpeed);
+            telemetry.update();
+            SSOn = !SSOn;
+            SSButtonPushed = true;
+        } else if (!gamepad2.left_bumper && SSButtonPushed) SSButtonPushed = false;
 
- //     if(gamepad2.left_bumper) shooterSpeed + .1;
-        //Shooter Speeds
+        if (gamepad2.right_bumper && !SSnegativeButtonPushed) {
+            shooterSpeed=shooterSpeed-.1;
+            telemetry.addData("Shooter Speed:", shooterSpeed);
+            telemetry.update();
+            SSnegativeOn = !SSnegativeOn;
+            SSnegativeButtonPushed = true;
+        } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
+
+        if (shooterSpeed<0) {shooterSpeed=0;}
+/*      //Shooter Speeds
         //fast
         if (gamepad2.left_bumper && !IsButtonPushed) {
             robot.shooter.setPower((IsOn ? 1:0));
@@ -111,10 +119,11 @@ public class CompetitionTeleOp extends OpMode {
             LSOn = !LSOn;
             LSButtonPushed = true;
         } else if (!gamepad2.right_bumper && LSButtonPushed) LSButtonPushed = false;
-
+*/
         //Conveyor controls
         robot.conveyor.setPower(-gamepad2.left_trigger);
         robot.conveyor.setPower(gamepad2.right_trigger);
+        robot.shooter.setPower(shooterSpeed);
 //      robot.shooter.setPower(gamepad2.right_trigger);
 
 //        if (gamepad2.right_bumper) {
