@@ -30,6 +30,7 @@ public class CompetitionTeleOp extends OpMode {
     boolean IsOn;
     boolean LSButtonPushed;
     boolean LSOn;
+    double shooterSpeed;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -47,7 +48,6 @@ public class CompetitionTeleOp extends OpMode {
         //3:1   84   counts per rotation
         //5:1   140  counts per rotation
         //100:1 2800 counts per rotation
-
         float z = gamepad1.left_stick_x;
         float x = gamepad1.right_stick_x;
         float y = -gamepad1.left_stick_y;
@@ -97,7 +97,7 @@ public class CompetitionTeleOp extends OpMode {
 //        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
 //
 
-        if(gamepad2.left_bumper) 
+ //     if(gamepad2.left_bumper) shooterSpeed + .1;
         //Shooter Speeds
         //fast
         if (gamepad2.left_bumper && !IsButtonPushed) {
