@@ -60,7 +60,7 @@ public class HardwareHolonomicChassis
     public DcMotor  shooter  = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
-    public CRServo  intakeservo = null;
+    public Servo  intakeservo = null;
     public CRServo  liftServo = null;
     public Servo    claw  = null;
 
@@ -98,7 +98,7 @@ public class HardwareHolonomicChassis
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
         intakemotor = hwMap.get(DcMotor.class, "IM");
-        intakeservo = hwMap.get(CRServo.class, "IS");
+        intakeservo = hwMap.get(Servo.class, "IS");
         arm = hwMap.get(DcMotor.class, "arm");
         claw = hwMap.get(Servo.class, "claw");
         conveyor = hwMap.get(DcMotor.class, "conveyor");
