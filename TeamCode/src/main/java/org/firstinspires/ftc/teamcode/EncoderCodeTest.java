@@ -21,7 +21,7 @@ public class  EncoderCodeTest extends LinearOpMode {
 
     float pi = (float)Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
     public float YcountsPerInch = 288/(pi*3.875f);
-    public float XcountsPerInch = 288;
+    public float XcountsPerInch = 288/(pi*3.875f);
     public float countsPerDegree = 288/360;
 
 
@@ -33,19 +33,25 @@ public class  EncoderCodeTest extends LinearOpMode {
         bl = hardwareMap.dcMotor.get("bl");
         br = hardwareMap.dcMotor.get("br");
 
-        telemetry.addData("Finished init", "yes");
-        telemetry.update();
-
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        telemetry.addData("Finished init", "yes");
+        telemetry.update();
 
         waitForStart();
         telemetry.addData("Started Autonomous", "yes");
         telemetry.update();
 
         driveXY(10, 1, "right");
+        driveXY(10, 1, "forward");
 
         telemetry.addData("Finished Autonomous", "yes");
         telemetry.update();
@@ -57,6 +63,16 @@ public class  EncoderCodeTest extends LinearOpMode {
 
         float YCountsPerInch = YcountsPerInch;
         float XCountsPerInch = XcountsPerInch;
+
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         if (direction == "forward") {
             fr.setTargetPosition(Math.round(inches * YcountsPerInch));
@@ -82,6 +98,7 @@ public class  EncoderCodeTest extends LinearOpMode {
             fl.setTargetPosition(-Math.round(inches * XCountsPerInch));
             bl.setTargetPosition(Math.round(inches * XCountsPerInch));
         }
+
 
         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
