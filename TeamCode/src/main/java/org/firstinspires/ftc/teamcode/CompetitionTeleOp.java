@@ -90,7 +90,7 @@ public class CompetitionTeleOp extends OpMode {
             LSButtonPushed = true;
         } else if (!gamepad2.a && LSButtonPushed) LSButtonPushed = false;
 
-        if (intakeSpeed>0) {intakeSpeed=1;}
+        if (intakeSpeed>1) {intakeSpeed=1;}
         if (intakeSpeed<0) {intakeSpeed=0;}
 
 //      Drops intake motor
@@ -116,20 +116,13 @@ public class CompetitionTeleOp extends OpMode {
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
-        if (shooterSpeed>0) {shooterSpeed=1;}
+        if (shooterSpeed>1) {shooterSpeed=1;}
         if (shooterSpeed<0) {shooterSpeed=0;}
         //Conveyor controls
         robot.conveyor.setPower(-gamepad2.left_trigger);
         robot.conveyor.setPower(gamepad2.right_trigger);
         robot.shooter.setPower(shooterSpeed);
-//      robot.shooter.setPower(gamepad2.right_trigger);
-
-//        if (gamepad2.right_bumper) {
-//            robot.shooter.setPower(1);
-//        } else if (gamepad2.left_bumper) {
-//            robot.shooter.setPower(.5);
-//        } else {robot.shooter.setPower(0);
-//        }
+        robot.intakemotor.setPower(intakeSpeed);
     }
 }
 
