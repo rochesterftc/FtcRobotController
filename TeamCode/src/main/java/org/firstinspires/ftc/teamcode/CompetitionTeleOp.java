@@ -79,25 +79,25 @@ public class CompetitionTeleOp extends OpMode {
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
+/*
+        if (gamepad2.x && !IsButtonPushed) {
+            robot.intakeservo.setPower((IsOn ? -1:0));
+            IsOn = !IsOn;
+            IsButtonPushed = true;
+        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
-//        if (gamepad2.x && !IsButtonPushed) {
-//            robot.intakeservo.setPower((IsOn ? -1:0));
-//            IsOn = !IsOn;
-//            IsButtonPushed = true;
-//        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
-//
-//        if (gamepad2.x && !LSButtonPushed) {
-//            robot.liftServo.setPower((LSOn ? -1:0));
-//            LSOn = !LSOn;
-//            LSButtonPushed = true;
-//        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
-//
-//        if (gamepad2.y && !IsButtonPushed) {
-//            robot.intakeservo.setPower((IsOn ? 1:0));
-//            IsOn = !IsOn;
-//            IsButtonPushed = true;
-//        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
-//
+        if (gamepad2.x && !LSButtonPushed) {
+            robot.liftServo.setPower((LSOn ? -1:0));
+            LSOn = !LSOn;
+            LSButtonPushed = true;
+        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
+
+        if (gamepad2.y && !IsButtonPushed) {
+            robot.intakeservo.setPower((IsOn ? 1:0));
+            IsOn = !IsOn;
+            IsButtonPushed = true;
+        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
+*/
         if (gamepad2.right_bumper && !LSButtonPushed) {
             robot.shooter.setPower((LSOn ? 1:0));
             LSOn = !LSOn;
