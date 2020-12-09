@@ -30,6 +30,8 @@ public class CompetitionTeleOp extends OpMode {
     boolean IsOn;
     boolean LSButtonPushed;
     boolean LSOn;
+    boolean LSnegativeButtonPushed;
+    boolean LSnegativeOn;
     boolean SSButtonPushed;
     boolean SSOn;
     boolean SSnegativeButtonPushed;
@@ -82,13 +84,13 @@ public class CompetitionTeleOp extends OpMode {
             SSButtonPushed = true;
         } else if (!gamepad2.b && LSButtonPushed) LSButtonPushed = false;
 
-        if (gamepad2.a && !LSButtonPushed) {
-            intakeSpeed=intakeSpeed-1;
+        if (gamepad2.a && !LSnegativeButtonPushed) {
+            intakeSpeed=intakeSpeed-.5;
             telemetry.addData("Intake Speed:", intakeSpeed);
             telemetry.update();
-            LSOn = !LSOn;
-            LSButtonPushed = true;
-        } else if (!gamepad2.a && LSButtonPushed) LSButtonPushed = false;
+            LSnegativeOn = !LSnegativeOn;
+            LSnegativeButtonPushed = true;
+        } else if (!gamepad2.a && LSnegativeButtonPushed) LSnegativeButtonPushed = false;
 
         if (intakeSpeed>1) {intakeSpeed=1;}
         if (intakeSpeed<0) {intakeSpeed=0;}
@@ -98,7 +100,7 @@ public class CompetitionTeleOp extends OpMode {
             robot.intakeservo.setPosition(IsOn ? .1 : .8);
             IsOn = !IsOn;
             IsButtonPushed = true;
-        } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
+        } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
 
         if (gamepad2.left_bumper && !SSButtonPushed) {
             shooterSpeed=shooterSpeed+.1;

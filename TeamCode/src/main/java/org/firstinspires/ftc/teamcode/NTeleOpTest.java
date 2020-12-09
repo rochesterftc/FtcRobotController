@@ -56,17 +56,6 @@ public class NTeleOpTest extends OpMode {
         robot.bl.setPower(y + x - z);
         robot.br.setPower(-y + x + z);
 
-        if (gamepad2.y) {
-            robot.intakeservo.setPower(1);
-            robot.liftServo.setPower(1);
-        } else if (gamepad2.x) {
-            robot.liftServo.setPower(-1);
-            robot.intakeservo.setPower(-1);
-        } else {
-            robot.intakeservo.setPower(0);
-            robot.liftServo.setPower(0);
-        }
-
         if (gamepad1.y && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 0.7 : 0.3));
             clawOn = !clawOn;
