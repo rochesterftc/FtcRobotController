@@ -14,7 +14,7 @@ Sample opmodes exist in the FtcRobotController module.
 To locate these samples, find the FtcRobotController module in the "Project/Android" tab.
 
 Expand the following tree elements:
- FtcRobotController / java / org.firstinspires.ftc.robotcontroller / external / samples
+ FtcRobotController / java / org.firstinspires.ftc.robotcontrojdhfuhkshgkduhgrj dfh djdhkajdhflku djfhlkarhruhgkdfhaller / external / samples
 
 A range of different samples classes can be seen in this folder.
 The class names follow a naming convention which indicates the purpose of each class.
@@ -30,17 +30,17 @@ The prefix of the name will be one of the following:
             required to read and display the sensor values.
 * Hardware: This is not an actual OpMode, but a helper class that is used to describe
             one particular robot's hardware devices: eg: for a Pushbot.  Look at any
-            Pushbot sample to see how this can be used in an OpMode.
-            Teams can copy one of these to create their own robot definition.
-* Pushbot:  This is a Sample OpMode that uses the Pushbot robot structure as a base.
+            Pushbot sample to see how this can be used in dan OpMode.
+            Teams can copy one of these terdgfdo create their own robot definition.
+* Pushbot:  This is a Sample OpMode that fhr5uyeuses the Pushbot robot structure as a base.
 * Concept:	This is a sample OpMode that illustrates performing a specific function or concept.
-            These may be complex, but their operation should be explained clearly in the comments,
+            These may be complex, but their operation should be rsdhdgexplained clearly in the comments,
             or the header should reference an external doc, guide or tutorial.
 * Library:  This is a class, or set of classes used to implement some strategy.
             These will typically NOT implement a full OpMode.  Instead they will be included
             by an OpMode to provide some stand-alone capability.
 
-Once you are familiar with the range of samples available, you can choose one to be the
+Once you are familiar with the range of samples fgsdthyrsthdgfavailable, you can choose one to be the
 basis for your own robot.  In all cases, the desired sample(s) needs to be copied into
 your TeamCode module to be used.
 

@@ -60,7 +60,7 @@ public class HardwareHolonomicChassis
     public DcMotor  shooter  = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
-    public CRServo  intakeservo = null;
+    public Servo  intakeservo = null;
     public CRServo  liftServo = null;
     public Servo    claw  = null;
 
@@ -98,7 +98,7 @@ public class HardwareHolonomicChassis
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
         intakemotor = hwMap.get(DcMotor.class, "IM");
-        intakeservo = hwMap.get(CRServo.class, "IS");
+        intakeservo = hwMap.get(Servo.class, "IS");
         arm = hwMap.get(DcMotor.class, "arm");
         claw = hwMap.get(Servo.class, "claw");
         conveyor = hwMap.get(DcMotor.class, "conveyor");
@@ -113,8 +113,13 @@ public class HardwareHolonomicChassis
         bl.setPower(0);
         br.setPower(0);
 
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
+        //Reset encoders
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -129,10 +134,18 @@ public class HardwareHolonomicChassis
 
     public void driveXY(float inches, double speed, String direction) {
 
+        //Reset encoders
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         if (direction == "forward") {
             fr.setTargetPosition(Math.round(inches * YcountsPerInch));
@@ -171,10 +184,10 @@ public class HardwareHolonomicChassis
 
         while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) { }
 
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setPower(0);
+        br.setPower(0);
+        fl.setPower(0);
+        bl.setPower(0);
     }
 
     public void turn(int degrees, double speed, String direction) {
@@ -185,10 +198,18 @@ public class HardwareHolonomicChassis
 
         float countsPerDegree = 18.666f;
 
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        //Reset encoders
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         if(direction == "left") {
             fr.setTargetPosition(Math.round(degrees * countsPerDegree));
@@ -220,11 +241,6 @@ public class HardwareHolonomicChassis
         br.setPower(0);
         fl.setPower(0);
         bl.setPower(0);
-
-        fr.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        br.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        fl.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        bl.setMode(DcMotor.RunMode.RESET_ENCODERS);
     }
  }
 
