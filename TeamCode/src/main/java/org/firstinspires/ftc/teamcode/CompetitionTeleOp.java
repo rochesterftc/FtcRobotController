@@ -70,24 +70,20 @@ public class CompetitionTeleOp extends OpMode {
 
         //Controls arm servo
         if (gamepad1.y && !clawButtonPushed) {
-            robot.claw.setPosition((clawOn ? 0.9 : 0.3));
+            robot.claw.setPosition((clawOn ? 1 : .2));
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
 //      Controls intake direction
         if (gamepad2.b && !LSButtonPushed) {
-            intakeSpeed=intakeSpeed+1;
-            telemetry.addData("Intake Speed:", intakeSpeed);
-            telemetry.update();
+            intakeSpeed=intakeSpeed+.1;
             LSOn = !LSOn;
             SSButtonPushed = true;
         } else if (!gamepad2.b && LSButtonPushed) LSButtonPushed = false;
 
         if (gamepad2.a && !LSnegativeButtonPushed) {
             intakeSpeed=intakeSpeed-.5;
-            telemetry.addData("Intake Speed:", intakeSpeed);
-            telemetry.update();
             LSnegativeOn = !LSnegativeOn;
             LSnegativeButtonPushed = true;
         } else if (!gamepad2.a && LSnegativeButtonPushed) LSnegativeButtonPushed = false;
@@ -97,23 +93,19 @@ public class CompetitionTeleOp extends OpMode {
 
 //      Drops intake motor
         if (gamepad2.y && !IsButtonPushed) {
-            robot.intakeservo.setPosition(IsOn ? .1 : .8);
+            robot.intakeservo.setPosition(IsOn ? .5 : .25);
             IsOn = !IsOn;
             IsButtonPushed = true;
         } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
 
         if (gamepad2.left_bumper && !SSButtonPushed) {
             shooterSpeed=shooterSpeed+.1;
-            telemetry.addData("Shooter Speed:", shooterSpeed);
-            telemetry.update();
             SSOn = !SSOn;
             SSButtonPushed = true;
         } else if (!gamepad2.left_bumper && SSButtonPushed) SSButtonPushed = false;
 
         if (gamepad2.right_bumper && !SSnegativeButtonPushed) {
             shooterSpeed=shooterSpeed-.1;
-            telemetry.addData("Shooter Speed:", shooterSpeed);
-            telemetry.update();
             SSnegativeOn = !SSnegativeOn;
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
@@ -125,6 +117,9 @@ public class CompetitionTeleOp extends OpMode {
         robot.conveyor.setPower(gamepad2.right_trigger);
         robot.shooter.setPower(shooterSpeed);
         robot.intakemotor.setPower(intakeSpeed);
+        telemetry.addData("Shooter speed", shooterSpeed);
+        telemetry.addData("intake speed", intakeSpeed);
+        telemetry.update();
     }
 }
 
