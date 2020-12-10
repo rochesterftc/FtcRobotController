@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -17,6 +19,7 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -32,10 +35,11 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 @Autonomous(name = "Auto Localization", group = "Testing")
 
 public class AutoLocalization extends LinearOpMode {
+    ElapsedTime initTimer = new ElapsedTime();
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
-    int errorInches = 1;
-    int errorDegrees = 5;
+    int errorInches = 2;
+    int errorDegrees = 10;
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -86,6 +90,11 @@ public class AutoLocalization extends LinearOpMode {
 
         robot.init(hardwareMap);
 
+        robot.fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         /*
          * Retrieve the camera we are to use.
          */
@@ -97,16 +106,22 @@ public class AutoLocalization extends LinearOpMode {
          * If no camera monitor is desired, use the parameter-less constructor instead (commented out below).
          */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        //VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
         /**
          * We also indicate which camera on the RC we wish to use.
          */
+        //Uncomment for webcam
+
         parameters.cameraName = webcamName;
+
+        //uncomment for phone cam
+          //final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+
 
         // Make sure extended tracking is disabled for this example.
         parameters.useExtendedTracking = false;
@@ -211,11 +226,17 @@ public class AutoLocalization extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
+        telemetry.addData("Status:","Init Completed in "+(float)initTimer.seconds()+" seconds.  Press play to start...");
+        telemetry.update();
         waitForStart();
 
         targetsUltimateGoal.activate();
 
         boolean atTarget = false;
+        //drive forward from start
+        setMotorPower(0, (float) 1, (float) -0.12);
+        sleep(3750);
+        setMotorPower(0,0,0);
 
         while (!isStopRequested() && !atTarget) {
 
@@ -241,35 +262,42 @@ public class AutoLocalization extends LinearOpMode {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                        translation.get(1) / mmPerInch, translation.get(0) / mmPerInch, translation.get(2) / mmPerInch);
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                //shoot target {X, Y, Z} = 6, 36, 2
+                setMotorPower(((translation.get(1)+6) / mmPerInch / 24), -((translation.get(0)+36) / mmPerInch / 24),0/*(rotation.thirdAngle+80) / 1000)*/);
 
-                setMotorPower((translation.get(0) / mmPerInch / 24), (translation.get(1) / mmPerInch / 24), rotation.thirdAngle / 45);
-
-                if (translation.get(0) > errorInches || translation.get(0) < -errorInches ||
-                        translation.get(1) > errorInches || translation.get(1) <-errorInches ||
-                        rotation.thirdAngle > errorDegrees || rotation.thirdAngle < -errorDegrees) {
+                if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
+                        translation.get(1) > (+errorInches) || translation.get(1) <(-errorInches) ||
+                        rotation.thirdAngle > (+errorDegrees) || rotation.thirdAngle < (-errorDegrees)) {
                     atTarget = false;
                 } else atTarget = true;
 
             }
             else {
                 telemetry.addData("Visible Target", "none");
+                robot.fl.setPower(0);
+                robot.fr.setPower(0);
+                robot.bl.setPower(0);
+                robot.br.setPower(0);
             }
             telemetry.update();
         }
 
     }
 
-    public void setMotorPower (float x, float y, float rX) {
-//        robot.fl.setPower(y + x + rX);
-//        robot.fr.setPower(-y + x - rX);
-//        robot.bl.setPower(y + x - rX);
-//        robot.br.setPower(-y + x + rX);
-        telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, rX);
+    public void setMotorPower (float z, float y, float x) {
+        //x = turning
+        //y = forward
+        //z = strafing
+        robot.fl.setPower(y + x + z);
+        robot.fr.setPower(-y + x + z);
+        robot.bl.setPower(y + x - z);
+        robot.br.setPower(-y + x - z);
+        telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, z);
     }
 
 }
