@@ -234,13 +234,13 @@ public class AutoLocalization extends LinearOpMode {
 
         boolean atTarget = false;
         //drive forward from start
-        setMotorPower(0, (float) 1, (float) -0.2);
+        setMotorPower(0, 1, 0);
         sleep(3750);
         setMotorPower(0,0,0);
 
-        ElapsedTime LocalizerTimeout = new ElapsedTime();
+        ElapsedTime localizerTimeout = new ElapsedTime();
 
-        while (!isStopRequested() && !atTarget && LocalizerTimeout.seconds() < 5) {
+        while (!isStopRequested() && !atTarget && localizerTimeout.seconds() < 5) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -271,8 +271,6 @@ public class AutoLocalization extends LinearOpMode {
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
-
-
 
                 setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24), ((translation.get(0)-6*mmPerInch) / mmPerInch / 24),((rotation.thirdAngle-85) / 1000));
 

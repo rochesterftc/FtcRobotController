@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
  */
 
 @TeleOp(name="Test  Tele-Op",group="Testing")
-//@Disabled
+@Disabled
 
 public class TeleOpTest extends OpMode {
 
