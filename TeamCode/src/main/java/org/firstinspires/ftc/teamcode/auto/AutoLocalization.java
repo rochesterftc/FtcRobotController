@@ -226,7 +226,7 @@ public class AutoLocalization extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        telemetry.addData("Status:","Init Completed in "+(float)initTimer.seconds()+" seconds.  Press play to start...");
+        telemetry.addData("Status:","Init Completed in "+Math.round(initTimer.seconds())+" seconds.  Press play to start...");
         telemetry.update();
         waitForStart();
 
@@ -234,11 +234,13 @@ public class AutoLocalization extends LinearOpMode {
 
         boolean atTarget = false;
         //drive forward from start
-        setMotorPower(0, (float) 1, (float) -0.12);
+        setMotorPower(0, (float) 1, (float) -0.2);
         sleep(3750);
         setMotorPower(0,0,0);
 
-        while (!isStopRequested() && !atTarget) {
+        ElapsedTime LocalizerTimeout = new ElapsedTime();
+
+        while (!isStopRequested() && !atTarget && LocalizerTimeout.seconds() < 5) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -268,7 +270,11 @@ public class AutoLocalization extends LinearOpMode {
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
                 //shoot target {X, Y, Z} = 6, 36, 2
-                setMotorPower(((translation.get(1)+6) / mmPerInch / 24), -((translation.get(0)+36) / mmPerInch / 24),0/*(rotation.thirdAngle+80) / 1000)*/);
+                VectorF targetPosition = lastLocation.getTranslation();
+
+
+
+                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24), ((translation.get(0)-6*mmPerInch) / mmPerInch / 24),((rotation.thirdAngle-85) / 1000));
 
                 if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
                         translation.get(1) > (+errorInches) || translation.get(1) <(-errorInches) ||
@@ -287,16 +293,23 @@ public class AutoLocalization extends LinearOpMode {
             telemetry.update();
         }
 
+        robot.shooter.setPower(1);
+        sleep(5000);
+        robot.conveyor.setPower(0.125);
+        sleep(7500);
+        robot.conveyor.setPower(0);
+        robot.shooter.setPower(0);
+
     }
 
     public void setMotorPower (float z, float y, float x) {
         //x = turning
         //y = forward
         //z = strafing
-        robot.fl.setPower(y + x + z);
-        robot.fr.setPower(-y + x + z);
-        robot.bl.setPower(y + x - z);
-        robot.br.setPower(-y + x - z);
+        robot.fl.setPower(y - x + z);
+        robot.fr.setPower(-y - x + z);
+        robot.bl.setPower(y - x - z);
+        robot.br.setPower(-y - x - z);
         telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, z);
     }
 
