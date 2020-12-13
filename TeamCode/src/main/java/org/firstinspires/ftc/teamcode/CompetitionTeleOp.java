@@ -30,7 +30,14 @@ public class  CompetitionTeleOp extends OpMode {
     boolean IsOn;
     boolean LSButtonPushed;
     boolean LSOn;
+    boolean LSnegativeButtonPushed;
+    boolean LSnegativeOn;
+    boolean SSButtonPushed;
+    boolean SSOn;
+    boolean SSnegativeButtonPushed;
+    boolean SSnegativeOn;
     double shooterSpeed;
+    double intakeSpeed;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -59,73 +66,63 @@ public class  CompetitionTeleOp extends OpMode {
         robot.bl.setPower(y + x - z);
         robot.br.setPower(-y + x - z);
 
-//      Controls intake functions
-        if (gamepad2.b) robot.intakemotor.setPower(1);
-        else if (gamepad2.a) robot.intakemotor.setPower(-1);
-        else robot.intakemotor.setPower(0);
-
-//      Controls arm functions
+//      Controls arm direction
         if (gamepad1.b) robot.arm.setPower(.3);
         else if (gamepad1.a) robot.arm.setPower(-.3);
         else robot.arm.setPower(0);
 
-//      Controls the intake servos
-        if (gamepad2.y) {
-            robot.intakeservo.setPower(1);
-        robot.liftServo.setPower(1); }
-        else if (gamepad2.x) {
-            robot.liftServo.setPower(-1);
-        robot.intakeservo.setPower(-1); }
-        else {
-            robot.intakeservo.setPower(0);
-            robot.liftServo.setPower(0); }
-
-//      Controls arm servo
+        //Controls arm servo
         if (gamepad1.y && !clawButtonPushed) {
-            robot.claw.setPosition((clawOn ? 0.9 : 0.3));
+            robot.claw.setPosition((clawOn ? 1 : .2));
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
-//        if (gamepad2.x && !IsButtonPushed) {
-//            robot.intakeservo.setPower((IsOn ? -1:0));
-//            IsOn = !IsOn;
-//            IsButtonPushed = true;
-//        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
-//
-//        if (gamepad2.x && !LSButtonPushed) {
-//            robot.liftServo.setPower((LSOn ? -1:0));
-//            LSOn = !LSOn;
-//            LSButtonPushed = true;
-//        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
-//
+//      Controls intake direction
+        if (gamepad2.b && !LSButtonPushed) {
+            intakeSpeed=intakeSpeed+.1;
+            LSOn = !LSOn;
+            SSButtonPushed = true;
+        } else if (!gamepad2.b && LSButtonPushed) LSButtonPushed = false;
 
- //     if(gamepad2.left_bumper) shooterSpeed + .1;
-        //Shooter Speeds
-        //fast
-        if (gamepad2.left_bumper && !IsButtonPushed) {
-            robot.shooter.setPower((IsOn ? 1:0));
+        if (gamepad2.a && !LSnegativeButtonPushed) {
+            intakeSpeed=intakeSpeed-.5;
+            LSnegativeOn = !LSnegativeOn;
+            LSnegativeButtonPushed = true;
+        } else if (!gamepad2.a && LSnegativeButtonPushed) LSnegativeButtonPushed = false;
+
+        if (intakeSpeed>1) {intakeSpeed=1;}
+        if (intakeSpeed<0) {intakeSpeed=0;}
+
+//      Drops intake motor
+        if (gamepad2.y && !IsButtonPushed) {
+            robot.intakeservo.setPosition(IsOn ? .5 : .25);
             IsOn = !IsOn;
             IsButtonPushed = true;
         } else if (!gamepad2.y && IsButtonPushed) IsButtonPushed = false;
-        //Slow
-        if (gamepad2.right_bumper && !LSButtonPushed) {
-            robot.shooter.setPower((LSOn ? .8:0));
-            LSOn = !LSOn;
-            LSButtonPushed = true;
-        } else if (!gamepad2.right_bumper && LSButtonPushed) LSButtonPushed = false;
 
+        if (gamepad2.left_bumper && !SSButtonPushed) {
+            shooterSpeed=shooterSpeed+.1;
+            SSOn = !SSOn;
+            SSButtonPushed = true;
+        } else if (!gamepad2.left_bumper && SSButtonPushed) SSButtonPushed = false;
+
+        if (gamepad2.right_bumper && !SSnegativeButtonPushed) {
+            shooterSpeed=shooterSpeed-.1;
+            SSnegativeOn = !SSnegativeOn;
+            SSnegativeButtonPushed = true;
+        } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
+
+        if (shooterSpeed>1) {shooterSpeed=1;}
+        if (shooterSpeed<0) {shooterSpeed=0;}
         //Conveyor controls
         robot.conveyor.setPower(-gamepad2.left_trigger);
         robot.conveyor.setPower(gamepad2.right_trigger);
-//      robot.shooter.setPower(gamepad2.right_trigger);
-
-//        if (gamepad2.right_bumper) {
-//            robot.shooter.setPower(1);
-//        } else if (gamepad2.left_bumper) {
-//            robot.shooter.setPower(.5);
-//        } else {robot.shooter.setPower(0);
-//        }
+        robot.shooter.setPower(shooterSpeed);
+        robot.intakemotor.setPower(intakeSpeed);
+        telemetry.addData("Shooter speed", shooterSpeed);
+        telemetry.addData("intake speed", intakeSpeed);
+        telemetry.update();
     }
 }
 
