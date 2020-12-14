@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.hardwaremap;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -104,6 +105,8 @@ public class HardwareHolonomicChassis
         conveyor = hwMap.get(DcMotor.class, "conveyor");
         shooter = hwMap.get(DcMotor.class, "shooter");
         liftServo = hwMap.get(CRServo.class, "LS");
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
 
         sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
 

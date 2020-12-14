@@ -28,16 +28,20 @@ public class CompetitionTeleOp extends OpMode {
     boolean clawOn;
     boolean IsButtonPushed;
     boolean IsOn;
+    boolean IMButtonPushed;
+    boolean IMOn;
     boolean LSButtonPushed;
     boolean LSOn;
-    boolean LSnegativeButtonPushed;
-    boolean LSnegativeOn;
+    boolean IMnegativeButtonPushed;
+    boolean IMnegativeOn;
     boolean SSButtonPushed;
     boolean SSOn;
     boolean SSnegativeButtonPushed;
     boolean SSnegativeOn;
     double shooterSpeed;
     double intakeSpeed;
+    double conveyorSpeed;
+    double liftServoSpeed;
 
     // Declare OpMode members.
    // private boolean helloThereFound;      // Sound file present flag
@@ -51,6 +55,18 @@ public class CompetitionTeleOp extends OpMode {
     }
 
     public void loop() {
+        if (gamepad2.dpad_up){
+            liftServoSpeed=1;
+            shooterSpeed=.7;
+            intakeSpeed=1;
+            robot.intakeservo.setPosition(.5);
+        }
+        if (gamepad2.dpad_down) {
+            liftServoSpeed=-1;
+            shooterSpeed=.5;
+            intakeSpeed=-1;
+            robot.intakeservo.setPosition(.25);
+        }
         //1:1   28   counts per rotation
         //3:1   84   counts per rotation
         //5:1   140  counts per rotation
@@ -76,17 +92,17 @@ public class CompetitionTeleOp extends OpMode {
         } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
 
 //      Controls intake direction
-        if (gamepad2.b && !LSButtonPushed) {
+        if (gamepad2.b && !IMButtonPushed) {
             intakeSpeed=intakeSpeed+.1;
-            LSOn = !LSOn;
-            SSButtonPushed = true;
-        } else if (!gamepad2.b && LSButtonPushed) LSButtonPushed = false;
+            IMOn = !IMOn;
+            IMButtonPushed = true;
+        } else if (!gamepad2.b && IMButtonPushed) IMButtonPushed = false;
 
-        if (gamepad2.a && !LSnegativeButtonPushed) {
-            intakeSpeed=intakeSpeed-.5;
-            LSnegativeOn = !LSnegativeOn;
-            LSnegativeButtonPushed = true;
-        } else if (!gamepad2.a && LSnegativeButtonPushed) LSnegativeButtonPushed = false;
+        if (gamepad2.a && !IMnegativeButtonPushed) {
+            intakeSpeed=intakeSpeed-.1;
+            IMnegativeOn = !IMnegativeOn;
+            IMnegativeButtonPushed = true;
+        } else if (!gamepad2.a && IMnegativeButtonPushed) IMnegativeButtonPushed = false;
 
         if (intakeSpeed>1) {intakeSpeed=1;}
         if (intakeSpeed<0) {intakeSpeed=0;}
@@ -110,15 +126,26 @@ public class CompetitionTeleOp extends OpMode {
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
+        if (gamepad2.x && LSButtonPushed) {
+            liftServoSpeed=(LSOn ? -1 : 1);
+            LSOn = !LSOn;
+            LSButtonPushed = true;
+        } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
+
         if (shooterSpeed>1) {shooterSpeed=1;}
         if (shooterSpeed<0) {shooterSpeed=0;}
         //Conveyor controls
-        robot.conveyor.setPower(-gamepad2.left_trigger);
-        robot.conveyor.setPower(gamepad2.right_trigger);
+        conveyorSpeed=-gamepad2.left_trigger;
+        conveyorSpeed=gamepad2.right_trigger;
+        conveyorSpeed=0;
+
         robot.shooter.setPower(shooterSpeed);
         robot.intakemotor.setPower(intakeSpeed);
-        telemetry.addData("Shooter speed", shooterSpeed);
-        telemetry.addData("intake speed", intakeSpeed);
+        robot.conveyor.setPower(conveyorSpeed);
+        robot.liftServo.setPower(liftServoSpeed);
+
+        telemetry.addData("Shooter Speed", shooterSpeed);
+        telemetry.addData("Intake Speed", intakeSpeed);
         telemetry.update();
     }
 }
