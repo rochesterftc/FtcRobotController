@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by George on 11/9/2020.
  */
 @Autonomous(name = "Time Autonomous TFOD", group = "Competition")
-
+@Disabled
 public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();

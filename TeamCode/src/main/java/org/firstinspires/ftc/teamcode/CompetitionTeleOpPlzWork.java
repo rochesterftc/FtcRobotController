@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
  * Created by Rochesterftc10303 on 10/4/2018.
  */
 @TeleOp(name="Competition Test",group="Master")
-
+@Disabled
 public class CompetitionTeleOpPlzWork extends OpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();

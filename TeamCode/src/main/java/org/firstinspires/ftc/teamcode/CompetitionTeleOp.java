@@ -20,7 +20,7 @@ import static java.lang.Thread.sleep;
  */
 @TeleOp(name="Competition2020-2021",group="Master")
 
-public class CompetitionTeleOp extends OpMode {
+public class  CompetitionTeleOp extends OpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
 
@@ -74,6 +74,9 @@ public class CompetitionTeleOp extends OpMode {
         float z = gamepad1.left_stick_x;
         float x = gamepad1.right_stick_x;
         float y = -gamepad1.left_stick_y;
+        //x = turning
+        //y = forward
+        //z = strafing
         robot.fl.setPower(y + x + z);
         robot.fr.setPower(-y + x + z);
         robot.bl.setPower(y + x - z);
