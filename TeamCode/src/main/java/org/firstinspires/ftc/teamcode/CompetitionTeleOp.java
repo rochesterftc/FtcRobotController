@@ -51,22 +51,9 @@ public class  CompetitionTeleOp extends OpMode {
         // Test Branch
         // Determine Resource IDs for sounds built into the RC application.
 
-
     }
 
     public void loop() {
-        if (gamepad2.dpad_up){
-            liftServoSpeed=1;
-            shooterSpeed=.7;
-            intakeSpeed=1;
-            robot.intakeservo.setPosition(.5);
-        }
-        if (gamepad2.dpad_down) {
-            liftServoSpeed=-1;
-            shooterSpeed=.5;
-            intakeSpeed=-1;
-            robot.intakeservo.setPosition(.25);
-        }
         //1:1   28   counts per rotation
         //3:1   84   counts per rotation
         //5:1   140  counts per rotation
@@ -130,25 +117,28 @@ public class  CompetitionTeleOp extends OpMode {
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
         if (gamepad2.x && LSButtonPushed) {
-            liftServoSpeed=(LSOn ? -1 : 1);
+            liftServoSpeed = (LSOn ? -1 : 1);
             LSOn = !LSOn;
             LSButtonPushed = true;
         } else if (!gamepad2.x && LSButtonPushed) LSButtonPushed = false;
 
         if (shooterSpeed>1) {shooterSpeed=1;}
         if (shooterSpeed<0) {shooterSpeed=0;}
-        //Conveyor controls
-        conveyorSpeed=-gamepad2.left_trigger;
-        conveyorSpeed=gamepad2.right_trigger;
-        conveyorSpeed=0;
 
-        robot.shooter.setPower(shooterSpeed);
+        if (liftServoSpeed<1) liftServoSpeed=1;
+        if (liftServoSpeed>-1) liftServoSpeed=-1;
+        //Conveyor controls
+            conveyorSpeed = -gamepad2.left_trigger;
+            conveyorSpeed = gamepad2.right_trigger;
+            conveyorSpeed = 0;
+
+
+        robot.shooter.setPower(-shooterSpeed);
         robot.intakemotor.setPower(intakeSpeed);
         robot.conveyor.setPower(conveyorSpeed);
-        robot.liftServo.setPower(liftServoSpeed);
+        robot.liftServo.setPower(liftServoSpeed/1.25);
 
         telemetry.addData("Shooter Speed", shooterSpeed);
-        telemetry.addData("Intake Speed", intakeSpeed);
         telemetry.update();
     }
 }
