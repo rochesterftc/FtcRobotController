@@ -136,7 +136,7 @@ public class LocalizationTest extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -150,10 +150,10 @@ public class LocalizationTest extends LinearOpMode {
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
-        /**
-         * We also indicate which camera on the RC we wish to use.
-         */
-        parameters.cameraName = webcamName;
+        //uncomment for phone cam
+        parameters.cameraDirection   = CAMERA_CHOICE;
+        //uncomment for webcam
+        //parameters.cameraName = webcamName;
 
         // Make sure extended tracking is disabled for this example.
         parameters.useExtendedTracking = false;

@@ -71,7 +71,7 @@ public class HardwareHolonomicChassis
     Wheel diameter - 3.875 inches
     Circumference - ~12.174 inches
     Drive reduction - 26:15 (1.7333...)
-    Core Hex Motor has 288 counts per revolution
+    Core Hex Motor has 288 counts per rev nolution
     Encoder counts per wheel revolution - ~166.154
     */
     float pi = (float)Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
