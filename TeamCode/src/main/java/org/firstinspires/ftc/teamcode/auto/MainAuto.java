@@ -306,7 +306,7 @@ public class MainAuto extends LinearOpMode {
 
                 //Start flywheel then allign with shooting position
                 robot.shooter.setPower(1);
-                //goToPosition(6,36,85);
+                goToPosition(6,36,85, allTrackables);
 
                 //Shoot then stop flywheel
                 robot.conveyor.setPower(0.125);
@@ -315,9 +315,9 @@ public class MainAuto extends LinearOpMode {
                 robot.shooter.setPower(0);
 
                 //Go to target for droping wobble goal
-                if (ringCondition == 1) {}//goToPosition();
-                else if (ringCondition == 2) {}//goToPosition();
-                else if (ringCondition == 3) {}//goToPosition();
+                if (ringCondition == 1) goToPosition(15,55,70, allTrackables);
+                else if (ringCondition == 2) goToPosition(40,37,0, allTrackables);
+                else if (ringCondition == 3) goToPosition(60,55,45, allTrackables);
 
                 //release wobble goal
                 robot.arm.setPower(-1);
@@ -331,11 +331,7 @@ public class MainAuto extends LinearOpMode {
                 robot.arm.setPower(0);
 
                 //park on shooting line
-                //goToPosition();
-
-
-
-
+                goToPosition(14,36,0, allTrackables);
 
             }
         }
@@ -366,64 +362,64 @@ public class MainAuto extends LinearOpMode {
             tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
         }
 
-//    public void goToPosition (int xInches, int yInches, int degrees) {
-//
-//        ElapsedTime localizerTimeout = new ElapsedTime();
-//        boolean atTarget = false;
-//        while (!isStopRequested() && !atTarget && localizerTimeout.seconds() < 5) {
-//
-//            // check all the trackable targets to see which one (if any) is visible.
-//            targetVisible = false;
-//            for (VuforiaTrackable trackable : allTrackables) {
-//                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-//                    telemetry.addData("Visible Target", trackable.getName());
-//                    targetVisible = true;
-//
-//                    // getUpdatedRobotLocation() will return null if no new information is available since
-//                    // the last time that call was made, or if the trackable is not currently visible.
-//                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-//                    if (robotLocationTransform != null) {
-//                        lastLocation = robotLocationTransform;
-//                    }
-//                    break;
-//                }
-//            }
-//
-//            // Provide feedback as to where the robot is located (if we know).
-//            if (targetVisible) {
-//                // express position (translation) of robot in inches.
-//                VectorF translation = lastLocation.getTranslation();
-//                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-//                        translation.get(1) / mmPerInch, translation.get(0) / mmPerInch, translation.get(2) / mmPerInch);
-//
-//                // express the rotation of the robot in degrees.
-//                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-//                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-//                //shoot target {X, Y, Z} = 6, 36, 2
-//                setMotorPower(((translation.get(1)-yInches*mmPerInch) / mmPerInch / 24), ((translation.get(0)-xInches*mmPerInch) / mmPerInch / 24),((rotation.thirdAngle-degrees) / 1000));
-//
-//                if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
-//                        translation.get(1) > (+errorInches) || translation.get(1) < (-errorInches) ||
-//                        rotation.thirdAngle > (+errorDegrees) || rotation.thirdAngle < (-errorDegrees)) {
-//                    atTarget = false;
-//                } else atTarget = true;
-//
-//            } else {
-//                telemetry.addData("Visible Target", "none");
-//                robot.fl.setPower(0);
-//                robot.fr.setPower(0);
-//                robot.bl.setPower(0);
-//                robot.br.setPower(0);
-//            }
-//            telemetry.update();
-//        }
-//
-//        robot.fl.setPower(0);
-//        robot.fr.setPower(0);
-//        robot.bl.setPower(0);
-//        robot.br.setPower(0);
-//
-//    }
+    public void goToPosition (int xInches, int yInches, int degrees, List<VuforiaTrackable> allTrackables ) {
+
+        ElapsedTime localizerTimeout = new ElapsedTime();
+        boolean atTarget = false;
+        while (!isStopRequested() && !atTarget && localizerTimeout.seconds() < 5 && opModeIsActive()) {
+
+            // check all the trackable targets to see which one (if any) is visible.
+            targetVisible = false;
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
+                    targetVisible = true;
+
+                    // getUpdatedRobotLocation() will return null if no new information is available since
+                    // the last time that call was made, or if the trackable is not currently visible.
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                    if (robotLocationTransform != null) {
+                        lastLocation = robotLocationTransform;
+                    }
+                    break;
+                }
+            }
+
+            // Provide feedback as to where the robot is located (if we know).
+            if (targetVisible) {
+                // express position (translation) of robot in inches.
+                VectorF translation = lastLocation.getTranslation();
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        translation.get(1) / mmPerInch, translation.get(0) / mmPerInch, translation.get(2) / mmPerInch);
+
+                // express the rotation of the robot in degrees.
+                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                //shoot target {X, Y, Z} = 6, 36, 2
+                setMotorPower(((translation.get(1)-yInches*mmPerInch) / mmPerInch / 24), ((translation.get(0)-xInches*mmPerInch) / mmPerInch / 24),((rotation.thirdAngle-degrees) / 1000));
+
+                if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
+                        translation.get(1) > (+errorInches) || translation.get(1) < (-errorInches) ||
+                        rotation.thirdAngle > (+errorDegrees) || rotation.thirdAngle < (-errorDegrees)) {
+                    atTarget = false;
+                } else atTarget = true;
+
+            } else {
+                telemetry.addData("Visible Target", "none");
+                robot.fl.setPower(0);
+                robot.fr.setPower(0);
+                robot.bl.setPower(0);
+                robot.br.setPower(0);
+            }
+            telemetry.update();
+        }
+
+        robot.fl.setPower(0);
+        robot.fr.setPower(0);
+        robot.bl.setPower(0);
+        robot.br.setPower(0);
+
+    }
 
 
 }

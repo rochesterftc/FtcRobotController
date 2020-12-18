@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -36,6 +37,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 public class AutoLocalization extends LinearOpMode {
     ElapsedTime initTimer = new ElapsedTime();
+
+    static DecimalFormat df = new DecimalFormat("0.00");
+
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     int errorInches = 2;
@@ -226,7 +230,7 @@ public class AutoLocalization extends LinearOpMode {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        telemetry.addData("Status:","Init Completed in "+Math.round(initTimer.seconds())+" seconds.  Press play to start...");
+        telemetry.addData("Status:","Init Completed in "+df.format(initTimer.seconds())+"s.  Press play to start...");
         telemetry.update();
         waitForStart();
 
@@ -235,7 +239,7 @@ public class AutoLocalization extends LinearOpMode {
         boolean atTarget = false;
         //drive forward from start
         setMotorPower(0, 1, 0);
-        sleep(3750);
+        sleep(2250);
         setMotorPower(0,0,0);
 
         ElapsedTime localizerTimeout = new ElapsedTime();
@@ -272,7 +276,7 @@ public class AutoLocalization extends LinearOpMode {
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
 
-                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24), ((translation.get(0)-6*mmPerInch) / mmPerInch / 24),((rotation.thirdAngle-85) / 1000));
+                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24/8), -((translation.get(0)-6*mmPerInch) / mmPerInch / 24/8),0/*- ((rotation.thirdAngle-85) / 1000)*/);
 
                 if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
                         translation.get(1) > (+errorInches) || translation.get(1) <(-errorInches) ||
