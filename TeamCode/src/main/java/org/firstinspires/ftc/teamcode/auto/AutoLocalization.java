@@ -241,10 +241,12 @@ public class AutoLocalization extends LinearOpMode {
         setMotorPower(0, 1, 0);
         sleep(2250);
         setMotorPower(0,0,0);
+        robot.shooter.setPower(-1);
+
 
         ElapsedTime localizerTimeout = new ElapsedTime();
 
-        while (!isStopRequested() && !atTarget && localizerTimeout.seconds() < 5) {
+        while (opModeIsActive() && !atTarget && localizerTimeout.seconds() < 5) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -276,11 +278,11 @@ public class AutoLocalization extends LinearOpMode {
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
 
-                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24/8), -((translation.get(0)-6*mmPerInch) / mmPerInch / 24/8),0/*- ((rotation.thirdAngle-85) / 1000)*/);
+                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-6*mmPerInch) / mmPerInch / 24/16),((rotation.thirdAngle-85) / 1000));
 
-                if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
-                        translation.get(1) > (+errorInches) || translation.get(1) <(-errorInches) ||
-                        rotation.thirdAngle > (+errorDegrees) || rotation.thirdAngle < (-errorDegrees)) {
+                if (((translation.get(1)-36*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-36*mmPerInch) / mmPerInch) < (-errorInches) ||
+                        ((translation.get(0)-6*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-6*mmPerInch) / mmPerInch) <(-errorInches) /*||
+                        (rotation.thirdAngle-85) > (+errorDegrees) || (rotation.thirdAngle-85) < (-errorDegrees)*/) {
                     atTarget = false;
                 } else atTarget = true;
 
@@ -294,10 +296,10 @@ public class AutoLocalization extends LinearOpMode {
             }
             telemetry.update();
         }
+        setMotorPower(0,0,0);
 
-        robot.shooter.setPower(1);
         sleep(5000);
-        robot.conveyor.setPower(0.125);
+        robot.conveyor.setPower(-0.25);
         sleep(7500);
         robot.conveyor.setPower(0);
         robot.shooter.setPower(0);

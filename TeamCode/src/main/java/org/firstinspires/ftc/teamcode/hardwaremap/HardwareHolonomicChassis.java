@@ -37,7 +37,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/**
+import java.text.DecimalFormat;
+
+ /**
  * This is NOT an opmode.
  *
  * This class can be used to define all the specific hardware for a basic robot chassis with Holonomic drive train(mecanum wheels).
@@ -66,6 +68,7 @@ public class HardwareHolonomicChassis
     public Servo    claw  = null;
 
     public ColorSensor sensorColor = null;
+
 
     /* ENCODER MATH
     Wheel diameter - 3.875 inches
