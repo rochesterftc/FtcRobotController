@@ -43,7 +43,7 @@ public class AutoLocalization extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     int errorInches = 2;
-    int errorDegrees = 10;
+    int errorDegrees = 2;
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -278,11 +278,11 @@ public class AutoLocalization extends LinearOpMode {
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
 
-                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-6*mmPerInch) / mmPerInch / 24/16),((rotation.thirdAngle-85) / 1000));
+                setMotorPower(((translation.get(1)-36*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-6*mmPerInch) / mmPerInch / 24/16),((rotation.thirdAngle-95) / 1000));
 
                 if (((translation.get(1)-36*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-36*mmPerInch) / mmPerInch) < (-errorInches) ||
-                        ((translation.get(0)-6*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-6*mmPerInch) / mmPerInch) <(-errorInches) /*||
-                        (rotation.thirdAngle-85) > (+errorDegrees) || (rotation.thirdAngle-85) < (-errorDegrees)*/) {
+                        ((translation.get(0)-6*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-6*mmPerInch) / mmPerInch) <(-errorInches) ||
+                        (rotation.thirdAngle-95) > (+errorDegrees) || (rotation.thirdAngle-95) < (-errorDegrees)) {
                     atTarget = false;
                 } else atTarget = true;
 
