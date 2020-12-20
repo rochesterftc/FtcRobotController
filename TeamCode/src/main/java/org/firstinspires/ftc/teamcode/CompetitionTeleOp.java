@@ -129,7 +129,7 @@ public class  CompetitionTeleOp extends OpMode {
         robot.shooter.setPower(-shooterSpeed);
         robot.intakemotor.setPower(intakeSpeed);
         robot.liftServo.setPower(liftServoSpeed);
-        robot.liftServo2.setPower(-liftServoSpeed);
+        robot.liftServo2.setPower(liftServoSpeed);
 
         telemetry.addData("Shooter Speed", shooterSpeed);
         telemetry.update();
