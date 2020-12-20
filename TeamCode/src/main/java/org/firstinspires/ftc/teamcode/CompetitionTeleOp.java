@@ -47,7 +47,7 @@ public class  CompetitionTeleOp extends OpMode {
         robot.init(hardwareMap);
         // Test Branch
         // Determine Resource IDs for sounds built into the RC application.
-
+        liftServoSpeed=0;
     }
 
     public void loop() {
@@ -81,14 +81,14 @@ public class  CompetitionTeleOp extends OpMode {
 //      Controls intake direction
         if (gamepad2.b && !IMButtonPushed) {
             intakeSpeed=intakeSpeed+.8;
-            liftServoSpeed=liftServoSpeed+1;
+            liftServoSpeed=liftServoSpeed+.9;
             IMOn = !IMOn;
             IMButtonPushed = true;
         } else if (!gamepad2.b && IMButtonPushed) IMButtonPushed = false;
 
         if (gamepad2.a && !IMnegativeButtonPushed) {
             intakeSpeed=intakeSpeed-.8;
-            liftServoSpeed = liftServoSpeed-1;
+            liftServoSpeed = liftServoSpeed-.9;
             IMnegativeOn = !IMnegativeOn;
             IMnegativeButtonPushed = true;
         } else if (!gamepad2.a && IMnegativeButtonPushed) IMnegativeButtonPushed = false;
