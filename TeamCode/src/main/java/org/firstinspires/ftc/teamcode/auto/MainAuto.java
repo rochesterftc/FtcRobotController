@@ -41,7 +41,7 @@ public class MainAuto extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     int errorInches = 2;
-    int errorDegrees = 10;
+    int errorDegrees = 2;
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -258,6 +258,8 @@ public class MainAuto extends LinearOpMode {
             // Uncomment the following line if you want to adjust the magnification and/or the aspect ratio of the input images.
             //tfod.setZoom(2.5, 1.78);
 
+            robot.claw.setPosition(0);
+
             /** Wait for the game to begin */
             telemetry.addData(">", "Press Play to start op mode");
             telemetry.update();
@@ -271,7 +273,7 @@ public class MainAuto extends LinearOpMode {
 
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                int ringCondition = 0; //1 = zero rings, 2 = one ring, 3 = four rings
+                int ringCondition = 1; //1 = zero rings, 2 = one ring, 3 = four rings
                 while (scanTime.seconds() < 2 && opModeIsActive()) {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
@@ -301,23 +303,47 @@ public class MainAuto extends LinearOpMode {
                 boolean atTarget = false;
                 //drive forward from start
                 setMotorPower(0, 1, 0);
-                sleep(2000);
+                sleep(2250);
                 setMotorPower(0, 0, 0);
 
                 //Start flywheel then allign with shooting position
-                robot.shooter.setPower(1);
-                goToPosition(6,36,85, allTrackables);
-
+                robot.shooter.setPower(-1);
+                goToPosition(36,6,110, allTrackables);
+                setMotorPower(0,0,0);
                 //Shoot then stop flywheel
-                robot.conveyor.setPower(0.125);
-                sleep(7500);
+                robot.conveyor.setPower(-0.25);
+                sleep(5000);
                 robot.conveyor.setPower(0);
                 robot.shooter.setPower(0);
 
                 //Go to target for droping wobble goal
-                if (ringCondition == 1) goToPosition(15,55,70, allTrackables);
-                else if (ringCondition == 2) goToPosition(40,37,0, allTrackables);
-                else if (ringCondition == 3) goToPosition(60,55,45, allTrackables);
+                if (ringCondition == 1) {
+                    goToPosition(36,14,90, allTrackables);
+                    setMotorPower(0,0,-1);
+                    sleep(1200);
+                    setMotorPower(0,0,0);
+                    setMotorPower((float) 0.5,0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                }
+                else if (ringCondition == 2) {
+                    goToPosition(36,14,90, allTrackables);
+                    setMotorPower(0,0,-1);
+                    sleep(600);
+                    setMotorPower(0,0,0);
+                    setMotorPower((float) 0.5,0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                }
+                else if (ringCondition == 3) {
+                    goToPosition(36,43 ,90, allTrackables);
+                    setMotorPower(0,0,-1);
+                    sleep(600);
+                    setMotorPower(0,0,0);
+                    setMotorPower(0, (float) 0.5,0);
+                    sleep(750);
+                    setMotorPower(0,0,0);
+                }
 
                 //release wobble goal
                 robot.arm.setPower(-1);
@@ -330,8 +356,19 @@ public class MainAuto extends LinearOpMode {
                 sleep(250);
                 robot.arm.setPower(0);
 
-                //park on shooting line
-                goToPosition(14,36,0, allTrackables);
+                if(ringCondition == 1) {
+                    setMotorPower((float) -0.5, 0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                } else if (ringCondition == 2) {
+                    setMotorPower((float) -0.5, 0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                }else if(ringCondition == 3){
+                    setMotorPower(-1,0,0);
+                    sleep(2000);
+                    setMotorPower(0,0,0);
+                }
 
             }
         }
@@ -366,7 +403,7 @@ public class MainAuto extends LinearOpMode {
 
         ElapsedTime localizerTimeout = new ElapsedTime();
         boolean atTarget = false;
-        while (!isStopRequested() && !atTarget && localizerTimeout.seconds() < 5 && opModeIsActive()) {
+        while (!atTarget && localizerTimeout.seconds() < 5 && opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
             targetVisible = false;
@@ -385,7 +422,7 @@ public class MainAuto extends LinearOpMode {
                 }
             }
 
-            // Provide feedback as to where the robot is located (if we know).
+            /// Provide feedback as to where the robot is located (if we know).
             if (targetVisible) {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
@@ -396,15 +433,18 @@ public class MainAuto extends LinearOpMode {
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
                 //shoot target {X, Y, Z} = 6, 36, 2
-                setMotorPower(((translation.get(1)-yInches*mmPerInch) / mmPerInch / 24), ((translation.get(0)-xInches*mmPerInch) / mmPerInch / 24),((rotation.thirdAngle-degrees) / 1000));
+                VectorF targetPosition = lastLocation.getTranslation();
 
-                if (translation.get(0) > (+errorInches) || translation.get(0) < (-errorInches) ||
-                        translation.get(1) > (+errorInches) || translation.get(1) < (-errorInches) ||
-                        rotation.thirdAngle > (+errorDegrees) || rotation.thirdAngle < (-errorDegrees)) {
+                setMotorPower(((translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-yInches*mmPerInch) / mmPerInch / 24/16),((rotation.thirdAngle-95) / 1000));
+
+                if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
+                        ((translation.get(0)-yInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-yInches*mmPerInch) / mmPerInch) <(-errorInches) ||
+                        (rotation.thirdAngle-degrees) > (+errorDegrees) || (rotation.thirdAngle-degrees) < (-errorDegrees)) {
                     atTarget = false;
                 } else atTarget = true;
 
-            } else {
+            }
+            else {
                 telemetry.addData("Visible Target", "none");
                 robot.fl.setPower(0);
                 robot.fr.setPower(0);
@@ -413,11 +453,7 @@ public class MainAuto extends LinearOpMode {
             }
             telemetry.update();
         }
-
-        robot.fl.setPower(0);
-        robot.fr.setPower(0);
-        robot.bl.setPower(0);
-        robot.br.setPower(0);
+        setMotorPower(0,0,0);
 
     }
 
