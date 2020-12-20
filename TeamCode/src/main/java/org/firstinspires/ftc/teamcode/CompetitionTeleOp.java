@@ -119,15 +119,16 @@ public class  CompetitionTeleOp extends OpMode {
         if (intakeSpeed>.8) {intakeSpeed=.8;}
         if (intakeSpeed<-.8) {intakeSpeed=-.8;}
 
-        if (liftServoSpeed<.9) {liftServoSpeed=.9;}
-        if (liftServoSpeed>-.9) {liftServoSpeed=-.9;}
+        if (liftServoSpeed>.9) {liftServoSpeed=.9;}
+        if (liftServoSpeed<-.9) {liftServoSpeed=-.9;}
+        
         //Conveyor controls
             robot.conveyor.setPower(-gamepad2.left_trigger);
             robot.conveyor.setPower(gamepad2.right_trigger);
 
         robot.shooter.setPower(-shooterSpeed);
         robot.intakemotor.setPower(intakeSpeed);
-        robot.liftServo.setPower(-liftServoSpeed);
+        robot.liftServo.setPower(liftServoSpeed);
 
         telemetry.addData("Shooter Speed", shooterSpeed);
         telemetry.update();
