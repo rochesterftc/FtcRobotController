@@ -268,6 +268,9 @@ public class MainAuto extends LinearOpMode {
 
             if (tfod != null) {
 
+                setMotorPower(0, 1, 0);
+
+
                 ElapsedTime scanTime = new ElapsedTime();
                 scanTime.reset();
 
@@ -302,13 +305,12 @@ public class MainAuto extends LinearOpMode {
 
                 boolean atTarget = false;
                 //drive forward from start
-                setMotorPower(0, 1, 0);
-                sleep(2250);
+                sleep((long) (2250-scanTime.time()));
                 setMotorPower(0, 0, 0);
 
                 //Start flywheel then allign with shooting position
                 robot.shooter.setPower(-1);
-                goToPosition(36,6,110, allTrackables);
+                goToPosition(36,6,80, allTrackables);
                 setMotorPower(0,0,0);
                 //Shoot then stop flywheel
                 robot.conveyor.setPower(-0.25);
@@ -453,8 +455,9 @@ public class MainAuto extends LinearOpMode {
             }
             telemetry.update();
         }
+        if (localizerTimeout.seconds()>5) telemetry.addLine("Localizer Timeout!");
         setMotorPower(0,0,0);
-
+        telemetry.update();
     }
 
 
