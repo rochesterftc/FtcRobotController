@@ -67,10 +67,8 @@ public class HardwareHolonomicChassis
     public CRServo  intakeservo = null;
     public Servo    claw  = null;
 
-    public CRServo liftServoA3 = null;
     public CRServo liftServoA2 = null;
     public CRServo liftServoA1 = null;
-    public CRServo liftServoB3 = null;
     public CRServo liftServoB2 = null;
     public CRServo liftServoB1 = null;
 
@@ -119,10 +117,9 @@ public class HardwareHolonomicChassis
 
         liftServoA1 = hwMap.get(CRServo.class, "LSA1");
         liftServoA2 = hwMap.get(CRServo.class, "LSA2");
-        liftServoA3 = hwMap.get(CRServo.class, "LSA3");
         liftServoB1 = hwMap.get(CRServo.class, "LSB1");
         liftServoB2 = hwMap.get(CRServo.class, "LSB2");
-        liftServoB3 = hwMap.get(CRServo.class, "LAB3");
+
 
         sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
 
