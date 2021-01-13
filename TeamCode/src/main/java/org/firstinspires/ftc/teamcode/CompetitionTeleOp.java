@@ -67,16 +67,16 @@ public class  CompetitionTeleOp extends OpMode {
         robot.br.setPower(-y + x - z);
 
 //      Controls arm direction
-        if (gamepad1.b) robot.arm.setPower(.4);
-        else if (gamepad1.a) robot.arm.setPower(-.4);
+        if (gamepad2.dpad_up) robot.arm.setPower(.4);
+        else if (gamepad2.dpad_down) robot.arm.setPower(-.4);
         else robot.arm.setPower(0);
 
         //Controls arm servo
-        if (gamepad1.y && !clawButtonPushed) {
+        if (gamepad2.dpad_right && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 1 : .2));
             clawOn = !clawOn;
             clawButtonPushed = true;
-        } else if (!gamepad1.y && clawButtonPushed) clawButtonPushed = false;
+        } else if (!gamepad2.dpad_right && clawButtonPushed) clawButtonPushed = false;
 
 //      Controls intake direction
         if (gamepad2.b && !IMButtonPushed) {
@@ -129,7 +129,7 @@ public class  CompetitionTeleOp extends OpMode {
         robot.shooter.setPower(-shooterSpeed);
         robot.intakemotor.setPower(intakeSpeed);
         robot.liftServo.setPower(liftServoSpeed);
-        robot.liftServo2.setPower(-liftServoSpeed);
+        robot.liftServo2.setPower(liftServoSpeed);
 
         telemetry.addData("Shooter Speed", shooterSpeed);
         telemetry.update();
