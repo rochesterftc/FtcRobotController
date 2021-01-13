@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 /**
  * Created by Rochesterftc10303 on 10/4/2018.
  */
-@TeleOp(name="Competition Test",group="Master")
 @Disabled
 public class CompetitionTeleOpPlzWork extends OpMode {
 
@@ -54,11 +53,6 @@ public class CompetitionTeleOpPlzWork extends OpMode {
             clawButtonPushed = true;
         } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
 
-        if (gamepad2.x && !IsButtonPushed) {
-            robot.intakeservo.setPosition((IsOn ? 1:0));
-            IsOn = !IsOn;
-            IsButtonPushed = true;
-        } else if (!gamepad2.x && IsButtonPushed) IsButtonPushed = false;
 
         robot.conveyor.setPower(gamepad2.left_trigger);
         robot.shooter.setPower(gamepad2.right_trigger);

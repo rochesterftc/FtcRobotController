@@ -63,10 +63,14 @@ public class HardwareHolonomicChassis
     public DcMotor  shooter  = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
-    public Servo  intakeservo = null;
-    public CRServo liftServo2 = null;
-    public CRServo  liftServo = null;
+
+    public CRServo  intakeservo = null;
     public Servo    claw  = null;
+
+    public CRServo liftServoA2 = null;
+    public CRServo liftServoA1 = null;
+    public CRServo liftServoB2 = null;
+    public CRServo liftServoB1 = null;
 
     public ColorSensor sensorColor = null;
 
@@ -102,14 +106,20 @@ public class HardwareHolonomicChassis
         fr = hwMap.get(DcMotor.class, "fr");
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
-        intakemotor = hwMap.get(DcMotor.class, "IM");
-        intakeservo = hwMap.get(Servo.class, "IS");
-        liftServo2 = hwMap.get(CRServo.class, "LS2");
+
+        intakemotor = hwMap.get(DcMotor.class, "conveyor2");
+        intakeservo = hwMap.get(CRServo.class, "IS");
+
         arm = hwMap.get(DcMotor.class, "arm");
         claw = hwMap.get(Servo.class, "claw");
         conveyor = hwMap.get(DcMotor.class, "conveyor");
         shooter = hwMap.get(DcMotor.class, "shooter");
-        liftServo = hwMap.get(CRServo.class, "LS");
+
+        liftServoA1 = hwMap.get(CRServo.class, "LSA1");
+        liftServoA2 = hwMap.get(CRServo.class, "LSA2");
+        liftServoB1 = hwMap.get(CRServo.class, "LSB1");
+        liftServoB2 = hwMap.get(CRServo.class, "LSB2");
+
 
         sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
 
