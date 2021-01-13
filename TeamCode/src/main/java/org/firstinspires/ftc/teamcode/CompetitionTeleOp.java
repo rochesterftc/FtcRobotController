@@ -122,8 +122,8 @@ public class  CompetitionTeleOp extends OpMode {
 
 
 //      Controls arm direction
-        if (gamepad2.dpad_up) robot.arm.setPower(.4);
-        else if (gamepad2.dpad_down) robot.arm.setPower(-.4);
+        if (gamepad2.dpad_up && gamepad2.dpad_left) robot.arm.setPower(.4);
+        else if (gamepad2.dpad_down && gamepad2.dpad_left) robot.arm.setPower(-.4);
         else robot.arm.setPower(0);
 
         //Conveyor controls
