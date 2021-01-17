@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaBase;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
@@ -23,7 +21,6 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -36,9 +33,11 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * Created by Nathaniel on 12/9/2020.
  */
 //@Disabled
-@Autonomous(name = "Localizer PID", group = "Competition")
-
-public class LocalizerPID extends LinearOpMode {
+@Autonomous(name = "Main Auto PID", group = "Competition")
+/**
+ *
+ */
+public class MainAutoPID extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     int errorInches = 2;
@@ -50,8 +49,6 @@ public class LocalizerPID extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-
-
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -269,9 +266,116 @@ public class LocalizerPID extends LinearOpMode {
 
             waitForStart();
 
-            goToPosition(36,6,110, allTrackables);
+            if (tfod != null) {
+
+
+
+                ElapsedTime scanTime = new ElapsedTime();
+                scanTime.reset();
+
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                int ringCondition = 1; //1 = zero rings, 2 = one ring, 3 = four rings
+                while (scanTime.seconds() < 2 && opModeIsActive()) {
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                        // step through the list of recognitions and display boundary info.
+                        int i = 1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                    recognition.getLeft(), recognition.getTop());
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                    recognition.getRight(), recognition.getBottom());
+                            if (recognition.getLabel() == "Single") {
+                                ringCondition = 2;
+                            } else if (recognition.getLabel() == "Quad") {
+                                ringCondition = 3;
+                            }
+                            telemetry.update();
+                        }
+                        telemetry.update();
+                    }
+                }
+
+                targetsUltimateGoal.activate();
+
+                boolean atTarget = false;
+                //drive forward from start
+//                setMotorPower(0, 1, 0);
+//                sleep(2250);
+//                setMotorPower(0, 0, 0);
+
+                //Start flywheel then allign with shooting position
+                robot.shooter.setPower(-1);
+                goToPosition(36,6,110, allTrackables);
+                setMotorPower(0,0,0);
+                //Shoot then stop flywheel
+                robot.conveyor.setPower(-0.4);
+                sleep(5000);
+                robot.conveyor.setPower(0);
+                robot.shooter.setPower(0);
+
+                //Go to target for droping wobble goal
+                if (ringCondition == 1) {
+                    goToPosition(36,14,90, allTrackables);
+                    setMotorPower(0,0,-1);
+                    sleep(1200);
+                    setMotorPower(0,0,0);
+                    setMotorPower((float) 0.5,0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                }
+                else if (ringCondition == 2) {
+                    goToPosition(36,14,90, allTrackables);
+                    setMotorPower(0,0,-1);
+                    sleep(600);
+                    setMotorPower(0,0,0);
+                    setMotorPower((float) 0.5,0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                }
+                else if (ringCondition == 3) {
+                    goToPosition(36,43 ,90, allTrackables);
+                    setMotorPower(0,0,-1);
+                    sleep(600);
+                    setMotorPower(0,0,0);
+                    setMotorPower(0, (float) 0.5,0);
+                    sleep(750);
+                    setMotorPower(0,0,0);
+                }
+
+                //release wobble goal
+                robot.arm.setPower(-1);
+                sleep(500);
+                robot.arm.setPower(0);
+                sleep(100);
+                robot.claw.setPosition(0.9);
+                sleep(200);
+                robot.arm.setPower(1);
+                sleep(250);
+                robot.arm.setPower(0);
+
+                if(ringCondition == 1) {
+                    setMotorPower((float) -0.5, 0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                } else if (ringCondition == 2) {
+                    setMotorPower((float) -0.5, 0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
+                }else if(ringCondition == 3){
+                    setMotorPower(-1,0,0);
+                    sleep(2000);
+                    setMotorPower(0,0,0);
+                }
+
+            }
         }
     }
+
 
 
     public void setMotorPower (float z, float y, float x) {
@@ -285,35 +389,35 @@ public class LocalizerPID extends LinearOpMode {
         telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, z);
     }
 
-    /**
-     * Initialize the TensorFlow Object Detection engine.
-     */
-    private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-    }
+        /**
+         * Initialize the TensorFlow Object Detection engine.
+         */
+        private void initTfod() {
+            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                    "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+            tfodParameters.minResultConfidence = 0.8f;
+            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+            tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        }
 
     public void goToPosition (int xInches, int yInches, int degrees, List<VuforiaTrackable> allTrackables ) {
 
-        PIDController xPid = new PIDController(0.002,0,0);
+        PIDController xPid = new PIDController(0.00002,0,0);
         xPid.setInputRange(-72,72);
         xPid.setOutputRange(0,1);
         xPid.setTolerance(errorInches/144);
         xPid.enable();
-        PIDController yPid = new PIDController(0.002,0,0);
+        PIDController yPid = new PIDController(0.00002,0,0);
         yPid.setInputRange(-72,72);
         yPid.setOutputRange(0,1);
         yPid.setTolerance(errorInches/144);
         yPid.enable();
+        double xPower;
+        double yPower;
 
         ElapsedTime localizerTimeout = new ElapsedTime();
         boolean atTarget = false;
-        double xPower;
-        double yPower;
         while (!atTarget && localizerTimeout.seconds() < 5 && opModeIsActive()) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -345,9 +449,10 @@ public class LocalizerPID extends LinearOpMode {
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
+
                 xPower = xPid.performPID(translation.get(1));
                 yPower = yPid.performPID(translation.get(0));
-                setMotorPower((float)(xPower), (float)(yPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
+                setMotorPower((float)(-xPower), (float)(-yPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
                 //(translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16
                 // mm Distance-distance to object
                 if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
