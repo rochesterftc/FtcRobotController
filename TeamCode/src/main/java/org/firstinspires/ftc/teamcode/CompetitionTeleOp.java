@@ -127,10 +127,13 @@ public class  CompetitionTeleOp extends OpMode {
         else robot.arm.setPower(0);
 
         //Conveyor controls
-        robot.conveyor.setPower(-gamepad2.left_trigger);
-        robot.conveyor.setPower(gamepad2.right_trigger);
-        robot.intakemotor.setPower(-gamepad2.left_trigger);
-        robot.intakemotor.setPower(gamepad2.right_trigger);
+        robot.conveyor.setPower(-gamepad2.left_trigger-1);
+        robot.conveyor.setPower(gamepad2.right_trigger+1);
+        //robot.conveyorServo.setPower(gamepad2.right_trigger);
+
+        robot.intakemotor.setPower(-gamepad2.left_trigger-1);
+        robot.intakemotor.setPower(gamepad2.right_trigger+1);
+        //robot.conveyorServo.setPower(-gamepad2.right_trigger);
 
         //Drops intake mechanism
         robot.intakeservo.setPower(gamepad2.left_stick_y/1.1);

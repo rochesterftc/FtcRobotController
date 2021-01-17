@@ -61,6 +61,7 @@ public class HardwareHolonomicChassis
     public DcMotor  br  = null;
     public DcMotor  conveyor  = null;
     public DcMotor  shooter  = null;
+   // public CRServo  conveyorServo = null;
     public DcMotor  intakemotor = null;
     public DcMotor  arm = null;
 
@@ -114,6 +115,7 @@ public class HardwareHolonomicChassis
         claw = hwMap.get(Servo.class, "claw");
         conveyor = hwMap.get(DcMotor.class, "conveyor");
         shooter = hwMap.get(DcMotor.class, "shooter");
+    //    conveyorServo = hwMap.get(CRServo.class, "conServo");
 
         liftServoA1 = hwMap.get(CRServo.class, "LSA1");
         liftServoA2 = hwMap.get(CRServo.class, "LSA2");
