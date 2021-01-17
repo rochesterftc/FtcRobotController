@@ -52,205 +52,207 @@ import java.text.DecimalFormat;
  * Motor channel:  Back Left drive motor:   "bl"
  * Motor channel:  Back Right drive motor:  "br"
  */
-public class HardwareHolonomicChassis {
-     /* Public OpMode members. */
-     public DcMotor fl = null;
-     public DcMotor fr = null;
-     public DcMotor bl = null;
-     public DcMotor br = null;
-     public DcMotor conveyor = null;
-     public DcMotor shooter = null;
-     public DcMotor intakemotor = null;
-     public DcMotor arm = null;
+public class HardwareHolonomicChassis
+{
+    /* Public OpMode members. */
+    public DcMotor  fl  = null;
+    public DcMotor  fr  = null;
+    public DcMotor  bl  = null;
+    public DcMotor  br  = null;
+    public DcMotor  conveyor  = null;
+    public DcMotor  shooter  = null;
+   // public CRServo  conveyorServo = null;
+    public DcMotor  intakemotor = null;
+    public DcMotor  arm = null;
 
-     public CRServo intakeservo = null;
-     public Servo claw = null;
+    public CRServo  intakeservo = null;
+    public Servo    claw  = null;
 
-     public CRServo liftServoA2 = null;
-     public CRServo liftServoA1 = null;
-     public CRServo liftServoB2 = null;
-     public CRServo liftServoB1 = null;
+    public CRServo liftServoA2 = null;
+    public CRServo liftServoA1 = null;
+    public CRServo liftServoB2 = null;
+    public CRServo liftServoB1 = null;
 
-     public ColorSensor sensorColor = null;
-
-
-     /* ENCODER MATH
-     Wheel diameter - 3.875 inches
-     Circumference - ~12.174 inches
-     Drive reduction - 26:15 (1.7333...)
-     Core Hex Motor has 288 counts per rev nolution
-     Encoder counts per wheel revolution - ~166.154
-     */
-     float pi = (float) Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
-     float ratio = 15 / 26;
-     float YcountsPerInch = (288 * ratio) / (pi * 3.875f);
-     float XcountsPerInch = 86f;
-
-     /* local OpMode members. */
-     HardwareMap hwMap = null;
-     private ElapsedTime period = new ElapsedTime();
-
-     /* Constructor */
-     public HardwareHolonomicChassis() {
-
-     }
-
-     /* Initialize standard Hardware interfaces */
-     public void init(HardwareMap HolonomichwMap) {
-         // Save reference to Hardware map
-         hwMap = HolonomichwMap;
-
-         // Define and Initialize Motors
-         fl = hwMap.get(DcMotor.class, "fl");
-         fr = hwMap.get(DcMotor.class, "fr");
-         bl = hwMap.get(DcMotor.class, "bl");
-         br = hwMap.get(DcMotor.class, "br");
-
-         intakemotor = hwMap.get(DcMotor.class, "conveyor2");
-         intakeservo = hwMap.get(CRServo.class, "IS");
-
-         arm = hwMap.get(DcMotor.class, "arm");
-         claw = hwMap.get(Servo.class, "claw");
-         conveyor = hwMap.get(DcMotor.class, "conveyor");
-         shooter = hwMap.get(DcMotor.class, "shooter");
-
-         liftServoA1 = hwMap.get(CRServo.class, "LSA1");
-         liftServoA2 = hwMap.get(CRServo.class, "LSA2");
-         liftServoB1 = hwMap.get(CRServo.class, "LSB1");
-         liftServoB2 = hwMap.get(CRServo.class, "LSB2");
+    public ColorSensor sensorColor = null;
 
 
-         sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
+    /* ENCODER MATH
+    Wheel diameter - 3.875 inches
+    Circumference - ~12.174 inches
+    Drive reduction - 26:15 (1.7333...)
+    Core Hex Motor has 288 counts per rev nolution
+    Encoder counts per wheel revolution - ~166.154
+    */
+    float pi = (float)Math.PI; //Float version of Pi, which is normally a double. This allows the encoder calculations to actually work.
+    float ratio = 15/26;
+    float YcountsPerInch = (288*ratio)/(pi*3.875f);
+    float XcountsPerInch = 86f;
 
-         // Set all motors to zero power
-         fl.setPower(0);
-         fr.setPower(0);
-         bl.setPower(0);
-         br.setPower(0);
+    /* local OpMode members. */
+    HardwareMap hwMap           =  null;
+    private ElapsedTime period  = new ElapsedTime();
 
-         //Reset encoders
-         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    /* Constructor */
+    public HardwareHolonomicChassis(){
 
-         //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
-         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 
-         //When given a power of 0, motors will brake instead of coast.
-         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-     }
+    /* Initialize standard Hardware interfaces */
+    public void init(HardwareMap HolonomichwMap) {
+        // Save reference to Hardware map
+        hwMap = HolonomichwMap;
 
-     public void driveXY(float inches, double speed, String direction) {
+        // Define and Initialize Motors
+        fl = hwMap.get(DcMotor.class, "fl");
+        fr = hwMap.get(DcMotor.class, "fr");
+        bl = hwMap.get(DcMotor.class, "bl");
+        br = hwMap.get(DcMotor.class, "br");
 
-         //Reset encoders
-         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakemotor = hwMap.get(DcMotor.class, "conveyor2");
+        intakeservo = hwMap.get(CRServo.class, "IS");
 
-         //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
-         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm = hwMap.get(DcMotor.class, "arm");
+        claw = hwMap.get(Servo.class, "claw");
+        conveyor = hwMap.get(DcMotor.class, "conveyor");
+        shooter = hwMap.get(DcMotor.class, "shooter");
+    //    conveyorServo = hwMap.get(CRServo.class, "conServo");
 
-
-         if (direction == "forward") {
-             fr.setTargetPosition(Math.round(inches * YcountsPerInch));
-             br.setTargetPosition(Math.round(inches * YcountsPerInch));
-             fl.setTargetPosition(-Math.round(inches * YcountsPerInch));
-             bl.setTargetPosition(-Math.round(inches * YcountsPerInch));
-         }
-         if (direction == "backward") {
-             fr.setTargetPosition(-Math.round(inches * YcountsPerInch));
-             br.setTargetPosition(-Math.round(inches * YcountsPerInch));
-             fl.setTargetPosition(Math.round(inches * YcountsPerInch));
-             bl.setTargetPosition(Math.round(inches * YcountsPerInch));
-         }
-         if (direction == "left") {
-             fr.setTargetPosition(Math.round(inches * XcountsPerInch));
-             br.setTargetPosition(-Math.round(inches * XcountsPerInch));
-             fl.setTargetPosition(Math.round(inches * XcountsPerInch));
-             bl.setTargetPosition(-Math.round(inches * XcountsPerInch));
-         }
-         if (direction == "right") {
-             fr.setTargetPosition(-Math.round(inches * XcountsPerInch));
-             br.setTargetPosition(Math.round(inches * XcountsPerInch));
-             fl.setTargetPosition(-Math.round(inches * XcountsPerInch));
-             bl.setTargetPosition(Math.round(inches * XcountsPerInch));
-         }
-
-         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-         br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-         fr.setPower(speed);
-         br.setPower(speed);
-         fl.setPower(speed);
-         bl.setPower(speed);
-
-         while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) {
-         }
-
-         fr.setPower(0);
-         br.setPower(0);
-         fl.setPower(0);
-         bl.setPower(0);
-     }
-
-     public void turn(int degrees, double speed, String direction) {
-
-         //1120 counts per rotation
-         //60 degrees per rotation
-         //18.6 countsPerDegree counts per degree
-
-         float countsPerDegree = 18.666f;
-
-         //Reset encoders
-         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-         //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
-         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftServoA1 = hwMap.get(CRServo.class, "LSA1");
+        liftServoA2 = hwMap.get(CRServo.class, "LSA2");
+        liftServoB1 = hwMap.get(CRServo.class, "LSB1");
+        liftServoB2 = hwMap.get(CRServo.class, "LSB2");
 
 
-         if (direction == "left") {
-             fr.setTargetPosition(Math.round(degrees * countsPerDegree));
-             br.setTargetPosition(Math.round(degrees * countsPerDegree));
-             fl.setTargetPosition(Math.round(degrees * countsPerDegree));
-             bl.setTargetPosition(Math.round(degrees * countsPerDegree));
-         }
-         if (direction == "right") {
-             fr.setTargetPosition(-Math.round(degrees * countsPerDegree));
-             br.setTargetPosition(-Math.round(degrees * countsPerDegree));
-             fl.setTargetPosition(-Math.round(degrees * countsPerDegree));
-             bl.setTargetPosition(-Math.round(degrees * countsPerDegree));
-         }
+        sensorColor = hwMap.get(ColorSensor.class, "sensor_color_distance");
 
-         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-         br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // Set all motors to zero power
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
 
-         fr.setPower(speed);
-         br.setPower(speed);
-         fl.setPower(speed);
-         bl.setPower(speed);
+        //Reset encoders
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-         while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) {
+        //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //When given a power of 0, motors will brake instead of coast.
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void driveXY(float inches, double speed, String direction) {
+
+        //Reset encoders
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        if (direction == "forward") {
+            fr.setTargetPosition(Math.round(inches * YcountsPerInch));
+            br.setTargetPosition(Math.round(inches * YcountsPerInch));
+            fl.setTargetPosition(-Math.round(inches * YcountsPerInch));
+            bl.setTargetPosition(-Math.round(inches * YcountsPerInch));
+        }
+        if (direction == "backward") {
+            fr.setTargetPosition(-Math.round(inches * YcountsPerInch));
+            br.setTargetPosition(-Math.round(inches * YcountsPerInch));
+            fl.setTargetPosition(Math.round(inches * YcountsPerInch));
+            bl.setTargetPosition(Math.round(inches * YcountsPerInch));
+        }
+        if (direction == "left") {
+            fr.setTargetPosition(Math.round(inches * XcountsPerInch));
+            br.setTargetPosition(-Math.round(inches * XcountsPerInch));
+            fl.setTargetPosition(Math.round(inches * XcountsPerInch));
+            bl.setTargetPosition(-Math.round(inches * XcountsPerInch));
+        }
+        if (direction == "right") {
+            fr.setTargetPosition(-Math.round(inches * XcountsPerInch));
+            br.setTargetPosition(Math.round(inches * XcountsPerInch));
+            fl.setTargetPosition(-Math.round(inches * XcountsPerInch));
+            bl.setTargetPosition(Math.round(inches * XcountsPerInch));
+        }
+
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fr.setPower(speed);
+        br.setPower(speed);
+        fl.setPower(speed);
+        bl.setPower(speed);
+
+        while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) { }
+
+        fr.setPower(0);
+        br.setPower(0);
+        fl.setPower(0);
+        bl.setPower(0);
+    }
+
+    public void turn(int degrees, double speed, String direction) {
+
+        //1120 counts per rotation
+        //60 degrees per rotation
+        //18.6 countsPerDegree counts per degree
+
+        float countsPerDegree = 18.666f;
+
+        //Reset encoders
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Change mode to RUN_USING_ENCODERS after resetting encoders because otherwise it won't work for some reason.
+        fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        if(direction == "left") {
+            fr.setTargetPosition(Math.round(degrees * countsPerDegree));
+            br.setTargetPosition(Math.round(degrees * countsPerDegree));
+            fl.setTargetPosition(Math.round(degrees * countsPerDegree));
+            bl.setTargetPosition(Math.round(degrees * countsPerDegree));
+        }
+        if(direction == "right") {
+            fr.setTargetPosition(-Math.round(degrees * countsPerDegree));
+            br.setTargetPosition(-Math.round(degrees * countsPerDegree));
+            fl.setTargetPosition(-Math.round(degrees * countsPerDegree));
+            bl.setTargetPosition(-Math.round(degrees * countsPerDegree));
+        }
+
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        fr.setPower(speed);
+        br.setPower(speed);
+        fl.setPower(speed);
+        bl.setPower(speed);
+
+        while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) {
 
          }
          fr.setPower(0);
@@ -275,5 +277,4 @@ public class HardwareHolonomicChassis {
          return toggleState;
      }
  }
-
 
