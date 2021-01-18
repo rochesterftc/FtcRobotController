@@ -254,11 +254,27 @@ public class HardwareHolonomicChassis
 
         while (fr.isBusy() && br.isBusy() && fl.isBusy() && bl.isBusy()) {
 
-        }
-        fr.setPower(0);
-        br.setPower(0);
-        fl.setPower(0);
-        bl.setPower(0);
-    }
+         }
+         fr.setPower(0);
+         br.setPower(0);
+         fl.setPower(0);
+         bl.setPower(0);
+     }
+
+     /**
+      * Creates a toggle switch out of a button input
+       * @param button The button or other input to control the toggle
+      * @param buttonPushed
+      * @param toggleState
+      * @return returns toggleState
+      */
+
+     public boolean toggle(boolean button, boolean buttonPushed, boolean toggleState) {
+         if (button && !buttonPushed) {
+             toggleState = !toggleState;
+             buttonPushed = true;
+         } else if (!button && buttonPushed) buttonPushed = false;
+         return toggleState;
+     }
  }
 
