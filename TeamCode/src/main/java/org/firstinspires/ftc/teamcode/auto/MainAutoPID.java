@@ -401,6 +401,13 @@ public class MainAutoPID extends LinearOpMode {
             tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
         }
 
+    /**
+     * Drives to a target position using vuforia localization and pid controller
+     * @param xInches target x coordinate in inches
+     * @param yInches target y coordinate in inches
+     * @param degrees target heading in degrees
+     * @param allTrackables passthrough for allTrackables object
+     */
     public void goToPosition (int xInches, int yInches, int degrees, List<VuforiaTrackable> allTrackables ) {
 
         PIDController xPid = new PIDController(0.00002,0,0);
