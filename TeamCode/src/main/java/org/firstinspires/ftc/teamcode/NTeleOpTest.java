@@ -38,14 +38,14 @@ public class NTeleOpTest extends OpMode {
         //1:1 28  counts per rotation
         //3:1 84  counts per rotation
         //5:1 140 counts per rotation
-
+/*
         if (gamepad2.b) robot.intakemotor.setPower(1);
         else if (gamepad2.a) robot.intakemotor.setPower(-1);
         else robot.intakemotor.setPower(0);
         if (gamepad1.b) robot.arm.setPower(.3);
         else if (gamepad1.a) robot.arm.setPower(-.3);
         else robot.arm.setPower(0);
-
+*/
         float z = gamepad1.left_stick_x;
         float x = gamepad1.right_stick_x;
         float y = -gamepad1.left_stick_y;
@@ -70,8 +70,8 @@ public class NTeleOpTest extends OpMode {
 
         robot.shooter.setPower(gamepad2.right_trigger);
 
-        robot.conveyor.setPower(-gamepad2.left_trigger/2);
-        robot.conveyor.setPower(gamepad2.right_trigger/2);
+       // robot.conveyor.setPower(-gamepad2.left_trigger/2);
+        //robot.conveyor.setPower(gamepad2.right_trigger/2);
 
     }
 }

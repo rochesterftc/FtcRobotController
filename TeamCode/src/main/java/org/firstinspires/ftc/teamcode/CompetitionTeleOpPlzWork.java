@@ -54,7 +54,7 @@ public class CompetitionTeleOpPlzWork extends OpMode {
         } else if (!gamepad2.y && clawButtonPushed) clawButtonPushed = false;
 
 
-        robot.conveyor.setPower(gamepad2.left_trigger);
+        //robot.conveyor.setPower(gamepad2.left_trigger);
         robot.shooter.setPower(gamepad2.right_trigger);
 
 //        if (gamepad2.left_bumper) {

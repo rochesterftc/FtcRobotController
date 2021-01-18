@@ -299,9 +299,11 @@ public class AutoLocalization extends LinearOpMode {
         setMotorPower(0,0,0);
 
         sleep(5000);
-        robot.conveyor.setPower(-0.25);
+        robot.lConveyor.setPower(-0.25);
+        robot.rConveyor.setPower(0.25);
         sleep(7500);
-        robot.conveyor.setPower(0);
+        robot.lConveyor.setPower(0);
+        robot.rConveyor.setPower(0);
         robot.shooter.setPower(0);
 
     }

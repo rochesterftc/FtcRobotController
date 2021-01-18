@@ -27,10 +27,12 @@ public class AutonomousShoot extends LinearOpMode {
 
         robot.shooter.setPower(1);
         sleep(10000);
-        robot.conveyor.setPower(-0.3);
+        robot.lConveyor.setPower(-0.3);
+        robot.rConveyor.setPower(0.3);
         sleep(10000);
         robot.shooter.setPower(0);
-        robot.conveyor.setPower(0);
+        robot.lConveyor.setPower(0);
+        robot.rConveyor.setPower(0);
 
     }
 }

@@ -116,7 +116,7 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
                         telemetry.update();
                     }
                 }
-
+/*
                 moveTime(0,0.5,0,4000);
                 robot.shooter.setPower(0.8);
                 sleep(2000);
@@ -237,7 +237,7 @@ public class TimeCompetitionAutonomousTFOD extends LinearOpMode {
 
                 //move onto white line
                 timeDriveXY(6, .75, "forward");
-
+*/
             }
         }
     }
