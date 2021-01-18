@@ -106,7 +106,7 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         //move to 1st power shot position
         timeDriveXY(45, 1, "right");
 
-        //shoot and keep motor running
+/*        //shoot and keep motor running
         robot.shooter.setPower(1);
         sleep(2000);
         robot.conveyor.setPower(1);
@@ -133,7 +133,7 @@ public class TimeCompetitionAutonomous extends LinearOpMode {
         sleep(500);
         robot.conveyor.setPower(0);
         robot.shooter.setPower(0);
-
+*/
         //move onto white line
         timeDriveXY(6, .75, "forward");
 

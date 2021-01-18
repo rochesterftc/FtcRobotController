@@ -129,10 +129,12 @@ public class tfodTest extends LinearOpMode {
                 robot.shooter.setPower(1);
                 moveTime(0,0,-1,1000);
                 sleep(3000);
-                robot.conveyor.setPower(-1);
+                robot.lConveyor.setPower(-1);
+                robot.rConveyor.setPower(1);
                 sleep(3000);
                 robot.shooter.setPower(0);
-                robot.conveyor.setPower(0);
+                robot.lConveyor.setPower(0);
+                robot.rConveyor.setPower(0);
                 moveTime(0,0,1,1000);
                 sleep(1000);
                 moveTime(0,0.5,0,2000);

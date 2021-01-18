@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,7 +19,8 @@ import static java.lang.Thread.sleep;
 /**
  * Created by Rochesterftc10303 on 10/4/2018.
  */
-@TeleOp(name="Competition2020-2021",group="Master")
+@TeleOp(name="Truman Competition 2020-2021",group="Master")
+@Disabled
 
 public class  CompetitionTeleOp extends OpMode {
 
@@ -35,7 +37,7 @@ public class  CompetitionTeleOp extends OpMode {
     boolean LSButtonPushedA;             boolean LSOnA;
     boolean LSnegativeButtonPushedA;     boolean LSnegativeOnA;
 
-    //Conveyor intake
+    //Conveyor
     double liftServoSpeedB;
     boolean LSButtonPushedB;             boolean LSOnB;
     boolean LSnegativeButtonPushedB;     boolean LSnegativeOnB;
@@ -82,7 +84,7 @@ public class  CompetitionTeleOp extends OpMode {
             LSnegativeButtonPushedA = true;
         } else if (!gamepad2.a && LSnegativeButtonPushedA) LSnegativeButtonPushedA = false;
 
-        //Controls conveyor intake direction
+        //Controls conveyor direction
         if (gamepad2.y && !LSButtonPushedB) {
             liftServoSpeedB=liftServoSpeedB+.9;
             LSOnB = !LSOnB;
@@ -94,6 +96,21 @@ public class  CompetitionTeleOp extends OpMode {
             LSnegativeOnB = !LSnegativeOnB;
             LSnegativeButtonPushedB = true;
         } else if (!gamepad2.x && LSnegativeButtonPushedB) LSnegativeButtonPushedB = false;
+         //old conveyer code
+//        robot.lConveyor.setPower(gamepad2.right_trigger-gamepad2.left_trigger);
+//        robot.rConveyor.setPower(gamepad2.left_trigger-gamepad2.right_trigger);
+
+        //Ring kicker and launch safety servos
+        /*//8.333:1 ratio
+        //15 degrees per .01 on servo position */
+        if (gamepad2.x) {
+            robot.kicker.setPosition(.12);
+            robot.safety.setPosition(.6);
+        }
+        if (gamepad2.y) {
+            robot.kicker.setPosition(0);
+            robot.safety.setPosition(0);
+        }
 
         //Launch mechanism
         if (gamepad2.left_bumper && !SSButtonPushed) {
@@ -126,27 +143,16 @@ public class  CompetitionTeleOp extends OpMode {
         else if (gamepad2.dpad_down && gamepad2.dpad_left) robot.arm.setPower(-.4);
         else robot.arm.setPower(0);
 
-        //Conveyor controls
-        robot.conveyor.setPower(-gamepad2.left_trigger-1);
-        robot.conveyor.setPower(gamepad2.right_trigger+1);
-        //robot.conveyorServo.setPower(gamepad2.right_trigger);
-
-        robot.intakemotor.setPower(-gamepad2.left_trigger-1);
-        robot.intakemotor.setPower(gamepad2.right_trigger+1);
-        //robot.conveyorServo.setPower(-gamepad2.right_trigger);
-
         //Drops intake mechanism
-        robot.intakeservo.setPower(gamepad2.left_stick_y/1.1);
+
 
         //Shooter speed
         robot.shooter.setPower(-shooterSpeed);
 
         //Intake galore
-        robot.liftServoA2.setPower(liftServoSpeedB);
-        robot.liftServoA1.setPower(liftServoSpeedA);
+        robot.lIntake.setPower(liftServoSpeedB);
 
-        robot.liftServoB2.setPower(-liftServoSpeedB);
-        robot.liftServoB1.setPower(-liftServoSpeedA);
+        robot.rIntake.setPower(-liftServoSpeedB);
 
         telemetry.addData("Shooter Speed", shooterSpeed);
         telemetry.update();
