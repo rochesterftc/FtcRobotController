@@ -262,13 +262,12 @@ public class HardwareHolonomicChassis
      }
 
      /**
-      * Creates a toggle switch out of a button input
+      * Creates a toggle switch controlled by a button input
        * @param button The button or other input to control the toggle
       * @param buttonPushed
       * @param toggleState
       * @return returns toggleState
       */
-
      public boolean toggle(boolean button, boolean buttonPushed, boolean toggleState) {
          if (button && !buttonPushed) {
              toggleState = !toggleState;
