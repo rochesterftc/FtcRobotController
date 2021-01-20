@@ -65,11 +65,11 @@ public class  CompetitionTeleOp extends OpMode {
 
 
         //Controls arm servo
-        if (gamepad2.dpad_right && !clawButtonPushed) {
+        if (gamepad1.dpad_right && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 1 : .2));
             clawOn = !clawOn;
             clawButtonPushed = true;
-        } else if (!gamepad2.dpad_right && clawButtonPushed) clawButtonPushed = false;
+        } else if (!gamepad1.dpad_right && clawButtonPushed) clawButtonPushed = false;
 
         //Controls intake direction
         if (gamepad2.b && !LSButtonPushedA) {
@@ -96,21 +96,6 @@ public class  CompetitionTeleOp extends OpMode {
             LSnegativeOnB = !LSnegativeOnB;
             LSnegativeButtonPushedB = true;
         } else if (!gamepad2.x && LSnegativeButtonPushedB) LSnegativeButtonPushedB = false;
-         //old conveyer code
-//        robot.lConveyor.setPower(gamepad2.right_trigger-gamepad2.left_trigger);
-//        robot.rConveyor.setPower(gamepad2.left_trigger-gamepad2.right_trigger);
-
-        //Ring kicker and launch safety servos
-        /*//8.333:1 ratio
-        //15 degrees per .01 on servo position */
-        if (gamepad2.x) {
-            robot.kicker.setPosition(.12);
-            robot.safety.setPosition(.6);
-        }
-        if (gamepad2.y) {
-            robot.kicker.setPosition(0);
-            robot.safety.setPosition(0);
-        }
 
         //Launch mechanism
         if (gamepad2.left_bumper && !SSButtonPushed) {
@@ -124,6 +109,22 @@ public class  CompetitionTeleOp extends OpMode {
             SSnegativeOn = !SSnegativeOn;
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
+
+        //old conveyer code
+          robot.lConveyor.setPower(gamepad2.right_trigger-gamepad2.left_trigger);
+          robot.rConveyor.setPower(gamepad2.left_trigger-gamepad2.right_trigger);
+
+        //Ring kicker and launch safety servos
+        /*//8.333:1 ratio
+        //15 degrees per .01 on servo position */
+        if (gamepad2.dpad_up) {
+            robot.kicker.setPosition(.12);
+            robot.safety.setPosition(.6);
+        }
+        if (gamepad2.dpad_down) {
+            robot.kicker.setPosition(0);
+            robot.safety.setPosition(0);
+        }
 
         //Speed restraints
         if (shooterSpeed>1) {shooterSpeed=1;}
@@ -139,12 +140,13 @@ public class  CompetitionTeleOp extends OpMode {
 
 
 //      Controls arm direction
-        if (gamepad2.dpad_up && gamepad2.dpad_left) robot.arm.setPower(.4);
-        else if (gamepad2.dpad_down && gamepad2.dpad_left) robot.arm.setPower(-.4);
+        if (gamepad1.dpad_up && gamepad1.dpad_left) robot.arm.setPower(.4);
+        else if (gamepad1.dpad_down && gamepad1.dpad_left) robot.arm.setPower(-.4);
         else robot.arm.setPower(0);
 
         //Drops intake mechanism
-
+        if(gamepad1.x)
+        robot.intakeservo.setPosition(-1);
 
         //Shooter speed
         robot.shooter.setPower(-shooterSpeed);
