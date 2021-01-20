@@ -313,9 +313,13 @@ public class MainAutoPID extends LinearOpMode {
                 goToPosition(36,6,110, allTrackables);
                 setMotorPower(0,0,0);
                 //Shoot then stop flywheel
-                robot.conveyor.setPower(-0.4);
+                robot.lConveyor.setPower(-0.4);
+                robot.rConveyor.setPower(0.4);
+
                 sleep(5000);
-                robot.conveyor.setPower(0);
+                robot.lConveyor.setPower(0);
+                robot.rConveyor.setPower(0);
+
                 robot.shooter.setPower(0);
 
                 //Go to target for droping wobble goal
@@ -326,7 +330,7 @@ public class MainAutoPID extends LinearOpMode {
                     setMotorPower(0,0,0);
                     setMotorPower((float) 0.5,0,0);
                     sleep(500);
-                    setMotorPower(0,0,0);
+                    setMotorPower(0,0,0); 
                 }
                 else if (ringCondition == 2) {
                     goToPosition(36,14,90, allTrackables);
