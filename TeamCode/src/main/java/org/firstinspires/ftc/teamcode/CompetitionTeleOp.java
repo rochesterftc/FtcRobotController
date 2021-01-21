@@ -20,7 +20,7 @@ import static java.lang.Thread.sleep;
  * Created by Rochesterftc10303 on 10/4/2018.
  */
 @TeleOp(name="Truman Competition 2020-2021",group="Master")
-@Disabled
+
 
 public class  CompetitionTeleOp extends OpMode {
 
