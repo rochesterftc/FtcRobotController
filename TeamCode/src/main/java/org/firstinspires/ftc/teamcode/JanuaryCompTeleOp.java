@@ -69,12 +69,12 @@ public class JanuaryCompTeleOp extends OpMode {
 
         //if x on gamepad 2 is pressed, set the intake servos to max power pulling rings in
         if (gamepad2.x) {
-            robot.lIntake.setPower(1);
+            robot.lIntake.setPower(-1);
             robot.rIntake.setPower(-1);
         }
         //if y on gamepad 2 is pressed, set the intake servos to max power pushing rings out
         if (gamepad2.y) {
-            robot.lIntake.setPower(-1);
+            robot.lIntake.setPower(1);
             robot.rIntake.setPower(1);
         }
 
