@@ -313,12 +313,15 @@ public class MainAutoPID extends LinearOpMode {
                 goToPosition(36,6,110, allTrackables);
                 setMotorPower(0,0,0);
                 //Shoot then stop flywheel
-                robot.lConveyor.setPower(-0.4);
+                robot.lConveyor.setPower(0.4);
                 robot.rConveyor.setPower(0.4);
 
-                sleep(5000);
+                sleep(4000);
+                robot.kicker.setPosition(0.12);
+                sleep(1000);
                 robot.lConveyor.setPower(0);
                 robot.rConveyor.setPower(0);
+                robot.kicker.setPosition(0);
 
                 robot.shooter.setPower(0);
 
@@ -386,10 +389,10 @@ public class MainAutoPID extends LinearOpMode {
         //x = turning
         //y = forward
         //z = strafing
-        robot.fl.setPower(y + x + z);
-        robot.fr.setPower(-y + x + z);
-        robot.bl.setPower(y + x - z);
-        robot.br.setPower(-y + x - z);
+//        robot.fl.setPower(y + x + z);
+//        robot.fr.setPower(-y + x + z);
+//        robot.bl.setPower(y + x - z);
+//        robot.br.setPower(-y + x - z);
         telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, z);
     }
 
@@ -414,12 +417,12 @@ public class MainAutoPID extends LinearOpMode {
      */
     public void goToPosition (int xInches, int yInches, int degrees, List<VuforiaTrackable> allTrackables ) {
 
-        PIDController xPid = new PIDController(0.00002,0,0);
+        PIDController xPid = new PIDController(0.0002,0,0);
         xPid.setInputRange(-72,72);
         xPid.setOutputRange(0,1);
         xPid.setTolerance(errorInches/144);
         xPid.enable();
-        PIDController yPid = new PIDController(0.00002,0,0);
+        PIDController yPid = new PIDController(0.0002,0,0);
         yPid.setInputRange(-72,72);
         yPid.setOutputRange(0,1);
         yPid.setTolerance(errorInches/144);
@@ -463,7 +466,7 @@ public class MainAutoPID extends LinearOpMode {
 
                 xPower = xPid.performPID(translation.get(1));
                 yPower = yPid.performPID(translation.get(0));
-                setMotorPower((float)(-xPower), (float)(-yPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
+                setMotorPower((float)(yPower), (float)(xPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
                 //(translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16
                 // mm Distance-distance to object
                 if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
