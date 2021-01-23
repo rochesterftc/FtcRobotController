@@ -1,4 +1,4 @@
-// Simple autonomous program that drives bot forward until end of period
+            // Simple autonomous program that drives bot forward until end of period
 // or touch sensor is hit. If touched, backs up a bit and turns 90 degrees
 // right and keeps going. Demonstrates obstacle avoidance and use of the
 // REV Hub's built in IMU in place of a gyro. Also uses gamepad1 buttons to

@@ -63,7 +63,7 @@ public class MainAutoPID extends LinearOpMode {
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
-    WebcamName webcamName = null;
+    //WebcamName webcamName = null;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
@@ -89,7 +89,7 @@ public class MainAutoPID extends LinearOpMode {
 
 
          //Retrieve the camera
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         /**
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -107,7 +107,7 @@ public class MainAutoPID extends LinearOpMode {
          * Indicates which camera on the RC we wish to use.
          * Comment the next line to use a phone cam
          */
-        parameters.cameraName = webcamName;
+        //parameters.cameraName = webcamName;
 
         /**
          * State whether to use extended tracking:
@@ -290,10 +290,11 @@ public class MainAutoPID extends LinearOpMode {
 //                setMotorPower(0, 0, 0);
 
                 /**Start flywheel then allign with shooting position*/
-                robot.shooter.setPower(-1);
+//                robot.shooter.setPower(-1);
                 goToPosition(36,6,110, allTrackables);
                 setMotorPower(0,0,0);
                 /**Shoot then stop flywheel*/
+                robot.shooter.setPower(-1);
                 robot.lConveyor.setPower(0.4);
                 robot.rConveyor.setPower(0.4);
                 sleep(4000);
@@ -379,10 +380,10 @@ public class MainAutoPID extends LinearOpMode {
      * @param x Speed along the z axis (e.g. rotation)
      */
     public void setMotorPower (float z, float y, float x) {
-//        robot.fl.setPower(y + x + z);
-//        robot.fr.setPower(-y + x + z);
-//        robot.bl.setPower(y + x - z);
-//        robot.br.setPower(-y + x - z);
+        robot.fl.setPower(y + x + z);
+        robot.fr.setPower(-y + x + z);
+        robot.bl.setPower(y + x - z);
+        robot.br.setPower(-y + x - z);
         telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, z);
     }
 
@@ -410,13 +411,13 @@ public class MainAutoPID extends LinearOpMode {
         /**
          * Initializing the PID controller object and passing the relevant info, we're using two separate instances for each axis of the robot
          */
-        PIDController xPid = new PIDController(0.0002,0,0);
-        xPid.setInputRange(-72,72);
+        PIDController xPid = new PIDController(0.00005,0.01,0);
+//        xPid.setInputRange(-72,72);
         xPid.setOutputRange(0,1);
         xPid.setTolerance(errorInches/144);
         xPid.enable();
-        PIDController yPid = new PIDController(0.0002,0,0);
-        yPid.setInputRange(-72,72);
+        PIDController yPid = new PIDController(0.00005,0.01,0);
+//        yPid.setInputRange(-72,72);
         yPid.setOutputRange(0,1);
         yPid.setTolerance(errorInches/144);
         yPid.enable();
@@ -428,7 +429,7 @@ public class MainAutoPID extends LinearOpMode {
          * This is the overall loop which should run until:
          *      The robot is at location
          *      Timeout is true
-         *      The opmode is stopped.
+         *      Or the opmode is stopped.
          */
         ElapsedTime localizerTimeout = new ElapsedTime();
         boolean atTarget = false;
@@ -468,7 +469,7 @@ public class MainAutoPID extends LinearOpMode {
                  */
                 xPower = xPid.performPID(translation.get(1));
                 yPower = yPid.performPID(translation.get(0));
-                setMotorPower((float)(yPower), (float)(xPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
+                setMotorPower((float)(xPower), (float)(yPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
                 //(translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16
                 // mm Distance-distance to object
 
@@ -496,6 +497,5 @@ public class MainAutoPID extends LinearOpMode {
         setMotorPower(0,0,0);
         telemetry.update();
     }
-
 
 }
