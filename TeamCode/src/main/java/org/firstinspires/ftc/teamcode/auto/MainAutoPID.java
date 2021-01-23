@@ -291,7 +291,7 @@ public class MainAutoPID extends LinearOpMode {
 
                 /**Start flywheel then allign with shooting position*/
 //                robot.shooter.setPower(-1);
-                goToPosition(36,6,110, allTrackables);
+                goToPosition(24,0,110, allTrackables);
                 setMotorPower(0,0,0);
                 /**Shoot then stop flywheel*/
                 robot.shooter.setPower(-1);

@@ -82,7 +82,7 @@ public class MainAuto extends LinearOpMode {
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
-    WebcamName webcamName = null;
+//    WebcamName webcamName = null;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
@@ -109,7 +109,7 @@ public class MainAuto extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+//        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -128,7 +128,7 @@ public class MainAuto extends LinearOpMode {
          */
         //Uncomment for webcam
 
-        parameters.cameraName = webcamName;
+//        parameters.cameraName = webcamName;
 
         //uncomment for phone cam
         //final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
@@ -259,6 +259,7 @@ public class MainAuto extends LinearOpMode {
             //tfod.setZoom(2.5, 1.78);
 
             robot.claw.setPosition(0);
+            robot.kicker.setPosition(0);
 
             /** Wait for the game to begin */
             telemetry.addData(">", "Press Play to start op mode");
@@ -309,13 +310,15 @@ public class MainAuto extends LinearOpMode {
                 setMotorPower(0, 0, 0);
 
                 //Start flywheel then allign with shooting position
-                robot.shooter.setPower(-1);
-                goToPosition(36,6,110, allTrackables);
+                goToPosition(24,0,110, allTrackables);
                 setMotorPower(0,0,0);
                 //Shoot then stop flywheel
-                robot.lConveyor.setPower(-0.4);
-                robot.rConveyor.setPower(0.4);
-                sleep(5000);
+                robot.shooter.setPower(-1);
+                robot.lConveyor.setPower(1);
+                robot.rConveyor.setPower(1);
+                sleep(4000);
+                robot.kicker.setPosition(1);
+                sleep(1000);
                 robot.lConveyor.setPower(0);
                 robot.rConveyor.setPower(0);
                 robot.shooter.setPower(0);
@@ -439,7 +442,7 @@ public class MainAuto extends LinearOpMode {
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
 
-                setMotorPower(((translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-yInches*mmPerInch) / mmPerInch / 24/16),((rotation.thirdAngle-95) / 1000));
+                setMotorPower(((translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-yInches*mmPerInch) / mmPerInch / 24/16),0 /*((rotation.thirdAngle-95) / 1000))*/);
                 //(translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16
                 // mm Distance-distance to object
                 if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
