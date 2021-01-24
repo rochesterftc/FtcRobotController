@@ -71,31 +71,9 @@ public class  CompetitionTeleOp extends OpMode {
             clawButtonPushed = true;
         } else if (!gamepad1.dpad_right && clawButtonPushed) clawButtonPushed = false;
 
-        //Controls intake direction
-        if (gamepad2.b && !LSButtonPushedA) {
-            liftServoSpeedA=liftServoSpeedA+1;
-            LSOnA = !LSOnA;
-            LSButtonPushedA = true;
-        } else if (!gamepad2.b && LSButtonPushedA) LSButtonPushedA = false;
-
-        if (gamepad2.a && !LSnegativeButtonPushedA) {
-            liftServoSpeedA = liftServoSpeedA-1;
-            LSnegativeOnA = !LSnegativeOnA;
-            LSnegativeButtonPushedA = true;
-        } else if (!gamepad2.a && LSnegativeButtonPushedA) LSnegativeButtonPushedA = false;
-
-        //Controls conveyor direction
-        if (gamepad2.y && !LSButtonPushedB) {
-            liftServoSpeedB=liftServoSpeedB+.9;
-            LSOnB = !LSOnB;
-            LSButtonPushedB = true;
-        } else if (!gamepad2.y && LSButtonPushedB) LSButtonPushedB = false;
-
-        if (gamepad2.x && !LSnegativeButtonPushedB) {
-            liftServoSpeedB = liftServoSpeedB-.9;
-            LSnegativeOnB = !LSnegativeOnB;
-            LSnegativeButtonPushedB = true;
-        } else if (!gamepad2.x && LSnegativeButtonPushedB) LSnegativeButtonPushedB = false;
+        if(gamepad2.a){robot.lIntake.setPower(1); robot.rIntake.setPower(-1);}
+        else if(gamepad2.b){robot.lIntake.setPower(-1); robot.rIntake.setPower(1);}
+        else {robot.rIntake.setPower(0);robot.lIntake.setPower(0);}
 
         //Launch mechanism
         if (gamepad2.left_bumper && !SSButtonPushed) {
@@ -111,17 +89,25 @@ public class  CompetitionTeleOp extends OpMode {
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
         //old conveyer code
-          robot.lConveyor.setPower(gamepad2.right_trigger-gamepad2.left_trigger);
-          robot.rConveyor.setPower(gamepad2.left_trigger-gamepad2.right_trigger);
+          if (gamepad2.right_trigger>.2){
+              robot.rConveyor.setPower(-1);
+              robot.lConveyor.setPower(-1);
+          }
+        else if (gamepad2.left_trigger>.2){
+            robot.rConveyor.setPower(1);
+            robot.lConveyor.setPower(1);
+        }
+        else {robot.rConveyor.setPower(0);
+              robot.lConveyor.setPower(0);}
 
         //Ring kicker and launch safety servos
         /*//8.333:1 ratio
         //15 degrees per .01 on servo position */
-        if (gamepad2.dpad_up) {
-            robot.kicker.setPosition(.12);
+        if (gamepad1.a) {
+            robot.kicker.setPosition(.5);
             robot.safety.setPosition(.6);
         }
-        if (gamepad2.dpad_down) {
+        if (gamepad1.b) {
             robot.kicker.setPosition(0);
             robot.safety.setPosition(0);
         }
@@ -130,33 +116,20 @@ public class  CompetitionTeleOp extends OpMode {
         if (shooterSpeed>1) {shooterSpeed=1;}
         if (shooterSpeed<0) {shooterSpeed=0;}
 
-        if (intakeSpeed>.8) {intakeSpeed=.8;}
-        if (intakeSpeed<-.8) {intakeSpeed=-.8;}
-
-        if (liftServoSpeedA>1) {liftServoSpeedA=1;}
-        if (liftServoSpeedA<-1) {liftServoSpeedA=-1;}
-        if (liftServoSpeedB>.9) {liftServoSpeedB=.9;}
-        if (liftServoSpeedB<-.9) {liftServoSpeedB=-.9;}
-
-
 //      Controls arm direction
-        if (gamepad1.dpad_up && gamepad1.dpad_left) robot.arm.setPower(.4);
-        else if (gamepad1.dpad_down && gamepad1.dpad_left) robot.arm.setPower(-.4);
+        if (gamepad1.left_bumper) robot.arm.setPower(.5);
+        else if (gamepad1.right_bumper) robot.arm.setPower(-.4);
         else robot.arm.setPower(0);
 
         //Drops intake mechanism
         if(gamepad1.x)
-        robot.intakeservo.setPosition(-1);
+        robot.intakeservo.setPosition(0);
 
         //Shooter speed
         robot.shooter.setPower(-shooterSpeed);
 
-        //Intake galore
-        robot.lIntake.setPower(liftServoSpeedB);
 
-        robot.rIntake.setPower(-liftServoSpeedB);
-
-        telemetry.addData("Shooter Speed", shooterSpeed);
+        telemetry.addData("Shooter Speed", (int)(shooterSpeed*10));
         telemetry.update();
     }
 }

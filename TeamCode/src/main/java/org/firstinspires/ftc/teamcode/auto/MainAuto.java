@@ -43,30 +43,18 @@ public class MainAuto extends LinearOpMode {
     int errorInches = 2;
     int errorDegrees = 2;
 
-    // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
+    // IMPORTANT: USB WebCam - "CAMERA_CHOICE = BACK;" and "PHONE_IS_PORTRAIT = false;"
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false;
+    private static final boolean PHONE_IS_PORTRAIT = true;
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
     private static final String VUFORIA_KEY =
             "ASLZpXP/////AAABmcf6IAKpuUgbqERI9bu4hEZEPCSq/2sZe0zrgWI1rySsI2SfEEm2e6c+A5svGl6C6mv6fczUZsEDhyWIkVyvG1baGFjFP8YHOcX1Tme9oOUVBcrWbmAacREJcyQ0wQ7D9RlgohT8JVucF1NvWGyk8lqqUDY0QID9MbBw/YENyN84MKNK+c4E/sbsTui/bdYkcn11xwgx0G5fnP6wjpVhIeuHAosrWz/7Rq8vHH1swQ6E19knAfhOWjEn+GjDSCdSaqsSiyUpgRj105WDf8sVDKpvII5IqMa7QFEOBOd7bAirRaiUUCBHj0EOK0efgRO/Zq+wt/ZbF0R66fVj2HK6UuYZQ/vRK6Wsyv+DoNCGc0Rj";
 
-    // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
-    // We will define some constants and conversions here
+    // Since ImageTarget trackables uses mm to specifiy their dimensions, we must use mm for all the physical dimension.
+    // Here we are just defining some constants and conversions
     private static final float mmPerInch = 25.4f;
     private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
@@ -111,7 +99,7 @@ public class MainAuto extends LinearOpMode {
          */
 //        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
-        /*
+        /**
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
          * If no camera monitor is desired, use the parameter-less constructor instead (commented out below).
@@ -124,15 +112,9 @@ public class MainAuto extends LinearOpMode {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
         /**
-         * We also indicate which camera on the RC we wish to use.
+         * Here we indicate that we want to use an external webcam, comment this out to use the phone cam
          */
-        //Uncomment for webcam
-
 //        parameters.cameraName = webcamName;
-
-        //uncomment for phone cam
-        //final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-
 
         // Make sure extended tracking is disabled for this example.
         parameters.useExtendedTracking = false;
@@ -154,7 +136,7 @@ public class MainAuto extends LinearOpMode {
         VuforiaTrackable frontWallTarget = targetsUltimateGoal.get(4);
         frontWallTarget.setName("Front Wall Target");
 
-        // For convenience, gather together all the trackable objects in one easily-iterable collection */
+        //Puts all targets into a list to be easily referenced later in the program
         List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targetsUltimateGoal);
 
@@ -304,15 +286,15 @@ public class MainAuto extends LinearOpMode {
                 targetsUltimateGoal.activate();
 
                 boolean atTarget = false;
-                //drive forward from start
+                /**drive forward from start*/
                 setMotorPower(0, 1, 0);
-                sleep(2250);
+                sleep(1800);
                 setMotorPower(0, 0, 0);
 
-                //Start flywheel then allign with shooting position
-                goToPosition(24,0,110, allTrackables);
+                /**Start flywheel then allign with shooting position*/
+                //goToPosition(30,0,110, allTrackables);
                 setMotorPower(0,0,0);
-                //Shoot then stop flywheel
+                /**Shoot then stop flywheel*/
                 robot.shooter.setPower(-1);
                 robot.lConveyor.setPower(1);
                 robot.rConveyor.setPower(1);
@@ -322,24 +304,26 @@ public class MainAuto extends LinearOpMode {
                 robot.lConveyor.setPower(0);
                 robot.rConveyor.setPower(0);
                 robot.shooter.setPower(0);
+                robot.kicker.setPosition(0);
+                setMotorPower(0,1,0);
+                sleep(750);
+                setMotorPower(0,0,0);
 
-                //Go to target for droping wobble goal
+                /**
+                 * Go to target for dropping wobble goal
+                 * Each section corresponds to the moves the robot should take depending on the
+                 * wobble goal target for that match
+                 */
                 if (ringCondition == 1) {
                     goToPosition(36,14,90, allTrackables);
                     setMotorPower(0,0,-1);
                     sleep(1200);
-                    setMotorPower(0,0,0);
-                    setMotorPower((float) 0.5,0,0);
-                    sleep(500);
                     setMotorPower(0,0,0);
                 }
                 else if (ringCondition == 2) {
                     goToPosition(36,14,90, allTrackables);
                     setMotorPower(0,0,-1);
                     sleep(600);
-                    setMotorPower(0,0,0);
-                    setMotorPower((float) 0.5,0,0);
-                    sleep(500);
                     setMotorPower(0,0,0);
                 }
                 else if (ringCondition == 3) {
@@ -363,6 +347,11 @@ public class MainAuto extends LinearOpMode {
                 sleep(250);
                 robot.arm.setPower(0);
 
+                /**
+                 * Park on the shot line
+                 * Again, each section corrisponds to the moves the robot should take depending on the
+                 * wobble goal target for that match
+                 */
                 if(ringCondition == 1) {
                     setMotorPower((float) -0.5, 0,0);
                     sleep(500);
@@ -382,7 +371,12 @@ public class MainAuto extends LinearOpMode {
     }
 
 
-
+    /**
+     * Sets the drive motors to move the robot at the appropriate speed for each axis according to the holonimc algorithm
+     * @param z Speed along the z axis (e.g. strafing)
+     * @param y Speed along the y axis (e.g. forward/back)
+     * @param x Speed along the z axis (e.g. rotation)
+     */
     public void setMotorPower (float z, float y, float x) {
         //x = turning
         //y = forward
@@ -406,6 +400,13 @@ public class MainAuto extends LinearOpMode {
             tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
         }
 
+    /**
+     * Drives to a target position using vuforia localization and pid controller
+     * @param xInches target x coordinate in inches
+     * @param yInches target y coordinate in inches
+     * @param degrees target heading in degrees
+     * @param allTrackables passthrough for allTrackables object
+     */
     public void goToPosition (int xInches, int yInches, int degrees, List<VuforiaTrackable> allTrackables ) {
 
         ElapsedTime localizerTimeout = new ElapsedTime();
@@ -442,9 +443,17 @@ public class MainAuto extends LinearOpMode {
                 //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
 
+                /**
+                 * Running pid calculation and setting motor power appropriately
+                 */
                 setMotorPower(((translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-yInches*mmPerInch) / mmPerInch / 24/16),0 /*((rotation.thirdAngle-95) / 1000))*/);
                 //(translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16
                 // mm Distance-distance to object
+
+                /**
+                 * Checking if the robot position is within the error margin for target position
+                 * Note: This section is redundant when using the public PID object because it already has an integrated method for this check
+                 */
                 if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
                         ((translation.get(0)-yInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-yInches*mmPerInch) / mmPerInch) <(-errorInches) ||
                         (rotation.thirdAngle-degrees) > (+errorDegrees) || (rotation.thirdAngle-degrees) < (-errorDegrees)) {
