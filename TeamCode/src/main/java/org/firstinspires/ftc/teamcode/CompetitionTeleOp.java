@@ -83,6 +83,7 @@ public class  CompetitionTeleOp extends OpMode {
         if (liftServoSpeedA>1) {liftServoSpeedA=1;}
         if (liftServoSpeedA<-1) {liftServoSpeedA=-1;}*/
     public void init() {robot.init(hardwareMap);
+    robot.intakeservo.setPosition(0);
     }
 
 
