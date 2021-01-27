@@ -26,25 +26,65 @@ public class  CompetitionTeleOp extends OpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
 
+    //Closed/Open
     boolean clawButtonPushed;           boolean clawOn;
     boolean SSButtonPushed;             boolean SSOn;
     boolean SSnegativeButtonPushed;     boolean SSnegativeOn;
     double shooterSpeed;
     double intakeSpeed;
 
-    //Rings intake
+    //Stuff that say in case of robot rebuild
+ /*   //Rings intake
     double liftServoSpeedA;
+    //Speed up intake
     boolean LSButtonPushedA;             boolean LSOnA;
+    //Slow down intake
     boolean LSnegativeButtonPushedA;     boolean LSnegativeOnA;
+
 
     //Conveyor
     double liftServoSpeedB;
     boolean LSButtonPushedB;             boolean LSOnB;
     boolean LSnegativeButtonPushedB;     boolean LSnegativeOnB;
+        //Controls conveyor direction
+        if (gamepad2.y && !LSButtonPushedB) {
+            liftServoSpeedB=liftServoSpeedB+.9;
+            LSOnB = !LSOnB;
+            LSButtonPushedB = true;
+        } else if (!gamepad2.y && LSButtonPushedB) LSButtonPushedB = false;
 
-    public void init() {
-        robot.init(hardwareMap);
+        if (gamepad2.x && !LSnegativeButtonPushedB) {
+            liftServoSpeedB = liftServoSpeedB-.9;
+            LSnegativeOnB = !LSnegativeOnB;
+            LSnegativeButtonPushedB = true;
+        } else if (!gamepad2.x && LSnegativeButtonPushedB) LSnegativeButtonPushedB = false;
+   if (liftServoSpeedB>.9) {liftServoSpeedB=.9;}
+        if (liftServoSpeedB<-.9) {liftServoSpeedB=-.9;}
+//Controls intake direction
+        if (gamepad2.b && !LSButtonPushedA) {
+        liftServoSpeedA=liftServoSpeedA+1;
+        LSOnA = !LSOnA;
+        LSButtonPushedA = true;
+    } else if (!gamepad2.b && LSButtonPushedA) LSButtonPushedA = false;
+
+        if (gamepad2.a && !LSnegativeButtonPushedA) {
+        liftServoSpeedA = liftServoSpeedA-1;
+        LSnegativeOnA = !LSnegativeOnA;
+        LSnegativeButtonPushedA = true;
+    } else if (!gamepad2.a && LSnegativeButtonPushedA) LSnegativeButtonPushedA = false;
+
+        //Intake galore
+        robot.lIntake.setPower(liftServoSpeedA);
+
+        robot.rIntake.setPower(-liftServoSpeedA);
+
+        if (intakeSpeed>.8) {intakeSpeed=.8;}
+        if (intakeSpeed<-.8) {intakeSpeed=-.8;}
+        if (liftServoSpeedA>1) {liftServoSpeedA=1;}
+        if (liftServoSpeedA<-1) {liftServoSpeedA=-1;}*/
+    public void init() {robot.init(hardwareMap);
     }
+
 
     public void loop() {
         //1:1   28   counts per rotation
@@ -62,7 +102,9 @@ public class  CompetitionTeleOp extends OpMode {
         robot.bl.setPower(y + x - z);
         robot.br.setPower(-y + x - z);
 
-
+        if (gamepad2.a){ robot.lIntake.setPower(1); robot.rIntake.setPower(-1);}
+        else if (gamepad2.b) { robot.lIntake.setPower(-1); robot.rIntake.setPower(1);}
+        else { robot.lIntake.setPower(0); robot.rIntake.setPower(0);}
 
         //Controls arm servo
         if (gamepad1.dpad_right && !clawButtonPushed) {
@@ -70,10 +112,6 @@ public class  CompetitionTeleOp extends OpMode {
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.dpad_right && clawButtonPushed) clawButtonPushed = false;
-
-        if(gamepad2.a){robot.lIntake.setPower(1); robot.rIntake.setPower(-1);}
-        else if(gamepad2.b){robot.lIntake.setPower(-1); robot.rIntake.setPower(1);}
-        else {robot.rIntake.setPower(0);robot.lIntake.setPower(0);}
 
         //Launch mechanism
         if (gamepad2.left_bumper && !SSButtonPushed) {
@@ -88,26 +126,25 @@ public class  CompetitionTeleOp extends OpMode {
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
-        //old conveyer code
-          if (gamepad2.right_trigger>.2){
-              robot.rConveyor.setPower(-1);
-              robot.lConveyor.setPower(-1);
-          }
-        else if (gamepad2.left_trigger>.2){
+        //Conveyer code
+        if (gamepad2.right_trigger>.3) {
+            robot.rConveyor.setPower(-1);
+            robot.lConveyor.setPower(-1);
+        }
+        else if (gamepad2.left_trigger>.3) {
             robot.rConveyor.setPower(1);
             robot.lConveyor.setPower(1);
         }
-        else {robot.rConveyor.setPower(0);
-              robot.lConveyor.setPower(0);}
+        else {robot.rConveyor.setPower(0); robot.lConveyor.setPower(0);}
 
         //Ring kicker and launch safety servos
         /*//8.333:1 ratio
         //15 degrees per .01 on servo position */
-        if (gamepad1.a) {
-            robot.kicker.setPosition(.5);
-            robot.safety.setPosition(.6);
+        if (gamepad2.dpad_up) {
+            robot.kicker.setPosition(1);
+            robot.safety.setPosition(1);
         }
-        if (gamepad1.b) {
+        else {
             robot.kicker.setPosition(0);
             robot.safety.setPosition(0);
         }
@@ -123,13 +160,14 @@ public class  CompetitionTeleOp extends OpMode {
 
         //Drops intake mechanism
         if(gamepad1.x)
-        robot.intakeservo.setPosition(0);
+            robot.intakeservo.setPosition(1);
 
         //Shooter speed
         robot.shooter.setPower(-shooterSpeed);
 
 
-        telemetry.addData("Shooter Speed", (int)(shooterSpeed*10));
+
+        telemetry.addData("Shooter Speed", shooterSpeed);
         telemetry.update();
     }
 }
