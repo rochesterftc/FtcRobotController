@@ -45,7 +45,7 @@ public class MainAuto extends LinearOpMode {
 
     // IMPORTANT: USB WebCam - "CAMERA_CHOICE = BACK;" and "PHONE_IS_PORTRAIT = false;"
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = true;
+    private static final boolean PHONE_IS_PORTRAIT = false;
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
@@ -288,11 +288,11 @@ public class MainAuto extends LinearOpMode {
                 boolean atTarget = false;
                 /**drive forward from start*/
                 setMotorPower(0, 1, 0);
-                sleep(1800);
+                sleep(2250);
                 setMotorPower(0, 0, 0);
 
                 /**Start flywheel then allign with shooting position*/
-                //goToPosition(30,0,110, allTrackables);
+                goToPosition(30,0,110, allTrackables);
                 setMotorPower(0,0,0);
                 /**Shoot then stop flywheel*/
                 robot.shooter.setPower(-1);
@@ -305,9 +305,7 @@ public class MainAuto extends LinearOpMode {
                 robot.rConveyor.setPower(0);
                 robot.shooter.setPower(0);
                 robot.kicker.setPosition(0);
-                setMotorPower(0,1,0);
-                sleep(750);
-                setMotorPower(0,0,0);
+
 
                 /**
                  * Go to target for dropping wobble goal
@@ -319,11 +317,17 @@ public class MainAuto extends LinearOpMode {
                     setMotorPower(0,0,-1);
                     sleep(1200);
                     setMotorPower(0,0,0);
+                    setMotorPower((float) 0.5,0,0);
+                    sleep(500);
+                    setMotorPower(0,0,0);
                 }
                 else if (ringCondition == 2) {
                     goToPosition(36,14,90, allTrackables);
                     setMotorPower(0,0,-1);
                     sleep(600);
+                    setMotorPower(0,0,0);
+                    setMotorPower((float) 0.5,0,0);
+                    sleep(500);
                     setMotorPower(0,0,0);
                 }
                 else if (ringCondition == 3) {
