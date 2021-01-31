@@ -103,48 +103,55 @@ public class  CompetitionTeleOp extends OpMode {
         robot.bl.setPower(y + x - z);
         robot.br.setPower(-y + x - z);
 
-        if (gamepad2.a){ robot.lIntake.setPower(1); robot.rIntake.setPower(-1);}
-        else if (gamepad2.b) { robot.lIntake.setPower(-1); robot.rIntake.setPower(1);}
-        else { robot.lIntake.setPower(0); robot.rIntake.setPower(0);}
+        //Controls the direction of intake by holding A, or B
+        //Pull in Rings When A is Pressed
+        if (gamepad2.a){robot.lIntake.setPower(1);robot.rIntake.setPower(-1);robot.mIntake.setPower(1);}
+        //Push out Rings When B is Pressed
+        else if (gamepad2.b) {robot.lIntake.setPower(-1);robot.rIntake.setPower(1);robot.mIntake.setPower(-1);}
+        //When neither a or B(NOR) pressed, set power to 0
+        else { robot.lIntake.setPower(0); robot.rIntake.setPower(0);robot.mIntake.setPower(0);}
 
         //Controls arm servo
         if (gamepad1.dpad_right && !clawButtonPushed) {
-            robot.claw.setPosition((clawOn ? 1 : .2));
+            robot.claw.setPosition((clawOn ? 1 : .2));//Sets position to open or closed
             clawOn = !clawOn;
             clawButtonPushed = true;
         } else if (!gamepad1.dpad_right && clawButtonPushed) clawButtonPushed = false;
 
         //Launch mechanism
         if (gamepad2.left_bumper && !SSButtonPushed) {
-            shooterSpeed=shooterSpeed+.1;
+            shooterSpeed=shooterSpeed+.1; //Increases launcher Speed When Left Bumper is pressed
             SSOn = !SSOn;
             SSButtonPushed = true;
         } else if (!gamepad2.left_bumper && SSButtonPushed) SSButtonPushed = false;
 
         if (gamepad2.right_bumper && !SSnegativeButtonPushed) {
-            shooterSpeed=shooterSpeed-.1;
+            shooterSpeed=shooterSpeed-.1; //Decreases Launcher Speed When Left Bumper is pressed
             SSnegativeOn = !SSnegativeOn;
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
         //Conveyer code
+        ///Set Conveyors Forward When Right Trigger is Pulled
         if (gamepad2.right_trigger>.3) {
             robot.rConveyor.setPower(-1);
             robot.lConveyor.setPower(-1);
         }
+        //Sets Conveyors Backward When Left Trigger is Pulled
         else if (gamepad2.left_trigger>.3) {
             robot.rConveyor.setPower(1);
             robot.lConveyor.setPower(1);
         }
+        //Sets Conveyors to Standstill When Neither Left or Right Trigger is Pulled
         else {robot.rConveyor.setPower(0); robot.lConveyor.setPower(0);}
 
         //Ring kicker and launch safety servos
-        /*//8.333:1 ratio
-        //15 degrees per .01 on servo position */
+        //Kicks ring into Launcher if dpad-up is Pressed
         if (gamepad2.dpad_up) {
             robot.kicker.setPosition(1);
             robot.safety.setPosition(1);
         }
+        //If dpad-up isn't Pressed set Position
         else {
             robot.kicker.setPosition(0);
             robot.safety.setPosition(0);
@@ -155,11 +162,14 @@ public class  CompetitionTeleOp extends OpMode {
         if (shooterSpeed<0) {shooterSpeed=0;}
 
 //      Controls arm direction
+        //Lifts arm when Right Bumper is pressed
         if (gamepad1.left_bumper) robot.arm.setPower(.5);
+        //Lowers are when Right Bumper is pressed
         else if (gamepad1.right_bumper) robot.arm.setPower(-.4);
+        //When Neither Left or Right Bumpers are pressed
         else robot.arm.setPower(0);
 
-        //Drops intake mechanism
+        //Drops intake mechanism when x is pressed
         if(gamepad1.x)
             robot.intakeservo.setPosition(1);
 
@@ -168,7 +178,7 @@ public class  CompetitionTeleOp extends OpMode {
 
 
 
-        telemetry.addData("Shooter Speed", shooterSpeed);
+        telemetry.addData("Shooter Speed", (int)shooterSpeed*10);
         telemetry.update();
     }
 }

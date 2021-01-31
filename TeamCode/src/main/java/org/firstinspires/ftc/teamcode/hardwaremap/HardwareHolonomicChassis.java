@@ -63,6 +63,7 @@ public class HardwareHolonomicChassis
     public Servo  intakeservo = null;
     public CRServo lIntake = null;
     public CRServo rIntake = null;
+    public CRServo mIntake = null;
 
     public DcMotor  lConveyor  = null;
     public DcMotor  rConveyor  = null;
@@ -109,9 +110,10 @@ public class HardwareHolonomicChassis
         bl = hwMap.get(DcMotor.class, "bl");
         br = hwMap.get(DcMotor.class, "br");
 
-        intakeservo = hwMap.get(Servo.class, "intake drop");
-        lIntake = hwMap.get(CRServo.class, "left intake");
-        rIntake = hwMap.get(CRServo.class, "right intake");
+        intakeservo=hwMap.get(Servo.class, "intake drop");
+        lIntake=hwMap.get(CRServo.class, "left intake");
+        rIntake=hwMap.get(CRServo.class, "right intake");
+        mIntake=hwMap.get(CRServo.class,"middle intake");
 
         lConveyor = hwMap.get(DcMotor.class, "left conveyor");
         rConveyor = hwMap.get(DcMotor.class, "right conveyor");
