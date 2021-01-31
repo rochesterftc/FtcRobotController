@@ -54,8 +54,6 @@ public class JanuaryCompTeleOp extends OpMode {
         /*If x on gamepad 1 is pressed and isn't being held down, set the intake dropper servo to
         whichever position it is not currently in (up/down) */
         if (gamepad1.x && !intakeButtonPushed) {
-            //if intakeDown is true, set the position to 0 (up). If it's false, set it to .75 (down).
-            robot.intakeservo.setPosition((intakeDown ? 0:.75));
             //set intakeDown to the opposite value
             intakeDown = !intakeDown;
             //Because x is currently being pressed, set it to being true so it doesn't constantly change servo positions
@@ -96,8 +94,6 @@ public class JanuaryCompTeleOp extends OpMode {
         /*If a on gamepad 2 is pressed and isn't being held down, set the safety servo to
         whichever position it is not currently in (engaged/disengaged) */
         if (gamepad1.a && !safetyButtonPushed) {
-            //if safetyEngaged is true, set the position to 0 (engaged). If it's false, set it to .75 (disengaged).
-            robot.intakeservo.setPosition((safetyEngaged ? 0:.75));
             //set safetyEngaged to the opposite value
             safetyEngaged = !safetyEngaged;
             //Because a is currently being pressed, set it to being true so it doesn't constantly change servo positions

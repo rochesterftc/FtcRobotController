@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
  * Created by George on 1/31/2021.
  */
 //@Disabled
-@Autonomous(name = "AutonomousBase", group = "Testing")
+@Autonomous(name = "AutonomousRampUpTest", group = "Testing")
 
 public class AutoRampUpTest extends LinearOpMode {
 

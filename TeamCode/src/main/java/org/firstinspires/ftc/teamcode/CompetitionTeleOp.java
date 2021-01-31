@@ -83,7 +83,6 @@ public class  CompetitionTeleOp extends OpMode {
         if (liftServoSpeedA>1) {liftServoSpeedA=1;}
         if (liftServoSpeedA<-1) {liftServoSpeedA=-1;}*/
     public void init() {robot.init(hardwareMap);
-    robot.intakeservo.setPosition(0);
     }
 
 
@@ -136,11 +135,13 @@ public class  CompetitionTeleOp extends OpMode {
         if (gamepad2.right_trigger>.3) {
             robot.rConveyor.setPower(-1);
             robot.lConveyor.setPower(-1);
+            robot.mIntake.setPower(-1);
         }
         //Sets Conveyors Backward When Left Trigger is Pulled
         else if (gamepad2.left_trigger>.3) {
             robot.rConveyor.setPower(1);
             robot.lConveyor.setPower(1);
+            robot.mIntake.setPower(1);
         }
         //Sets Conveyors to Standstill When Neither Left or Right Trigger is Pulled
         else {robot.rConveyor.setPower(0); robot.lConveyor.setPower(0);}
@@ -163,22 +164,16 @@ public class  CompetitionTeleOp extends OpMode {
 
 //      Controls arm direction
         //Lifts arm when Right Bumper is pressed
-        if (gamepad1.left_bumper) robot.arm.setPower(.5);
+        if (gamepad1.left_trigger>.1) robot.arm.setPower(.5);
         //Lowers are when Right Bumper is pressed
-        else if (gamepad1.right_bumper) robot.arm.setPower(-.4);
+        else if (gamepad1.right_trigger>.1) robot.arm.setPower(-.4);
         //When Neither Left or Right Bumpers are pressed
         else robot.arm.setPower(0);
-
-        //Drops intake mechanism when x is pressed
-        if(gamepad1.x)
-            robot.intakeservo.setPosition(1);
 
         //Shooter speed
         robot.shooter.setPower(-shooterSpeed);
 
-
-
-        telemetry.addData("Shooter Speed", (int)shooterSpeed*10);
+        telemetry.addData("Shooter Speed", Math.round(shooterSpeed*10));
         telemetry.update();
     }
 }
