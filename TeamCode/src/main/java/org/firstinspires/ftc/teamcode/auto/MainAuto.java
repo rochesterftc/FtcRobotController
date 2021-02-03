@@ -292,7 +292,7 @@ public class MainAuto extends LinearOpMode {
                 setMotorPower(0, 0, 0);
 
                 /**Start flywheel then allign with shooting position*/
-                goToPosition(30,0,110, allTrackables);
+                goToPosition(30,-6,110, allTrackables);
                 setMotorPower(0,0,0);
                 /**Shoot then stop flywheel*/
                 robot.shooter.setPower(-1);
@@ -353,7 +353,7 @@ public class MainAuto extends LinearOpMode {
 
                 /**
                  * Park on the shot line
-                 * Again, each section corrisponds to the moves the robot should take depending on the
+                 * Again, each section corresponds to the moves the robot should take depending on the
                  * wobble goal target for that match
                  */
                 if(ringCondition == 1) {
@@ -402,34 +402,35 @@ public class MainAuto extends LinearOpMode {
     public void rampSpeed(double z, double y, double x, double rampTime){
         // Ramp motor speeds till stop pressed.
         ElapsedTime rampTimer = new ElapsedTime();
+        rampTimer.reset();
         double modifier = 0.1;
         while(opModeIsActive()) {
             if (rampTimer.seconds() >= rampTime * modifier) modifier = modifier + 0.1;
             setMotorPower(z * modifier, y * modifier, x * modifier);
             // Display the current value
-            telemetry.addData("Motor Power", "{x,y,z}%5.2f", z * modifier, y * modifier, x * modifier);
             telemetry.addData("Timer", rampTimer.seconds());
-            telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
             if(rampTimer.seconds()>= rampTime)break;
         }
+        setMotorPower(z,y,x);
     }
-
     /**
      * Drive via time ramping speed up and down
+     * see also: {@link #rampSpeed}
      * @param z Max speed along the z axis (e.g. strafing)
      * @param y Max speed along the y axis (e.g. forward/back)
      * @param x Max speed along the x axis (e.g. rotation)
      * @param driveTime total drive time including ramp up and down
      * @param rampTime Time in seconds to get to full power
      */
-    public void driveRamp(double z, double y, double x, double driveTime, double rampTime){
-        rampSpeed(z,y,x,rampTime);
-        sleep((long) (driveTime-(rampTime*2)*1000));
-        rampSpeed(0,0,0,rampTime);
-
+    public void driveRamp(double z, double y, double x, double driveTime, double rampTime) {
+        if (driveTime > (rampTime / 2)) {
+            rampSpeed(z, y, x, rampTime);
+            sleep((long) ((driveTime * 1000) - (rampTime * 2) * 1000));
+            rampSpeed(0, 0, 0, rampTime);
+        } else telemetry.addData("WARNING:", "rampTime longer than half driveTime");
+        telemetry.update();
     }
-
 
         /**
          * Initialize the TensorFlow Object Detection engine.

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
  * Created by George on 1/31/2021.
  */
 //@Disabled
-@Autonomous(name = "AutonomousRampUpTest", group = "Testing")
+@Autonomous(name = "Auto Ramp Up Test", group = "Testing")
 
 public class AutoRampUpTest extends LinearOpMode {
 
@@ -21,7 +21,7 @@ HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     public void runOpMode() {
         robot.init(hardwareMap);
         waitForStart();
-        driveRamp(0,1,0,1,0.333);
+        driveRamp(0,1,0,2,0.75);
     }
     /**
      * Sets the drive motors to move the robot at the appropriate speed for each axis according to the holonimc algorithm
@@ -55,9 +55,7 @@ HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
             if (rampTimer.seconds() >= rampTime * modifier) modifier = modifier + 0.1;
             setMotorPower(z * modifier, y * modifier, x * modifier);
             // Display the current value
-            telemetry.addData("Motor Power", "{x,y,z}%5.2f", z * modifier, y * modifier, x * modifier);
             telemetry.addData("Timer", rampTimer.seconds());
-            telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
             if(rampTimer.seconds()>= rampTime)break;
         }
@@ -65,6 +63,7 @@ HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     }
     /**
      * Drive via time ramping speed up and down
+     * see also: {@link #rampSpeed}
      * @param z Max speed along the z axis (e.g. strafing)
      * @param y Max speed along the y axis (e.g. forward/back)
      * @param x Max speed along the x axis (e.g. rotation)
@@ -72,9 +71,12 @@ HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
      * @param rampTime Time in seconds to get to full power
      */
     public void driveRamp(double z, double y, double x, double driveTime, double rampTime){
-        rampSpeed(z,y,x,rampTime);
-        sleep((long) (driveTime-(rampTime*2)*1000));
-        rampSpeed(0,0,0,rampTime);
+        if (driveTime>(rampTime/2)) {
+            rampSpeed(z, y, x, rampTime);
+            sleep((long) ((driveTime * 1000) - (rampTime * 2) * 1000));
+            rampSpeed(0, 0, 0, rampTime);
+        } else telemetry.addData("WARNING:","rampTime longer than half driveTime");
+        telemetry.update();
 
     }
 
