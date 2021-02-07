@@ -104,11 +104,11 @@ public class  CompetitionTeleOp extends OpMode {
 
         //Controls the direction of intake by holding A, or B
         //Pull in Rings When A is Pressed
-        if (gamepad2.a){robot.lIntake.setPower(1);robot.rIntake.setPower(-1);robot.mIntake.setPower(1);}
+        if (gamepad2.a){robot.lIntake.setPower(1);robot.rIntake.setPower(-1);}
         //Push out Rings When B is Pressed
-        else if (gamepad2.b) {robot.lIntake.setPower(-1);robot.rIntake.setPower(1);robot.mIntake.setPower(-1);}
+        else if (gamepad2.b) {robot.lIntake.setPower(-1);robot.rIntake.setPower(1);}
         //When neither a or B(NOR) pressed, set power to 0
-        else { robot.lIntake.setPower(0); robot.rIntake.setPower(0);robot.mIntake.setPower(0);}
+        else { robot.lIntake.setPower(0); robot.rIntake.setPower(0);}
 
         //Controls arm servo
         if (gamepad1.dpad_right && !clawButtonPushed) {
@@ -132,19 +132,19 @@ public class  CompetitionTeleOp extends OpMode {
 
         //Conveyer code
         ///Set Conveyors Forward When Right Trigger is Pulled
-        if (gamepad2.right_trigger>.3) {
+        if (gamepad2.right_trigger>.2) {
             robot.rConveyor.setPower(-1);
             robot.lConveyor.setPower(-1);
-            robot.mIntake.setPower(-1);
+            robot.mIntake.setPower(-.5);
         }
         //Sets Conveyors Backward When Left Trigger is Pulled
-        else if (gamepad2.left_trigger>.3) {
+        else if (gamepad2.left_trigger>.2) {
             robot.rConveyor.setPower(1);
             robot.lConveyor.setPower(1);
-            robot.mIntake.setPower(1);
+            robot.mIntake.setPower(.5);
         }
         //Sets Conveyors to Standstill When Neither Left or Right Trigger is Pulled
-        else {robot.rConveyor.setPower(0); robot.lConveyor.setPower(0);}
+        else {robot.rConveyor.setPower(0);robot.lConveyor.setPower(0);robot.mIntake.setPower(0);}
 
         //Ring kicker and launch safety servos
         //Kicks ring into Launcher if dpad-up is Pressed
