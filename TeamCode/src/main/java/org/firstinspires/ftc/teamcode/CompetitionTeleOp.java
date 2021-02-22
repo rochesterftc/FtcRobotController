@@ -97,10 +97,10 @@ public class  CompetitionTeleOp extends OpMode {
         //x = turning
         //y = forward
         //z = strafing
-        robot.fl.setPower(y + x + z);
-        robot.fr.setPower(-y + x + z);
-        robot.bl.setPower(y + x - z);
-        robot.br.setPower(-y + x - z);
+        robot.fl.setPower(y + (x/1.5) + z);
+        robot.fr.setPower(-y + (x/1.5) + z);
+        robot.bl.setPower(y + (x/1.5) - z);
+        robot.br.setPower(-y + (x/1.5) - z);
 
         //Controls the direction of intake by holding A, or B
         //Pull in Rings When A is Pressed
@@ -111,11 +111,11 @@ public class  CompetitionTeleOp extends OpMode {
         else { robot.lIntake.setPower(0); robot.rIntake.setPower(0);}
 
         //Controls arm servo
-        if (gamepad1.dpad_right && !clawButtonPushed) {
+        if (gamepad1.left_bumper && !clawButtonPushed) {
             robot.claw.setPosition((clawOn ? 1 : .2));//Sets position to open or closed
             clawOn = !clawOn;
             clawButtonPushed = true;
-        } else if (!gamepad1.dpad_right && clawButtonPushed) clawButtonPushed = false;
+        } else if (!gamepad1.left_bumper && clawButtonPushed) clawButtonPushed = false;
 
         //Launch mechanism
         if (gamepad2.left_bumper && !SSButtonPushed) {
@@ -130,6 +130,7 @@ public class  CompetitionTeleOp extends OpMode {
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
+        if (gamepad2.y) robot.shooter.setPower(.8);
         //Conveyer code
         ///Set Conveyors Forward When Right Trigger is Pulled
         if (gamepad2.right_trigger>.2) {
@@ -164,14 +165,14 @@ public class  CompetitionTeleOp extends OpMode {
 
 //      Controls arm direction
         //Lifts arm when Right Bumper is pressed
-        if (gamepad1.left_trigger>.1) robot.arm.setPower(.5);
+        if (gamepad1.left_stick_button) robot.arm.setPower(.5);
         //Lowers are when Right Bumper is pressed
-        else if (gamepad1.right_trigger>.1) robot.arm.setPower(-.4);
+        else if (gamepad1.right_stick_button) robot.arm.setPower(-.4);
         //When Neither Left or Right Bumpers are pressed
         else robot.arm.setPower(0);
 
         //Shooter speed
-        robot.shooter.setPower(-shooterSpeed);
+        robot.shooter.setPower(-shooterSpeed/10);
 
         telemetry.addData("Shooter Speed", Math.round(shooterSpeed*10));
         telemetry.update();
