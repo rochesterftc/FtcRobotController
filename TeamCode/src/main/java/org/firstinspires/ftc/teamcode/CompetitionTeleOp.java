@@ -130,7 +130,6 @@ public class  CompetitionTeleOp extends OpMode {
             SSnegativeButtonPushed = true;
         } else if (!gamepad2.right_bumper && SSnegativeButtonPushed) SSnegativeButtonPushed = false;
 
-        if (gamepad2.y) robot.shooter.setPower(.8);
         //Conveyer code
         ///Set Conveyors Forward When Right Trigger is Pulled
         if (gamepad2.right_trigger>.2) {
@@ -172,9 +171,9 @@ public class  CompetitionTeleOp extends OpMode {
         else robot.arm.setPower(0);
 
         //Shooter speed
-        robot.shooter.setPower(-shooterSpeed/10);
+        robot.shooter.setPower(-shooterSpeed);
 
-        telemetry.addData("Shooter Speed", Math.round(shooterSpeed*10));
+      //  telemetry.addData("Shooter Speed", Math.round(shooterSpeed*10));
         telemetry.update();
     }
 }
