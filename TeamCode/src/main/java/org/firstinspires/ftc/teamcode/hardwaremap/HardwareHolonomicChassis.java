@@ -150,7 +150,7 @@ public class HardwareHolonomicChassis
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //set shooter to RUN_USING_ENCODER so it targets a specific motor speed rather than a voltage, as the max voltage changes as the battery dies
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       // shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void driveXY(float inches, double speed, String direction) {

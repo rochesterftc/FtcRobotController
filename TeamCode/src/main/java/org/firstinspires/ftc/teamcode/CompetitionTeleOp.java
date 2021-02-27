@@ -173,7 +173,7 @@ public class  CompetitionTeleOp extends OpMode {
         //Shooter speed
         robot.shooter.setPower(-shooterSpeed);
 
-      //  telemetry.addData("Shooter Speed", Math.round(shooterSpeed*10));
+        telemetry.addData("Shooter Speed", Math.round(shooterSpeed*10));
         telemetry.update();
     }
 }
