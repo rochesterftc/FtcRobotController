@@ -11,18 +11,17 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaBase;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.hardwaremap.HardwareHolonomicChassis;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -34,10 +33,10 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 /**
  * Created by Nathaniel on 12/9/2020.
  */
-//@Disabled
-@Autonomous(name = "Main Auto", group = "Competition")
+@Disabled
+@Autonomous(name = "Main Auto PID OLD", group = "Competition")
 
-public class MainAuto extends LinearOpMode {
+public class MainAutoPIDOLD extends LinearOpMode {
 
     HardwareHolonomicChassis robot = new HardwareHolonomicChassis();
     int errorInches = 2;
@@ -53,8 +52,8 @@ public class MainAuto extends LinearOpMode {
     private static final String VUFORIA_KEY =
             "ASLZpXP/////AAABmcf6IAKpuUgbqERI9bu4hEZEPCSq/2sZe0zrgWI1rySsI2SfEEm2e6c+A5svGl6C6mv6fczUZsEDhyWIkVyvG1baGFjFP8YHOcX1Tme9oOUVBcrWbmAacREJcyQ0wQ7D9RlgohT8JVucF1NvWGyk8lqqUDY0QID9MbBw/YENyN84MKNK+c4E/sbsTui/bdYkcn11xwgx0G5fnP6wjpVhIeuHAosrWz/7Rq8vHH1swQ6E19knAfhOWjEn+GjDSCdSaqsSiyUpgRj105WDf8sVDKpvII5IqMa7QFEOBOd7bAirRaiUUCBHj0EOK0efgRO/Zq+wt/ZbF0R66fVj2HK6UuYZQ/vRK6Wsyv+DoNCGc0Rj";
 
-    // Since ImageTarget trackables uses mm to specifiy their dimensions, we must use mm for all the physical dimension.
-    // Here we are just defining some constants and conversions
+    // Since ImageTarget trackables uses mm to specifiy their dimensions, use mm for all the physical dimension.
+    // We will define some constants and conversions here
     private static final float mmPerInch = 25.4f;
     private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
@@ -65,12 +64,7 @@ public class MainAuto extends LinearOpMode {
     // Class Members
     private OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia = null;
-
-    /**
-     * This is the webcam we are to use. As with other hardware devices such as motors and
-     * servos, this device is identified using the robot configuration tool in the FTC application.
-     */
-    WebcamName webcamName = null;
+    //WebcamName webcamName = null;
 
     /**
      * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
@@ -94,10 +88,9 @@ public class MainAuto extends LinearOpMode {
         robot.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        /*
-         * Retrieve the camera we are to use.
-         */
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+         //Retrieve the camera
+        //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         /**
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -112,18 +105,24 @@ public class MainAuto extends LinearOpMode {
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
         /**
-         * Here we indicate that we want to use an external webcam, comment this out to use the phone cam
+         * Indicates which camera on the RC we wish to use.
+         * Comment the next line to use a phone cam
          */
-        parameters.cameraName = webcamName;
+        //parameters.cameraName = webcamName;
 
-        // Make sure extended tracking is disabled for this example.
+        /**
+         * State whether to use extended tracking:
+         * Extended tracking is a feature of the vuforia engine that will attempt to estimate
+         * the target position if the camera loses sight of it, but it often results in value
+         * drift so I usually leave it off
+         */
         parameters.useExtendedTracking = false;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         // Load the data sets for the trackable objects. These particular data
-        // sets are stored in the 'assets' part of our application.
+        // sets are stored in the 'assets' package of the SDK.
         VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
         VuforiaTrackable blueTowerGoalTarget = targetsUltimateGoal.get(0);
         blueTowerGoalTarget.setName("Blue Tower Goal Target");
@@ -241,7 +240,6 @@ public class MainAuto extends LinearOpMode {
             //tfod.setZoom(2.5, 1.78);
 
             robot.claw.setPosition(0);
-            robot.kicker.setPosition(0);
 
             /** Wait for the game to begin */
             telemetry.addData(">", "Press Play to start op mode");
@@ -286,32 +284,31 @@ public class MainAuto extends LinearOpMode {
                 targetsUltimateGoal.activate();
 
                 boolean atTarget = false;
+
                 /**drive forward from start*/
-                setMotorPower(0, 1, 0);
-                sleep(2250);
-                setMotorPower(0, 0, 0);
+//                setMotorPower(0, 1, 0);
+//                sleep(2250);
+//                setMotorPower(0, 0, 0);
 
                 /**Start flywheel then allign with shooting position*/
-                goToPosition(30,6,110, allTrackables);
+//                robot.shooter.setPower(-1);
+                goToPosition(24,0,110, allTrackables);
                 setMotorPower(0,0,0);
                 /**Shoot then stop flywheel*/
                 robot.shooter.setPower(-1);
-                robot.lConveyor.setPower(1);
-                robot.rConveyor.setPower(1);
-                robot.mIntake.setPower(.5);
+                robot.lConveyor.setPower(0.4);
+                robot.rConveyor.setPower(0.4);
                 sleep(4000);
-                robot.kicker.setPosition(1);
+                robot.kicker.setPosition(0.12);
                 sleep(1000);
                 robot.lConveyor.setPower(0);
                 robot.rConveyor.setPower(0);
-                robot.mIntake.setPower(0);
-                robot.shooter.setPower(0);
                 robot.kicker.setPosition(0);
-
+                robot.shooter.setPower(0);
 
                 /**
-                 * Go to target for dropping wobble goal
-                 * Each section corresponds to the moves the robot should take depending on the
+                 * Go to target for droping wobble goal
+                 * Each section corrisponds to the moves the robot should take depending on the
                  * wobble goal target for that match
                  */
                 if (ringCondition == 1) {
@@ -321,7 +318,7 @@ public class MainAuto extends LinearOpMode {
                     setMotorPower(0,0,0);
                     setMotorPower((float) 0.5,0,0);
                     sleep(500);
-                    setMotorPower(0,0,0);
+                    setMotorPower(0,0,0); 
                 }
                 else if (ringCondition == 2) {
                     goToPosition(36,14,90, allTrackables);
@@ -355,7 +352,7 @@ public class MainAuto extends LinearOpMode {
 
                 /**
                  * Park on the shot line
-                 * Again, each section corresponds to the moves the robot should take depending on the
+                 * Again, each section corrisponds to the moves the robot should take depending on the
                  * wobble goal target for that match
                  */
                 if(ringCondition == 1) {
@@ -383,55 +380,12 @@ public class MainAuto extends LinearOpMode {
      * @param y Speed along the y axis (e.g. forward/back)
      * @param x Speed along the z axis (e.g. rotation)
      */
-    public void setMotorPower (double z, double y, double x) {
-        //x = turning
-        //y = forward
-        //z = strafing
+    public void setMotorPower (float z, float y, float x) {
         robot.fl.setPower(y + x + z);
         robot.fr.setPower(-y + x + z);
         robot.bl.setPower(y + x - z);
         robot.br.setPower(-y + x - z);
         telemetry.addData("Motor Power", "{X,Y,rX} = %.2f, %.2f, %.2f", x, y, z);
-    }
-
-    /**
-     * Ramp up drive speed over a specified time
-     * @param z Max speed along the z axis (e.g. strafing)
-     * @param y Max speed along the y axis (e.g. forward/back)
-     * @param x Max speed along the x axis (e.g. rotation)
-     * @param rampTime Time in seconds to get to full power
-     */
-    public void rampSpeed(double z, double y, double x, double rampTime){
-        // Ramp motor speeds till stop pressed.
-        ElapsedTime rampTimer = new ElapsedTime();
-        rampTimer.reset();
-        double modifier = 0.1;
-        while(opModeIsActive()) {
-            if (rampTimer.seconds() >= rampTime * modifier) modifier = modifier + 0.1;
-            setMotorPower(z * modifier, y * modifier, x * modifier);
-            // Display the current value
-            telemetry.addData("Timer", rampTimer.seconds());
-            telemetry.update();
-            if(rampTimer.seconds()>= rampTime)break;
-        }
-        setMotorPower(z,y,x);
-    }
-    /**
-     * Drive via time ramping speed up and down
-     * see also: {@link #rampSpeed}
-     * @param z Max speed along the z axis (e.g. strafing)
-     * @param y Max speed along the y axis (e.g. forward/back)
-     * @param x Max speed along the x axis (e.g. rotation)
-     * @param driveTime total drive time including ramp up and down
-     * @param rampTime Time in seconds to get to full power
-     */
-    public void driveRamp(double z, double y, double x, double driveTime, double rampTime) {
-        if (driveTime > (rampTime / 2)) {
-            rampSpeed(z, y, x, rampTime);
-            sleep((long) ((driveTime * 1000) - (rampTime * 2) * 1000));
-            rampSpeed(0, 0, 0, rampTime);
-        } else telemetry.addData("WARNING:", "rampTime longer than half driveTime");
-        telemetry.update();
     }
 
         /**
@@ -455,6 +409,29 @@ public class MainAuto extends LinearOpMode {
      */
     public void goToPosition (int xInches, int yInches, int degrees, List<VuforiaTrackable> allTrackables ) {
 
+        /**
+         * Initializing the PID controller object and passing the relevant info, we're using two separate instances for each axis of the robot
+         */
+        PIDController xPid = new PIDController(0.00005,0.01,0);
+//        xPid.setInputRange(-72,72);
+        xPid.setOutputRange(0,1);
+        xPid.setTolerance(errorInches/144);
+        xPid.enable();
+        PIDController yPid = new PIDController(0.00005,0.01,0);
+//        yPid.setInputRange(-72,72);
+        yPid.setOutputRange(0,1);
+        yPid.setTolerance(errorInches/144);
+        yPid.enable();
+        double xPower;
+        double yPower;
+
+
+        /**
+         * This is the overall loop which should run until:
+         *      The robot is at location
+         *      Timeout is true
+         *      Or the opmode is stopped.
+         */
         ElapsedTime localizerTimeout = new ElapsedTime();
         boolean atTarget = false;
         while (!atTarget && localizerTimeout.seconds() < 5 && opModeIsActive()) {
@@ -486,25 +463,26 @@ public class MainAuto extends LinearOpMode {
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-                //shoot target {X, Y, Z} = 6, 36, 2
                 VectorF targetPosition = lastLocation.getTranslation();
 
                 /**
                  * Running pid calculation and setting motor power appropriately
                  */
-                setMotorPower(((translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16), -((translation.get(0)-yInches*mmPerInch) / mmPerInch / 24/16),0 /*((rotation.thirdAngle-95) / 1000))*/);
+                xPower = xPid.performPID(translation.get(1));
+                yPower = yPid.performPID(translation.get(0));
+                setMotorPower((float)(xPower), (float)(yPower),0 /*((rotation.thirdAngle-95) / 1000)*/);
                 //(translation.get(1)-xInches*mmPerInch) / mmPerInch / 24/16
                 // mm Distance-distance to object
 
                 /**
                  * Checking if the robot position is within the error margin for target position
-                 * Note: This section is redundant when using the public PID object because it already has an integrated method for this check
+                 * This section is redundant because the pid object already has an integrated method for this check
                  */
-                if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
-                        ((translation.get(0)-yInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-yInches*mmPerInch) / mmPerInch) <(-errorInches) ||
-                        (rotation.thirdAngle-degrees) > (+errorDegrees) || (rotation.thirdAngle-degrees) < (-errorDegrees)) {
-                    atTarget = false;
-                } else atTarget = true;
+//                if (((translation.get(1)-xInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(1)-xInches*mmPerInch) / mmPerInch) < (-errorInches) ||
+//                        ((translation.get(0)-yInches*mmPerInch) / mmPerInch) > (+errorInches) || ((translation.get(0)-yInches*mmPerInch) / mmPerInch) <(-errorInches) ||
+//                        (rotation.thirdAngle-degrees) > (+errorDegrees) || (rotation.thirdAngle-degrees) < (-errorDegrees)) {
+//                    atTarget = false;
+//                } else atTarget = true;
 
             }
             else {
